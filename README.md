@@ -1,6 +1,6 @@
-# JimmsCalibrePlugins
+# JimmsOtherCalibrePlugins
 
-This is a repository for Jim Miller (AKA Jimm, JimmXinu, retiefjimm) to store his 
-'other' calibre plugins, IE, not FanFictionDownLoader(FFDL).
+This is a repository for me to keep my 'other' calibre plugins, IE, not
+FFDL, EpubMerge, EpubSplit and SmartEject.
 
-EpubMerge, EpubSplit and SmartEject are all available for installation within calibre.
+You're welcome to try using these, but I'm not going to offer very much support.
