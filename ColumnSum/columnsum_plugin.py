@@ -99,10 +99,11 @@ class ColumnSumPlugin(InterfaceAction):
             if coldef['datatype'] in ('int','float'):
                 num_cust_cols.append(coldef)
         
-        LoopProgressDialog(self.gui,
-                           book_list,
-                           partial(self.sum_columns_loop, db=self.gui.current_db,sum_cols=num_cust_cols),
-                           partial(self.sum_columns_finish, sum_cols=num_cust_cols))
+        ld = LoopProgressDialog(self.gui,
+                                book_list,
+                                partial(self.sum_columns_loop, db=self.gui.current_db,sum_cols=num_cust_cols))
+        if not ld.wasCanceled():
+            self.sum_columns_finish(book_list, sum_cols=num_cust_cols)
             
     def sum_columns_loop(self,bookid,db=None,sum_cols=[]):
         #print("bookid:%s"%bookid)
@@ -133,7 +134,7 @@ class ColumnSumPlugin(InterfaceAction):
         if len(x['values']) > 0 :
             sorts = sorted(x['values'])
             length = len(sorts)
-            print("length:%s"%length)
+            # print("length:%s"%length)
             i=int(length/2)
             if not length % 2:
                 median = (sorts[i] + sorts[i - 1]) / 2.0
@@ -198,7 +199,6 @@ class LoopProgressDialog(QProgressDialog):
     def __init__(self, gui,
                  book_list,
                  foreach_function,
-                 finish_function,
                  init_label=_("Collecting ..."),
                  win_title=_("Summing Columns"),
                  status_prefix=_("Books collected")):
@@ -209,7 +209,6 @@ class LoopProgressDialog(QProgressDialog):
         self.setMinimumWidth(500)
         self.book_list = book_list
         self.foreach_function = foreach_function
-        self.finish_function = finish_function
         self.status_prefix = status_prefix
         self.i = 0
         
@@ -237,7 +236,7 @@ class LoopProgressDialog(QProgressDialog):
         except Exception as e:
             book['good']=False
             book['comment']=unicode(e)
-            traceback.print_exc()
+            #traceback.print_exc()
             
         self.updateStatus()
         self.i += 1
@@ -249,5 +248,3 @@ class LoopProgressDialog(QProgressDialog):
 
     def do_when_finished(self):
         self.hide()
-        # Queues a job to process these books in the background.
-        self.finish_function(self.book_list)
