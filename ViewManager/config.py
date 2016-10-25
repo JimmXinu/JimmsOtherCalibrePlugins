@@ -305,6 +305,7 @@ class SortColumnListWidget(ColumnListWidget):
                 item.setIcon(get_icon('images/sort_desc.png'))
         else:
             item.setIcon(QIcon())
+        self.item_selection_changed() ## otherwise asc/desc can be disabled if selected, then checked.
         self.blockSignals(previous)
 
     def item_selection_changed(self):
