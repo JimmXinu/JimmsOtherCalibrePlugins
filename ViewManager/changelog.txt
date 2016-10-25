@@ -1,0 +1,46 @@
+[B]Version 1.3.0[/B] - 22 Jun 2012
+Now requires calibre 0.8.57
+Store views in the calibre database rather than a json file, to allow reuse from different computers (not simultaneously!)
+Add a support option to the "Other" tab allowing viewing the plugin data stored in the database
+No longer support upgrading from plugin versions older than 1.2.0
+
+[B]Version 1.2.1[/B] - 11 Sep 2011
+When switching libraries, ensure no issues with old menu items causing a crash
+
+[B]Version 1.2.0[/B] - 11 Sep 2011
+Upgrade to support the centralised keyboard shortcut management in Calibre
+When opening the configuration dialog, default to the last selected view
+
+[B]Version 1.1.2[/B] - 16 Jul 2011
+Fix config error introduced with 1.1.1
+
+[B]Version 1.1.1[/B] - 16 Jul 2011
+Fix error issue for first time users
+
+[B]Version 1.1.0[/B] - 11 Jul 2011
+Add ability to store column widths as part of the view information
+
+[B]Version 1.0.6[/B] - 15 Jun 2011
+Indicate the last selected view with a checkbox in the menu
+
+[B]Version 1.0.5[/B] - 23 Apr 2011
+Fix bug of not always remembering the last applied view when restarting/switching libraries
+Enhance configuration options to allow specifying a view to apply at startup
+Ensure any auto applying of views is a per library setting
+
+[B]Version 1.0.4[/B] - 14 Apr 2011
+Fix bug of applying a blank saved search not working
+
+[B]Version 1.0.3[/B] - 12 Apr 2011
+Fix bug of plugin not working for first time users
+Add text to config dialog advising of behaviour if enable automatic apply view
+
+[B]Version 1.0.2[/B] - 11 Apr 2011
+Offer configuration option to apply last selected view at startup or switching libraries
+Change configuration file format to offer more flexibility
+
+[B]Version 1.0.1[/B] - 10 Apr 2011
+Fix bug of key error when creating new views
+
+[B]Version 1.0[/B] - 10 Apr 2011
+Initial release of View Manager plugin
