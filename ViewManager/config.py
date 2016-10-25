@@ -42,7 +42,7 @@ from calibre.utils.config import JSONConfig
 from calibre.utils.icu import sort_key
 from calibre.utils.search_query_parser import saved_searches
 
-from calibre_plugins.view_manager.common_utils import (get_library_uuid, get_icon, 
+from calibre_plugins.view_manager.common_utils import (get_library_uuid, get_icon,
                                                     KeyboardConfigDialog, PrefsViewerDialog)
 
 PREFS_NAMESPACE = 'ViewManagerPlugin'
@@ -103,7 +103,7 @@ def migrate_json_config_if_required():
             os.remove(json_path)
         except:
             pass
- 
+
 
 def migrate_library_config_if_required(db, library_config):
     schema_version = library_config.get(KEY_SCHEMA_VERSION, 0)
@@ -114,7 +114,7 @@ def migrate_library_config_if_required(db, library_config):
 
     # Any migration code in future will exist in here.
     #if schema_version < 1.x:
-    
+
     set_library_config(db, library_config)
 
 
@@ -134,9 +134,9 @@ def get_library_config(db):
                 del plugin_prefs['libraries']
             else:
                 plugin_prefs['libraries'] = libraries
-                
-    if library_config is None:       
-        library_config = db.prefs.get_namespaced(PREFS_NAMESPACE, PREFS_KEY_SETTINGS, 
+
+    if library_config is None:
+        library_config = db.prefs.get_namespaced(PREFS_NAMESPACE, PREFS_KEY_SETTINGS,
                                                  copy.deepcopy(DEFAULT_LIBRARY_VALUES))
     migrate_library_config_if_required(db, library_config)
     return library_config
@@ -201,6 +201,7 @@ class ColumnListWidget(QListWidget):
         self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
 
     def populate(self, columns, all_columns):
+        self.saved_column_widths = dict(columns)
         self.all_columns_with_widths = all_columns
         self.blockSignals(True)
         self.clear()
@@ -235,7 +236,9 @@ class ColumnListWidget(QListWidget):
                     if colname == data:
                         use_width = width
                         break
-                cols.append((data, use_width))
+                ## first look for previously saved width; failing
+                ## that, current column size; failing that -1 default.
+                cols.append((data, self.saved_column_widths.get(data,use_width)))
         return cols
 
     def move_column_up(self):
@@ -633,7 +636,7 @@ class ConfigWidget(QWidget):
             if col in hidden_cols:
                 colsizemap.append((col, -1))
             else:
-                colsizemap.append((col, -1))
+                colsizemap.append((col, state['column_sizes'].get(col,-1)))
         return colsizemap
 
     def columns_state(self, defaults=False):
