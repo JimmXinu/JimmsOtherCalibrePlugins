@@ -11,13 +11,14 @@ import sys
 from collections import OrderedDict
 from functools import partial
 try:
-    from PyQt5.Qt import QMenu, QToolButton
+    from PyQt5.Qt import QMenu, QToolButton, QInputDialog
 except ImportError as e:
-    from PyQt4.Qt import QMenu, QToolButton
+    from PyQt4.Qt import QMenu, QToolButton, QInputDialog
 
 from calibre.gui2.actions import InterfaceAction
 from calibre.constants import numeric_version as calibre_version
 
+from calibre.gui2 import error_dialog
 import calibre_plugins.view_manager.config as cfg
 from calibre_plugins.view_manager.common_utils import (set_plugin_icon_resources, get_icon,
                                         create_menu_action_unique)
@@ -34,7 +35,7 @@ class ViewManagerAction(InterfaceAction):
 
     def genesis(self):
         self.menu = QMenu(self.gui)
-        
+
         self.menu_actions = []
         #self.old_actions_unique_map = {}
 
@@ -69,7 +70,7 @@ class ViewManagerAction(InterfaceAction):
             if calibre_version >= (2,10,0):
                 self.gui.removeAction(action)
         self.menu_actions = []
-        
+
         if len(views) > 0:
             has_checked_view = False
             for key in sorted(views.keys()):
@@ -83,13 +84,17 @@ class ViewManagerAction(InterfaceAction):
                 if is_checked:
                     has_checked_view = True
             m.addSeparator()
-            save_ac = create_menu_action_unique(self, m, '&Save column widths', 'column.png',
+            save_ac = create_menu_action_unique(self, m, '&Save columns and widths', 'column.png',
                                                   triggered=self.save_column_widths)
             #self.actions_unique_map[save_ac.calibre_shortcut_unique_name] = save_ac.calibre_shortcut_unique_name
             self.menu_actions.append(save_ac)
             if not has_checked_view:
                 save_ac.setEnabled(False)
-            m.addSeparator()
+
+        new_ac = create_menu_action_unique(self, m, '&Create new View', 'plus.png',
+                                                  triggered=partial(self.save_column_widths,create=True))
+        self.menu_actions.append(new_ac)
+        m.addSeparator()
 
         create_menu_action_unique(self, m, _('&Customize plugin')+'...', 'config.png',
                                   shortcut=False, triggered=self.show_configuration)
@@ -113,24 +118,56 @@ class ViewManagerAction(InterfaceAction):
                 return True
         return False
 
-    def save_column_widths(self):
-        if self.current_view is None:
+    def save_column_widths(self,create=False):
+        if self.current_view is None and not create:
             return
+
         library_config = cfg.get_library_config(self.gui.current_db)
         views = library_config[cfg.KEY_VIEWS]
-        view_info = views[self.current_view]
+
+        if create:
+            ## code
+            new_view_name, ok = QInputDialog.getText(self.gui, 'Add new view',
+                                                     'Enter a unique display name for this view:', text='Default')
+            if not ok:
+                # Operation cancelled
+                return
+            new_view_name = unicode(new_view_name).strip()
+            # Verify it does not clash with any other views in the list
+            for view_name in views.keys():
+                if view_name.lower() == new_view_name.lower():
+                    return error_dialog(self.gui, 'Add Failed', 'A view with the same name already exists', show=True)
+
+            view_info = { cfg.KEY_COLUMNS: [], cfg.KEY_SORT: [],
+                          cfg.KEY_APPLY_RESTRICTION: False, cfg.KEY_RESTRICTION: '',
+                          cfg.KEY_APPLY_SEARCH: False, cfg.KEY_SEARCH: '' }
+            views[new_view_name] = view_info
+        else:
+            view_info = views[self.current_view]
+
         # Now need to identify the column widths for each column
         state = self.gui.library_view.get_state()
         sizes = state['column_sizes']
         new_config_cols = []
-        for colname, width in view_info[cfg.KEY_COLUMNS]:
-            new_width = sizes.get(colname, width)
-            new_config_cols.append((colname, new_width))
+
+        prev_col_sizes = dict(view_info[cfg.KEY_COLUMNS])
+        # ordered columns list from col_id->position map.
+        ordered_cols = sorted(state['column_positions'], key=state['column_positions'].get)# state['column_positions'].items().sort(key=lambda x: x[1])
+        # filter out hidden columns.
+        ordered_cols = filter(lambda x : x not in state['hidden_columns'], ordered_cols)
+        for col in ordered_cols:
+            # I'm not sure under what circumstances the saved col size
+            # would be needed, but the previous code fell back to it.
+            # JM
+            prev_size = prev_col_sizes.get(col,-1)
+            new_config_cols.append((col, sizes.get(col, prev_size)))
 
         # Persist the updated view column info
         view_info[cfg.KEY_COLUMNS] = new_config_cols
         library_config[cfg.KEY_VIEWS] = views
         cfg.set_library_config(self.gui.current_db, library_config)
+        if create:
+            self.rebuild_menus()
 
     def switch_view(self, key):
         library_config = cfg.get_library_config(self.gui.current_db)
