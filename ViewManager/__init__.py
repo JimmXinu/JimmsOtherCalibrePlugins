@@ -24,7 +24,7 @@ class ActionViewManager(InterfaceActionBase):
     description             = 'Define your own sets of column views with sort orders'
     supported_platforms     = ['windows', 'osx', 'linux']
     author                  = 'Grant Drake'
-    version                 = (1, 4, 0)
+    version                 = (1, 4, 1)
     minimum_calibre_version = (0, 8, 57)
 
     #: This field defines the GUI plugin class that contains all the code

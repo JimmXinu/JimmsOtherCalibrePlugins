@@ -7,6 +7,9 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
+
 import sys
 from collections import OrderedDict
 from functools import partial
@@ -84,7 +87,7 @@ class ViewManagerAction(InterfaceAction):
                 if is_checked:
                     has_checked_view = True
             m.addSeparator()
-            save_ac = create_menu_action_unique(self, m, '&Save columns and widths', 'column.png',
+            save_ac = create_menu_action_unique(self, m, '&Save columns, widths and sorts', 'column.png',
                                                   triggered=self.save_column_widths)
             #self.actions_unique_map[save_ac.calibre_shortcut_unique_name] = save_ac.calibre_shortcut_unique_name
             self.menu_actions.append(save_ac)
@@ -124,7 +127,7 @@ class ViewManagerAction(InterfaceAction):
 
         library_config = cfg.get_library_config(self.gui.current_db)
         views = library_config[cfg.KEY_VIEWS]
-
+        new_view_name = None
         if create:
             ## code
             new_view_name, ok = QInputDialog.getText(self.gui, 'Add new view',
@@ -147,6 +150,8 @@ class ViewManagerAction(InterfaceAction):
 
         # Now need to identify the column widths for each column
         state = self.gui.library_view.get_state()
+        pp.pprint(state)
+        pp.pprint(view_info)
         sizes = state['column_sizes']
         new_config_cols = []
 
@@ -162,12 +167,36 @@ class ViewManagerAction(InterfaceAction):
             prev_size = prev_col_sizes.get(col,-1)
             new_config_cols.append((col, sizes.get(col, prev_size)))
 
+        new_config_sort = []
+        already_sorted = {}
+        TF_map = { True:0, False:1 } # no idea why VM records asc/desc that way...
+        for col, direct in state['sort_history']:
+            if col not in already_sorted:
+                already_sorted[col] = direct
+                new_config_sort.append([unicode(col),TF_map[direct]])
+
+        ## Not used--config only handles saved/named searches.  Also
+        ## needs to deal with saved from 'current search'.  Similar
+        ## issue with saving search.
+        # Save search restriction
+        # search_restrict = unicode(self.gui.search_restriction.currentText())
+        # print("search_restrict:%s"%search_restrict)
+        # if search_restrict:
+        #     view_info[cfg.KEY_APPLY_RESTRICTION] = True
+        #     view_info[cfg.KEY_RESTRICTION] = search_restrict
+        # else:
+        #     view_info[cfg.KEY_APPLY_RESTRICTION] = False
+        #     view_info[cfg.KEY_RESTRICTION] = ''
+
         # Persist the updated view column info
         view_info[cfg.KEY_COLUMNS] = new_config_cols
+        pp.pprint(new_config_sort)
+        view_info[cfg.KEY_SORT] = new_config_sort
         library_config[cfg.KEY_VIEWS] = views
         cfg.set_library_config(self.gui.current_db, library_config)
         if create:
             self.rebuild_menus()
+            self.switch_view(new_view_name)
 
     def switch_view(self, key):
         library_config = cfg.get_library_config(self.gui.current_db)
@@ -231,6 +260,8 @@ class ViewManagerAction(InterfaceAction):
         for col, asc in sort_cols:
             sh.append((col, asc==0))
 
+        print("set sort history:")
+        pp.pprint(sh)
         resize_cols = dict([(cname, width) for cname, width in valid_cols.iteritems() if width > 0])
         state = {'hidden_columns': hidden_cols,
                  'column_positions': positions,
