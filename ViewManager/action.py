@@ -7,8 +7,8 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
+# import pprint
+# pp = pprint.PrettyPrinter(indent=4)
 
 import sys
 from collections import OrderedDict
@@ -150,8 +150,8 @@ class ViewManagerAction(InterfaceAction):
 
         # Now need to identify the column widths for each column
         state = self.gui.library_view.get_state()
-        pp.pprint(state)
-        pp.pprint(view_info)
+        #pp.pprint(state)
+        #pp.pprint(view_info)
         sizes = state['column_sizes']
         new_config_cols = []
 
@@ -190,7 +190,7 @@ class ViewManagerAction(InterfaceAction):
 
         # Persist the updated view column info
         view_info[cfg.KEY_COLUMNS] = new_config_cols
-        pp.pprint(new_config_sort)
+        #pp.pprint(new_config_sort)
         view_info[cfg.KEY_SORT] = new_config_sort
         library_config[cfg.KEY_VIEWS] = views
         cfg.set_library_config(self.gui.current_db, library_config)
@@ -260,8 +260,8 @@ class ViewManagerAction(InterfaceAction):
         for col, asc in sort_cols:
             sh.append((col, asc==0))
 
-        print("set sort history:")
-        pp.pprint(sh)
+        ##print("set sort history:")
+        ##pp.pprint(sh)
         resize_cols = dict([(cname, width) for cname, width in valid_cols.iteritems() if width > 0])
         state = {'hidden_columns': hidden_cols,
                  'column_positions': positions,
