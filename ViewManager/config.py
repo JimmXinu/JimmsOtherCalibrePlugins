@@ -70,6 +70,8 @@ KEY_VIEW_TO_APPLY = 'viewToApply'
 
 KEY_COLUMNS = 'columns'
 KEY_SORT = 'sort'
+KEY_APPLY_VIRTLIB = 'applyVirtLib'
+KEY_VIRTLIB = 'virtLibToApply'
 KEY_APPLY_RESTRICTION = 'applyRestriction'
 KEY_RESTRICTION = 'restrictionToApply'
 KEY_APPLY_SEARCH = 'applySearch'
@@ -173,14 +175,14 @@ class ViewComboBox(QComboBox):
 
 class SearchComboBox(QComboBox):
 
-    def __init__(self, parent):
+    def __init__(self, parent, entries={}):
         QComboBox.__init__(self, parent)
-        self.populate_combo()
+        self.populate_combo(entries)
 
-    def populate_combo(self):
+    def populate_combo(self, entries):
         self.clear()
         self.addItem('')
-        p = sorted(saved_searches().names(), key=sort_key)
+        p = sorted(entries, key=sort_key)
         for search_name in p:
             self.addItem(search_name)
 
@@ -418,15 +420,30 @@ class ConfigWidget(QWidget):
         other_layout = QGridLayout()
         view_group_box_layout.addLayout(other_layout)
 
+        tooltip = "Apply the selected saved search when the View is activated."
         self.apply_search_checkbox = QCheckBox('Apply saved &search', self)
-        self.saved_search_combo = SearchComboBox(self)
-        self.apply_restriction_checkbox = QCheckBox('Apply search &restriction', self)
-        self.search_restriction_combo = SearchComboBox(self)
+        self.apply_search_checkbox.setToolTip(tooltip)
+        self.saved_search_combo = SearchComboBox(self, entries=saved_searches().names())
+        self.saved_search_combo.setToolTip(tooltip)
 
-        other_layout.addWidget(self.apply_restriction_checkbox, 0, 0, 1, 1)
-        other_layout.addWidget(self.search_restriction_combo, 0, 1, 1, 1)
-        other_layout.addWidget(self.apply_search_checkbox, 1, 0, 1, 1)
-        other_layout.addWidget(self.saved_search_combo, 1, 1, 1, 1)
+        tooltip = "Switch to the selected Virtual Library when the View is activated."
+        self.apply_virtlib_checkbox = QCheckBox('Switch to &Virtual Library', self)
+        self.apply_virtlib_checkbox.setToolTip(tooltip)
+        self.virtlib_combo = SearchComboBox(self,entries=self.gui.library_view.model().db.prefs.get('virtual_libraries', {}))
+        self.virtlib_combo.setToolTip(tooltip)
+
+        tooltip = "Apply the selected saved search as a Virtual Library additional restriction when the View is activated."
+        self.apply_restriction_checkbox = QCheckBox('Apply VL additional search &restriction', self)
+        self.apply_restriction_checkbox.setToolTip(tooltip)
+        self.search_restriction_combo = SearchComboBox(self,entries=saved_searches().names())
+        self.search_restriction_combo.setToolTip(tooltip)
+
+        other_layout.addWidget(self.apply_search_checkbox, 0, 0, 1, 1)
+        other_layout.addWidget(self.saved_search_combo, 0, 1, 1, 1)
+        other_layout.addWidget(self.apply_virtlib_checkbox, 1, 0, 1, 1)
+        other_layout.addWidget(self.virtlib_combo, 1, 1, 1, 1)
+        other_layout.addWidget(self.apply_restriction_checkbox, 2, 0, 1, 1)
+        other_layout.addWidget(self.search_restriction_combo, 2, 1, 1, 1)
         other_layout.setColumnStretch(2, 1)
 
         layout.addSpacing(10)
@@ -502,6 +519,11 @@ class ConfigWidget(QWidget):
             view_info[KEY_SEARCH] = unicode(self.saved_search_combo.currentText()).strip()
         else:
             view_info[KEY_SEARCH] = ''
+        view_info[KEY_APPLY_VIRTLIB] = self.apply_virtlib_checkbox.checkState() == Qt.Checked
+        if view_info[KEY_APPLY_VIRTLIB]:
+            view_info[KEY_VIRTLIB] = unicode(self.virtlib_combo.currentText()).strip()
+        else:
+            view_info[KEY_VIRTLIB] = ''
 
         self.views[self.view_name] = view_info
 
@@ -530,6 +552,8 @@ class ConfigWidget(QWidget):
             restriction_to_apply = view_info[KEY_RESTRICTION]
             apply_search = view_info[KEY_APPLY_SEARCH]
             search_to_apply = view_info[KEY_SEARCH]
+            apply_virtlib = view_info.get(KEY_APPLY_VIRTLIB,False)
+            virtlib_to_apply = view_info.get(KEY_VIRTLIB,'')
 
         self.columns_list.populate(columns, all_columns)
         self.sort_list.populate(sort_columns, all_columns)
@@ -537,6 +561,8 @@ class ConfigWidget(QWidget):
         self.search_restriction_combo.select_value(restriction_to_apply)
         self.apply_search_checkbox.setCheckState(Qt.Checked if apply_search else Qt.Unchecked)
         self.saved_search_combo.select_value(search_to_apply)
+        self.apply_virtlib_checkbox.setCheckState(Qt.Checked if apply_virtlib else Qt.Unchecked)
+        self.virtlib_combo.select_value(virtlib_to_apply)
 
     def add_view(self):
         # Display a prompt allowing user to specify a new view
@@ -553,8 +579,9 @@ class ConfigWidget(QWidget):
 
         self.persist_view_config()
         view_info = { KEY_COLUMNS: [], KEY_SORT: [],
-                     KEY_APPLY_RESTRICTION: False, KEY_RESTRICTION: '',
-                     KEY_APPLY_SEARCH: False, KEY_SEARCH: '' }
+                      KEY_APPLY_RESTRICTION: False, KEY_RESTRICTION: '',
+                      KEY_APPLY_SEARCH: False, KEY_SEARCH: '',
+                      KEY_APPLY_VIRTLIB: False, KEY_VIRTLIB: ''}
         if self.view_name:
             # We will copy values from the currently selected view
             old_view_info = self.views[self.view_name]
@@ -564,6 +591,8 @@ class ConfigWidget(QWidget):
             view_info[KEY_RESTRICTION] = copy.deepcopy(old_view_info[KEY_RESTRICTION])
             view_info[KEY_APPLY_SEARCH] = copy.deepcopy(old_view_info[KEY_APPLY_SEARCH])
             view_info[KEY_SEARCH] = copy.deepcopy(old_view_info[KEY_SEARCH])
+            view_info[KEY_APPLY_VIRTLIB] = copy.deepcopy(old_view_info.get(KEY_APPLY_VIRTLIB,False))
+            view_info[KEY_VIRTLIB] = copy.deepcopy(old_view_info.get(KEY_VIRTLIB,''))
         else:
             # We will copy values from the current library view
             view_info[KEY_COLUMNS] = self.get_current_columns(visible_only=True)

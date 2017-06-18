@@ -207,6 +207,8 @@ class ViewManagerAction(InterfaceAction):
             library_config[cfg.KEY_LAST_VIEW] = key
             cfg.set_library_config(self.gui.current_db, library_config)
 
+        if view_info[cfg.KEY_APPLY_VIRTLIB]:
+            self.apply_virtlib(view_info[cfg.KEY_VIRTLIB])
         if view_info[cfg.KEY_APPLY_RESTRICTION]:
             self.apply_restriction(view_info[cfg.KEY_RESTRICTION])
         if view_info[cfg.KEY_APPLY_SEARCH]:
@@ -216,6 +218,9 @@ class ViewManagerAction(InterfaceAction):
         self.gui.library_view.select_rows(selected_ids)
         self.current_view = key
         self.rebuild_menus()
+
+    def apply_virtlib(self, virtlib_name):
+        self.gui.apply_virtual_library(virtlib_name)
 
     def apply_restriction(self, restriction_name):
         current = unicode(self.gui.search_restriction.currentText())
