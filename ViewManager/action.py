@@ -207,7 +207,7 @@ class ViewManagerAction(InterfaceAction):
             library_config[cfg.KEY_LAST_VIEW] = key
             cfg.set_library_config(self.gui.current_db, library_config)
 
-        if view_info[cfg.KEY_APPLY_VIRTLIB]:
+        if view_info.get(cfg.KEY_APPLY_VIRTLIB,False):
             self.apply_virtlib(view_info[cfg.KEY_VIRTLIB])
         if view_info[cfg.KEY_APPLY_RESTRICTION]:
             self.apply_restriction(view_info[cfg.KEY_RESTRICTION])
