@@ -175,23 +175,32 @@ class ViewComboBox(QComboBox):
 
 class SearchComboBox(QComboBox):
 
-    def __init__(self, parent, entries={}):
+    def __init__(self, parent, entries={}, empty='(Clear)'):
         QComboBox.__init__(self, parent)
+        self.empty=empty
         self.populate_combo(entries)
 
     def populate_combo(self, entries):
         self.clear()
-        self.addItem('')
+        self.addItem(self.empty)
         p = sorted(entries, key=sort_key)
         for search_name in p:
             self.addItem(search_name)
 
     def select_value(self, search):
+        if search == '':
+            search = self.empty
         if search:
             idx = self.findText(search)
             self.setCurrentIndex(idx)
         elif self.count() > 0:
             self.setCurrentIndex(0)
+
+    def currentText(self):
+        t = super(SearchComboBox,self).currentText()
+        if t == self.empty:
+            t = ''
+        return t
 
 
 class ColumnListWidget(QListWidget):
@@ -420,30 +429,40 @@ class ConfigWidget(QWidget):
         other_layout = QGridLayout()
         view_group_box_layout.addLayout(other_layout)
 
-        tooltip = "Apply the selected saved search when the View is activated."
+        apply_label = QLabel('Search, Virtual library and VL Additional restriction will only be changed if checked below.')
+        apply_label.setWordWrap(True)
+
         self.apply_search_checkbox = QCheckBox('Apply saved &search', self)
-        self.apply_search_checkbox.setToolTip(tooltip)
-        self.saved_search_combo = SearchComboBox(self, entries=saved_searches().names())
-        self.saved_search_combo.setToolTip(tooltip)
+        self.apply_search_checkbox.setToolTip("Apply the selected saved search when the View is activated.")
+        self.saved_search_combo = SearchComboBox(self, entries=saved_searches().names(),empty="(Clear Search)")
+        self.saved_search_combo.setToolTip("Saved search to apply.")
+        # enable/disable combo based on check.
+        self.saved_search_combo.setEnabled(self.apply_search_checkbox.isChecked())
+        self.apply_search_checkbox.stateChanged.connect(lambda x : self.saved_search_combo.setEnabled(self.apply_search_checkbox.isChecked()))
 
-        tooltip = "Switch to the selected Virtual Library when the View is activated."
-        self.apply_virtlib_checkbox = QCheckBox('Switch to &Virtual Library', self)
-        self.apply_virtlib_checkbox.setToolTip(tooltip)
-        self.virtlib_combo = SearchComboBox(self,entries=self.gui.library_view.model().db.prefs.get('virtual_libraries', {}))
-        self.virtlib_combo.setToolTip(tooltip)
+        self.apply_virtlib_checkbox = QCheckBox('Switch to &Virtual library', self)
+        self.apply_virtlib_checkbox.setToolTip("Switch to the selected Virtual library when the View is activated.")
+        self.virtlib_combo = SearchComboBox(self,entries=self.gui.library_view.model().db.prefs.get('virtual_libraries', {}),empty="(No Virtual library)")
+        self.virtlib_combo.setToolTip("Virtual library to switch to.")
+        # enable/disable combo based on check.
+        self.virtlib_combo.setEnabled(self.apply_virtlib_checkbox.isChecked())
+        self.apply_virtlib_checkbox.stateChanged.connect(lambda x : self.virtlib_combo.setEnabled(self.apply_virtlib_checkbox.isChecked()))
 
-        tooltip = "Apply the selected saved search as a Virtual Library additional restriction when the View is activated."
         self.apply_restriction_checkbox = QCheckBox('Apply VL additional search &restriction', self)
-        self.apply_restriction_checkbox.setToolTip(tooltip)
-        self.search_restriction_combo = SearchComboBox(self,entries=saved_searches().names())
-        self.search_restriction_combo.setToolTip(tooltip)
+        self.apply_restriction_checkbox.setToolTip("Apply the selected saved search as a Virtual library additional restriction when the View is activated.")
+        self.search_restriction_combo = SearchComboBox(self,entries=saved_searches().names(),empty="(Clear VL restriction search)")
+        self.search_restriction_combo.setToolTip("Saved search to apply as VL additional search restriction.")
+        # enable/disable combo based on check.
+        self.search_restriction_combo.setEnabled(self.apply_restriction_checkbox.isChecked())
+        self.apply_restriction_checkbox.stateChanged.connect(lambda x : self.search_restriction_combo.setEnabled(self.apply_restriction_checkbox.isChecked()))
 
-        other_layout.addWidget(self.apply_search_checkbox, 0, 0, 1, 1)
-        other_layout.addWidget(self.saved_search_combo, 0, 1, 1, 1)
-        other_layout.addWidget(self.apply_virtlib_checkbox, 1, 0, 1, 1)
-        other_layout.addWidget(self.virtlib_combo, 1, 1, 1, 1)
-        other_layout.addWidget(self.apply_restriction_checkbox, 2, 0, 1, 1)
-        other_layout.addWidget(self.search_restriction_combo, 2, 1, 1, 1)
+        other_layout.addWidget(apply_label, 0, 0, 1, 2)
+        other_layout.addWidget(self.apply_search_checkbox, 1, 0, 1, 1)
+        other_layout.addWidget(self.saved_search_combo, 1, 1, 1, 1)
+        other_layout.addWidget(self.apply_virtlib_checkbox, 2, 0, 1, 1)
+        other_layout.addWidget(self.virtlib_combo, 2, 1, 1, 1)
+        other_layout.addWidget(self.apply_restriction_checkbox, 3, 0, 1, 1)
+        other_layout.addWidget(self.search_restriction_combo, 3, 1, 1, 1)
         other_layout.setColumnStretch(2, 1)
 
         layout.addSpacing(10)
@@ -543,6 +562,8 @@ class ConfigWidget(QWidget):
         restriction_to_apply = ''
         apply_search = False
         search_to_apply = ''
+        apply_virtlib = False
+        virtlib_to_apply = ''
         if self.view_name:
             view_info = self.views[self.view_name]
             columns = copy.deepcopy(view_info[KEY_COLUMNS])
