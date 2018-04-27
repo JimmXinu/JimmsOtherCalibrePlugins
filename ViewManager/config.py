@@ -14,13 +14,13 @@ try:
     from PyQt5.Qt import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                           QGroupBox, QComboBox, QGridLayout, QListWidget,
                           QListWidgetItem, QIcon, QInputDialog, Qt,
-                          QAction, QCheckBox, QPushButton, QScrollArea)
+                          QAction, QCheckBox, QPushButton, QScrollArea, QSpinBox)
 except ImportError as e:
     from PyQt4 import QtGui
     from PyQt4.Qt import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                           QGroupBox, QComboBox, QGridLayout, QListWidget,
                           QListWidgetItem, QIcon, QInputDialog, Qt,
-                          QAction, QCheckBox, QPushButton, QScrollArea)
+                          QAction, QCheckBox, QPushButton, QScrollArea, QSpinBox)
 try:
     from calibre.gui2 import QVariant
     del QVariant
@@ -152,7 +152,7 @@ def set_library_config(db, library_config):
 
 class ViewComboBox(QComboBox):
 
-    def __init__(self, parent, views, special=False):
+    def __init__(self, parent, views, special=None):
         QComboBox.__init__(self, parent)
         self.special = special
         self.populate_combo(views)
@@ -161,7 +161,7 @@ class ViewComboBox(QComboBox):
         self.blockSignals(True)
         self.clear()
         if self.special:
-            self.addItem(LAST_VIEW_ITEM)
+            self.addItem(self.special)
         for view_name in sorted(views.keys()):
             self.addItem(view_name)
         self.select_view(selected_text)
@@ -361,9 +361,11 @@ class ConfigWidget(QWidget):
         self.all_columns = self.get_current_columns()
         self.view_name = None
 
+        self.has_splitter = hasattr(self.gui.library_view,'pin_view')
+        
         toplayout = QVBoxLayout(self)
         self.setLayout(toplayout)
-
+        ## wrap config in a scrollable area for smaller displays.
         scrollable = QScrollArea()
         scrollcontent = QWidget()
         scrollable.setWidget(scrollcontent)
@@ -372,7 +374,6 @@ class ConfigWidget(QWidget):
 
         layout = QVBoxLayout()
         scrollcontent.setLayout(layout)
-
 
         select_view_layout = QHBoxLayout()
         layout.addLayout(select_view_layout)
@@ -398,7 +399,7 @@ class ConfigWidget(QWidget):
         select_view_layout.addWidget(self.rename_view_button)
         select_view_layout.insertStretch(-1)
 
-        view_group_box = QGroupBox(self)
+        view_group_box = QGroupBox('View Options',self)
         layout.addWidget(view_group_box)
         view_group_box_layout = QVBoxLayout()
         view_group_box.setLayout(view_group_box_layout)
@@ -406,7 +407,10 @@ class ConfigWidget(QWidget):
         customise_layout = QGridLayout()
         view_group_box_layout.addLayout(customise_layout, 1)
 
-        self.columns_label = QLabel('Columns in view:', self)
+        if self.has_splitter:
+            self.columns_label = QLabel('Columns in left (default) view:', self)
+        else:
+            self.columns_label = QLabel('Columns in view:', self)
         self.columns_list = ColumnListWidget(self, self.gui)
         self.move_column_up_button = QtGui.QToolButton(self)
         self.move_column_up_button.setToolTip('Move column up')
@@ -416,6 +420,26 @@ class ConfigWidget(QWidget):
         self.move_column_down_button.setIcon(QIcon(I('arrow-down.png')))
         self.move_column_up_button.clicked.connect(self.columns_list.move_column_up)
         self.move_column_down_button.clicked.connect(self.columns_list.move_column_down)
+        self.columns_apply = QCheckBox('Save/Apply Columns Shown', self)
+        self.columns_apply_sizes = QCheckBox('Save/Apply Column Sizes', self)
+
+        ## Create, but don't show on older versions.  For the few
+        ## (like me during testing) who switch back and forth between
+        ## new and old calibre versions.
+        self.split_columns_label = QLabel('Columns in right (split) view:', self)
+        self.split_columns_list = ColumnListWidget(self, self.gui)
+        self.splitter_apply = QCheckBox('Save/Apply Split Book List', self)
+        self.split_columns_apply = QCheckBox('Save/Apply Columns Shown', self)
+        self.split_columns_apply_sizes = QCheckBox('Save/Apply Column Sizes', self)
+        if self.has_splitter:
+            self.move_split_column_up_button = QtGui.QToolButton(self)
+            self.move_split_column_up_button.setToolTip('Move column up')
+            self.move_split_column_up_button.setIcon(QIcon(I('arrow-up.png')))
+            self.move_split_column_down_button = QtGui.QToolButton(self)
+            self.move_split_column_down_button.setToolTip('Move column down')
+            self.move_split_column_down_button.setIcon(QIcon(I('arrow-down.png')))
+            self.move_split_column_up_button.clicked.connect(self.split_columns_list.move_column_up)
+            self.move_split_column_down_button.clicked.connect(self.split_columns_list.move_column_down)
 
         self.sort_label = QLabel('Sort order:', self)
         self.sort_list = SortColumnListWidget(self, self.gui)
@@ -427,23 +451,56 @@ class ConfigWidget(QWidget):
         self.move_sort_down_button.setIcon(QIcon(I('arrow-down.png')))
         self.move_sort_up_button.clicked.connect(self.sort_list.move_column_up)
         self.move_sort_down_button.clicked.connect(self.sort_list.move_column_down)
+        self.sort_apply = QCheckBox('Save/Apply Sort', self)
+        self.sort_limit_label = QLabel('Sort Column Limit', self)
+        self.sort_limit_spin = QSpinBox(self)
 
-        customise_layout.addWidget(self.columns_label, 0, 0, 1, 1)
-        customise_layout.addWidget(self.sort_label, 0, 2, 1, 1)
-        customise_layout.addWidget(self.columns_list, 1, 0, 3, 1)
-        customise_layout.addWidget(self.move_column_up_button, 1, 1, 1, 1)
-        customise_layout.addWidget(self.move_column_down_button, 3, 1, 1, 1)
-        customise_layout.addWidget(self.sort_list,1, 2, 3, 1)
-        customise_layout.addWidget(self.move_sort_up_button, 1, 3, 1, 1)
-        customise_layout.addWidget(self.move_sort_down_button, 3, 3, 1, 1)
+        layout_col = 0 # calculate layout because split column only shown if available.
+        customise_layout.addWidget(self.columns_label, 0, layout_col, 1, 1)
+        customise_layout.addWidget(self.columns_list, 1, layout_col, 3, 1)
+        customise_layout.addWidget(self.columns_apply, 4, layout_col, 1, 1)
+        customise_layout.addWidget(self.columns_apply_sizes, 5, layout_col, 1, 1)
+        layout_col = layout_col + 1
+        customise_layout.addWidget(self.move_column_up_button, 1, layout_col, 1, 1)
+        customise_layout.addWidget(self.move_column_down_button, 3, layout_col, 1, 1)
+        layout_col = layout_col + 1
+
+        if self.has_splitter:
+            customise_layout.addWidget(self.split_columns_label, 0, layout_col, 1, 1)
+            customise_layout.addWidget(self.split_columns_list, 1, layout_col, 3, 1)
+            customise_layout.addWidget(self.splitter_apply, 4, layout_col, 1, 1)
+            customise_layout.addWidget(self.split_columns_apply, 5, layout_col, 1, 1)
+            customise_layout.addWidget(self.split_columns_apply_sizes, 6, layout_col, 1, 1)
+            layout_col = layout_col + 1
+            customise_layout.addWidget(self.move_split_column_up_button, 1, layout_col, 1, 1)
+            customise_layout.addWidget(self.move_split_column_down_button, 3, layout_col, 1, 1)
+            layout_col = layout_col + 1
+        
+        customise_layout.addWidget(self.sort_label, 0, layout_col, 1, 1)
+        customise_layout.addWidget(self.sort_list, 1, layout_col, 3, 1)
+        customise_layout.addWidget(self.sort_apply, 4, layout_col, 1, 1)
+        customise_layout.addWidget(self.sort_limit_label, 5, layout_col, 1, 1)
+        horz = QHBoxLayout()
+        horz.addWidget(self.sort_limit_spin)
+        horz.addWidget(self.sort_limit_label)
+        customise_layout.addLayout(horz, 5, layout_col, 1, 1)
+        layout_col = layout_col + 1
+        
+        customise_layout.addWidget(self.move_sort_up_button, 1, layout_col, 1, 1)
+        customise_layout.addWidget(self.move_sort_down_button, 3, layout_col, 1, 1)
+        layout_col = layout_col + 1
 
         self.columns_label.setMaximumHeight(self.columns_label.sizeHint().height())
 
-        other_layout = QGridLayout()
-        view_group_box_layout.addLayout(other_layout)
+        search_group_box = QGroupBox("Search and Virtual Library Options",self)
+        layout.addWidget(search_group_box)
+        search_group_box_layout = QVBoxLayout()
+        search_group_box.setLayout(search_group_box_layout)
 
-        apply_label = QLabel('Search, Virtual library and VL Additional restriction will only be changed if checked below.')
-        apply_label.setWordWrap(True)
+        # customise_layout = QGridLayout()
+        # search_group_box_layout.addLayout(customise_layout, 1)
+        other_layout = QGridLayout()
+        search_group_box_layout.addLayout(other_layout)
 
         self.apply_search_checkbox = QCheckBox('Apply saved &search', self)
         self.apply_search_checkbox.setToolTip("Apply the selected saved search when the View is activated.")
@@ -469,16 +526,15 @@ class ConfigWidget(QWidget):
         self.search_restriction_combo.setEnabled(self.apply_restriction_checkbox.isChecked())
         self.apply_restriction_checkbox.stateChanged.connect(lambda x : self.search_restriction_combo.setEnabled(self.apply_restriction_checkbox.isChecked()))
 
-        other_layout.addWidget(apply_label, 0, 0, 1, 2)
-        other_layout.addWidget(self.apply_search_checkbox, 1, 0, 1, 1)
-        other_layout.addWidget(self.saved_search_combo, 1, 1, 1, 1)
-        other_layout.addWidget(self.apply_virtlib_checkbox, 2, 0, 1, 1)
-        other_layout.addWidget(self.virtlib_combo, 2, 1, 1, 1)
-        other_layout.addWidget(self.apply_restriction_checkbox, 3, 0, 1, 1)
-        other_layout.addWidget(self.search_restriction_combo, 3, 1, 1, 1)
-        other_layout.setColumnStretch(2, 1)
+        other_layout.addWidget(self.apply_search_checkbox, 0, 0, 1, 1)
+        other_layout.addWidget(self.saved_search_combo, 0, 1, 1, 1)
+        other_layout.addWidget(self.apply_virtlib_checkbox, 1, 0, 1, 1)
+        other_layout.addWidget(self.virtlib_combo, 1, 1, 1, 1)
+        other_layout.addWidget(self.apply_restriction_checkbox, 2, 0, 1, 1)
+        other_layout.addWidget(self.search_restriction_combo, 2, 1, 1, 1)
+        # other_layout.setRowStretch(4, 1)
 
-        layout.addSpacing(10)
+        #layout.addSpacing(10)
         other_group_box = QGroupBox('General Options', self)
         layout.addWidget(other_group_box)
         other_group_box_layout = QGridLayout()
@@ -488,7 +544,7 @@ class ConfigWidget(QWidget):
         self.auto_apply_checkbox = QCheckBox('&Automatically apply view:', self)
         auto_apply = self.library.get(KEY_AUTO_APPLY_VIEW, False)
         self.auto_apply_checkbox.setCheckState(Qt.Checked if auto_apply else Qt.Unchecked)
-        self.auto_view_combo = ViewComboBox(self, self.views, special=True)
+        self.auto_view_combo = ViewComboBox(self, self.views, special=LAST_VIEW_ITEM)
         self.auto_view_combo.select_view(self.library.get(KEY_VIEW_TO_APPLY, LAST_VIEW_ITEM))
         self.auto_view_combo.setMinimumSize(150, 20)
         info_apply_label = QLabel('Enabling this option may override any startup search restriction or '
@@ -539,6 +595,7 @@ class ConfigWidget(QWidget):
             return
         # Update all of the current user information in the store
         view_info = self.views[self.view_name]
+        view_info[KEY_PIN_COLUMNS] = self.split_columns_list.get_data()
         view_info[KEY_COLUMNS] = self.columns_list.get_data()
         view_info[KEY_SORT] = self.sort_list.get_data()
         view_info[KEY_APPLY_RESTRICTION] = self.apply_restriction_checkbox.checkState() == Qt.Checked
@@ -580,6 +637,7 @@ class ConfigWidget(QWidget):
         if self.view_name:
             view_info = self.views[self.view_name]
             columns = copy.deepcopy(view_info[KEY_COLUMNS])
+            split_columns = copy.deepcopy(view_info.get(KEY_PIN_COLUMNS,{}))
             sort_columns = copy.deepcopy(view_info[KEY_SORT])
             all_columns = self.all_columns
             apply_restriction = view_info[KEY_APPLY_RESTRICTION]
@@ -590,6 +648,7 @@ class ConfigWidget(QWidget):
             virtlib_to_apply = view_info.get(KEY_VIRTLIB,'')
 
         self.columns_list.populate(columns, all_columns)
+        self.split_columns_list.populate(split_columns, all_columns)
         self.sort_list.populate(sort_columns, all_columns)
         self.apply_restriction_checkbox.setCheckState(Qt.Checked if apply_restriction else Qt.Unchecked)
         self.search_restriction_combo.select_value(restriction_to_apply)

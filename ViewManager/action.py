@@ -50,11 +50,13 @@ class ViewManagerAction(InterfaceAction):
         # Assign our menu to this action and an icon
         self.qaction.setMenu(self.menu)
         self.qaction.setIcon(get_icon(PLUGIN_ICONS[0]))
+        self.has_splitter = False
 
     def initialization_complete(self):
         self.current_view = None
         if not self.check_switch_to_last_view_for_library():
             self.rebuild_menus()
+        self.has_splitter = hasattr(self.gui.library_view,'pin_view')
 
     def library_changed(self, db):
         # We need to rebuild out menus when the library is changed, as each library
@@ -100,8 +102,9 @@ class ViewManagerAction(InterfaceAction):
         self.menu_actions.append(new_ac)
         m.addSeparator()
 
-        create_menu_action_unique(self, m, _('&Customize plugin')+'...', 'config.png',
-                                  shortcut=False, triggered=self.show_configuration)
+        cfg_ac = create_menu_action_unique(self, m, _('&Customize plugin')+'...', 'config.png',
+                                           triggered=self.show_configuration)
+        self.menu_actions.append(cfg_ac)
         # for menu_id, unique_name in self.old_actions_unique_map.iteritems():
         #     if menu_id not in self.actions_unique_map:
         #         self.gui.keyboard.unregister_shortcut(unique_name)
@@ -194,7 +197,7 @@ class ViewManagerAction(InterfaceAction):
         #     view_info[cfg.KEY_APPLY_RESTRICTION] = False
         #     view_info[cfg.KEY_RESTRICTION] = ''
 
-        if hasattr(self.gui.library_view,'pin_view'):
+        if self.has_splitter:
             # print("pin isVisible:%s"%self.gui.library_view.pin_view.isVisible())
             pin_state = self.gui.library_view.pin_view.get_state()
             print("pin_state:")
@@ -325,28 +328,27 @@ class ViewManagerAction(InterfaceAction):
 
         state['sort_history'] = sh
 
-        self.gui.library_view.apply_state(state)
+        self.gui.library_view.apply_state(state,max_sort_levels=len(state['sort_history']))
         self.gui.library_view.save_state()
 
-        if hasattr(self.gui.library_view,'pin_view'):
+        if self.has_splitter:
             if cfg.KEY_PIN_COLUMNS in view_info:
                 pin_state = self.contruct_state_from_view_info(cfg.KEY_PIN_COLUMNS,view_info)
                 print("set pin_state:")
                 pp.pprint(pin_state)
 
+                self.gui.library_view.pin_view.setVisible(view_info.get(cfg.KEY_PIN_VISIBLE,False))
+                
                 print("splitter.saveState:")
                 pp.pprint(self.gui.library_view.pin_view.splitter.saveState())
-                # gprefs['book_list_pin_splitter_state'] = view_info[cfg.KEY_PIN_SPLITTER_STATE]
-                # self.gui.library_view.pin_view.restore_state() # force pin_view to read splitter state.
                 if hasattr(self.gui.library_view.pin_view.splitter,'splitter_state'):
                     print("splitter_state")
-                    self.gui.library_view.pin_view.splitter.splitter_state = view_info[cfg.KEY_PIN_SPLITTER_STATE]
+                    self.gui.library_view.pin_view.splitter.splitter_state = view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None)
                 else:
-                    self.gui.library_view.pin_view.splitter.restoreState(view_info[cfg.KEY_PIN_SPLITTER_STATE])
+                    self.gui.library_view.pin_view.splitter.restoreState(view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None))
                 print("splitter.saveState:")
                 pp.pprint(self.gui.library_view.pin_view.splitter.saveState())
 
-                self.gui.library_view.pin_view.setVisible(view_info[cfg.KEY_PIN_VISIBLE])
 
                 self.gui.library_view.pin_view.apply_state(pin_state)
                 self.gui.library_view.pin_view.save_state()
