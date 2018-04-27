@@ -7,8 +7,8 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
-# import pprint
-# pp = pprint.PrettyPrinter(indent=4)
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
 
 import sys
 from collections import OrderedDict
@@ -20,6 +20,7 @@ except ImportError as e:
 
 from calibre.gui2.actions import InterfaceAction
 from calibre.constants import numeric_version as calibre_version
+from calibre.gui2 import gprefs
 
 from calibre.gui2 import error_dialog
 import calibre_plugins.view_manager.config as cfg
@@ -88,14 +89,14 @@ class ViewManagerAction(InterfaceAction):
                     has_checked_view = True
             m.addSeparator()
             save_ac = create_menu_action_unique(self, m, '&Save columns, widths and sorts', 'column.png',
-                                                  triggered=self.save_column_widths)
+                                                  triggered=self.save_view)
             #self.actions_unique_map[save_ac.calibre_shortcut_unique_name] = save_ac.calibre_shortcut_unique_name
             self.menu_actions.append(save_ac)
             if not has_checked_view:
                 save_ac.setEnabled(False)
 
         new_ac = create_menu_action_unique(self, m, '&Create new View', 'plus.png',
-                                                  triggered=partial(self.save_column_widths,create=True))
+                                                  triggered=partial(self.save_view,create=True))
         self.menu_actions.append(new_ac)
         m.addSeparator()
 
@@ -121,7 +122,29 @@ class ViewManagerAction(InterfaceAction):
                 return True
         return False
 
-    def save_column_widths(self,create=False):
+    def contruct_config_cols(self,key_columns,view_info,state):
+        sizes = state['column_sizes']
+        new_config_cols = []
+
+        # Now need to identify the column widths for each column
+        if key_columns in view_info:
+            prev_col_sizes = dict(view_info[key_columns])
+        else:
+            prev_col_sizes = dict()
+        # ordered columns list from col_id->position map.
+        ordered_cols = sorted(state['column_positions'], key=state['column_positions'].get)# state['column_positions'].items().sort(key=lambda x: x[1])
+        # filter out hidden columns.
+        ordered_cols = filter(lambda x : x not in state['hidden_columns'], ordered_cols)
+        for col in ordered_cols:
+            # I'm not sure under what circumstances the saved col size
+            # would be needed, but the previous code fell back to it.
+            # JM
+            prev_size = prev_col_sizes.get(col,-1)
+            new_config_cols.append((col, sizes.get(col, prev_size)))
+
+        return new_config_cols
+
+    def save_view(self,create=False):
         if self.current_view is None and not create:
             return
 
@@ -143,37 +166,20 @@ class ViewManagerAction(InterfaceAction):
 
             view_info = { cfg.KEY_COLUMNS: [], cfg.KEY_SORT: [],
                           cfg.KEY_APPLY_RESTRICTION: False, cfg.KEY_RESTRICTION: '',
-                          cfg.KEY_APPLY_SEARCH: False, cfg.KEY_SEARCH: '' }
+                          cfg.KEY_APPLY_SEARCH: False, cfg.KEY_SEARCH: '',
+                          cfg.KEY_PIN_COLUMNS: [], cfg.KEY_PIN_VISIBLE: False,
+                          cfg.KEY_PIN_SPLITTER_STATE: None }
             views[new_view_name] = view_info
         else:
             view_info = views[self.current_view]
 
-        # Now need to identify the column widths for each column
+        print("pre-view_info:")
+        pp.pprint(view_info)
+
         state = self.gui.library_view.get_state()
-        #pp.pprint(state)
-        #pp.pprint(view_info)
-        sizes = state['column_sizes']
-        new_config_cols = []
+        print("state:")
+        pp.pprint(state)
 
-        prev_col_sizes = dict(view_info[cfg.KEY_COLUMNS])
-        # ordered columns list from col_id->position map.
-        ordered_cols = sorted(state['column_positions'], key=state['column_positions'].get)# state['column_positions'].items().sort(key=lambda x: x[1])
-        # filter out hidden columns.
-        ordered_cols = filter(lambda x : x not in state['hidden_columns'], ordered_cols)
-        for col in ordered_cols:
-            # I'm not sure under what circumstances the saved col size
-            # would be needed, but the previous code fell back to it.
-            # JM
-            prev_size = prev_col_sizes.get(col,-1)
-            new_config_cols.append((col, sizes.get(col, prev_size)))
-
-        new_config_sort = []
-        already_sorted = {}
-        TF_map = { True:0, False:1 } # no idea why VM records asc/desc that way...
-        for col, direct in state['sort_history']:
-            if col not in already_sorted:
-                already_sorted[col] = direct
-                new_config_sort.append([unicode(col),TF_map[direct]])
 
         ## Not used--config only handles saved/named searches.  Also
         ## needs to deal with saved from 'current search'.  Similar
@@ -188,12 +194,44 @@ class ViewManagerAction(InterfaceAction):
         #     view_info[cfg.KEY_APPLY_RESTRICTION] = False
         #     view_info[cfg.KEY_RESTRICTION] = ''
 
+        if hasattr(self.gui.library_view,'pin_view'):
+            # print("pin isVisible:%s"%self.gui.library_view.pin_view.isVisible())
+            pin_state = self.gui.library_view.pin_view.get_state()
+            print("pin_state:")
+            pp.pprint(pin_state)
+            # print("gprefs['book_list_pin_splitter_state']:")
+            # pp.pprint(gprefs.get('book_list_pin_splitter_state',None))
+
+            new_config_cols = self.contruct_config_cols(cfg.KEY_PIN_COLUMNS,view_info,pin_state)
+            # Persist the updated view column info
+            view_info[cfg.KEY_PIN_COLUMNS] = new_config_cols
+            view_info[cfg.KEY_PIN_VISIBLE] = self.gui.library_view.pin_view.isVisible()
+            # self.gui.library_view.pin_view.save_state() # force pin_view to update splitter state.
+            # view_info[cfg.KEY_PIN_SPLITTER_STATE] = gprefs.get('book_list_pin_splitter_state',None)
+            if hasattr(self.gui.library_view.pin_view.splitter,'splitter_state'):
+                print("splitter_state")
+                view_info[cfg.KEY_PIN_SPLITTER_STATE] = self.gui.library_view.pin_view.splitter.splitter_state
+            else:
+                view_info[cfg.KEY_PIN_SPLITTER_STATE] = bytearray(self.gui.library_view.pin_view.splitter.saveState())
+
+        new_config_sort = []
+        already_sorted = {}
+        TF_map = { True:0, False:1 } # no idea why VM records asc/desc that way...
+        for col, direct in state['sort_history']:
+            if col not in already_sorted:
+                already_sorted[col] = direct
+                new_config_sort.append([unicode(col),TF_map[direct]])
+
+        new_config_cols = self.contruct_config_cols(cfg.KEY_COLUMNS,view_info,state)
         # Persist the updated view column info
         view_info[cfg.KEY_COLUMNS] = new_config_cols
-        #pp.pprint(new_config_sort)
         view_info[cfg.KEY_SORT] = new_config_sort
+
         library_config[cfg.KEY_VIEWS] = views
         cfg.set_library_config(self.gui.current_db, library_config)
+
+        print("post-view_info:")
+        pp.pprint(view_info)
         if create:
             self.rebuild_menus()
             self.switch_view(new_view_name)
@@ -237,10 +275,10 @@ class ViewManagerAction(InterfaceAction):
                 self.gui.saved_search.setCurrentIndex(idx)
                 self.gui.saved_search.saved_search_selected(search_name)
 
-    def apply_column_and_sort(self, view_info):
+    def contruct_state_from_view_info(self, cfg_key, view_info):
         model = self.gui.library_view.model()
         colmap = list(model.column_map)
-        config_cols = view_info[cfg.KEY_COLUMNS]
+        config_cols = view_info[cfg_key]
         # Make sure our config contains only valid columns
         valid_cols = OrderedDict([(cname,width) for cname, width in config_cols if cname in colmap])
         if not valid_cols:
@@ -256,7 +294,24 @@ class ViewManagerAction(InterfaceAction):
         positions = {}
         for i, col in enumerate((sorted(model.column_map, cmp=col_pos))):
             positions[col] = i
+        resize_cols = dict([(cname, width) for cname, width in valid_cols.iteritems() if width > 0])
 
+        state = {'hidden_columns': hidden_cols,
+                 'column_positions': positions,
+                 'column_sizes': resize_cols}
+
+        return state
+
+    def apply_column_and_sort(self, view_info):
+        print("apply view_info:")
+        pp.pprint(view_info)
+
+        state = self.contruct_state_from_view_info(cfg.KEY_COLUMNS,view_info)
+        print("set state:")
+        pp.pprint(state)
+
+        model = self.gui.library_view.model()
+        colmap = list(model.column_map)
         # Now setup the sorting
         sort_cols = view_info[cfg.KEY_SORT]
         # Make sure our config contains only valid columns
@@ -265,16 +320,41 @@ class ViewManagerAction(InterfaceAction):
         for col, asc in sort_cols:
             sh.append((col, asc==0))
 
-        ##print("set sort history:")
-        ##pp.pprint(sh)
-        resize_cols = dict([(cname, width) for cname, width in valid_cols.iteritems() if width > 0])
-        state = {'hidden_columns': hidden_cols,
-                 'column_positions': positions,
-                 'sort_history': sh,
-                 'column_sizes': resize_cols}
+        print("set sort history:")
+        pp.pprint(sh)
+
+        state['sort_history'] = sh
 
         self.gui.library_view.apply_state(state)
         self.gui.library_view.save_state()
+
+        if hasattr(self.gui.library_view,'pin_view'):
+            if cfg.KEY_PIN_COLUMNS in view_info:
+                pin_state = self.contruct_state_from_view_info(cfg.KEY_PIN_COLUMNS,view_info)
+                print("set pin_state:")
+                pp.pprint(pin_state)
+
+                print("splitter.saveState:")
+                pp.pprint(self.gui.library_view.pin_view.splitter.saveState())
+                # gprefs['book_list_pin_splitter_state'] = view_info[cfg.KEY_PIN_SPLITTER_STATE]
+                # self.gui.library_view.pin_view.restore_state() # force pin_view to read splitter state.
+                if hasattr(self.gui.library_view.pin_view.splitter,'splitter_state'):
+                    print("splitter_state")
+                    self.gui.library_view.pin_view.splitter.splitter_state = view_info[cfg.KEY_PIN_SPLITTER_STATE]
+                else:
+                    self.gui.library_view.pin_view.splitter.restoreState(view_info[cfg.KEY_PIN_SPLITTER_STATE])
+                print("splitter.saveState:")
+                pp.pprint(self.gui.library_view.pin_view.splitter.saveState())
+
+                self.gui.library_view.pin_view.setVisible(view_info[cfg.KEY_PIN_VISIBLE])
+
+                self.gui.library_view.pin_view.apply_state(pin_state)
+                self.gui.library_view.pin_view.save_state()
+            else:
+                # if previous setting doesn't have pin/splitter
+                # settings, assume view should not be split.
+                self.gui.library_view.pin_view.setVisible(False)
+
 
     def show_configuration(self):
         self.interface_action_base_plugin.do_user_config(self.gui)

@@ -14,13 +14,13 @@ try:
     from PyQt5.Qt import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                           QGroupBox, QComboBox, QGridLayout, QListWidget,
                           QListWidgetItem, QIcon, QInputDialog, Qt,
-                          QAction, QCheckBox, QPushButton)
+                          QAction, QCheckBox, QPushButton, QScrollArea)
 except ImportError as e:
     from PyQt4 import QtGui
     from PyQt4.Qt import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                           QGroupBox, QComboBox, QGridLayout, QListWidget,
                           QListWidgetItem, QIcon, QInputDialog, Qt,
-                          QAction, QCheckBox, QPushButton)
+                          QAction, QCheckBox, QPushButton, QScrollArea)
 try:
     from calibre.gui2 import QVariant
     del QVariant
@@ -76,6 +76,9 @@ KEY_APPLY_RESTRICTION = 'applyRestriction'
 KEY_RESTRICTION = 'restrictionToApply'
 KEY_APPLY_SEARCH = 'applySearch'
 KEY_SEARCH = 'searchToApply'
+KEY_PIN_COLUMNS = 'pin_columns'
+KEY_PIN_VISIBLE = 'pin_visible'
+KEY_PIN_SPLITTER_STATE = 'pin_splitter_state'
 
 LAST_VIEW_ITEM = '*Last View Used'
 
@@ -358,8 +361,18 @@ class ConfigWidget(QWidget):
         self.all_columns = self.get_current_columns()
         self.view_name = None
 
-        layout = QVBoxLayout(self)
-        self.setLayout(layout)
+        toplayout = QVBoxLayout(self)
+        self.setLayout(toplayout)
+
+        scrollable = QScrollArea()
+        scrollcontent = QWidget()
+        scrollable.setWidget(scrollcontent)
+        scrollable.setWidgetResizable(True)
+        toplayout.addWidget(scrollable)
+
+        layout = QVBoxLayout()
+        scrollcontent.setLayout(layout)
+
 
         select_view_layout = QHBoxLayout()
         layout.addLayout(select_view_layout)
