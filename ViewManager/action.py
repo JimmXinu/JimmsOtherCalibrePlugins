@@ -345,7 +345,8 @@ class ViewManagerAction(InterfaceAction):
                     print("splitter_state")
                     self.gui.library_view.pin_view.splitter.splitter_state = view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None)
                 else:
-                    self.gui.library_view.pin_view.splitter.restoreState(view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None))
+                    if view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None):
+                        self.gui.library_view.pin_view.splitter.restoreState(view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None))
                 print("splitter.saveState:")
                 pp.pprint(self.gui.library_view.pin_view.splitter.saveState())
 
