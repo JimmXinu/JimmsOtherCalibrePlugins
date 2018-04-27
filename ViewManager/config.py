@@ -399,7 +399,7 @@ class ConfigWidget(QWidget):
         select_view_layout.addWidget(self.rename_view_button)
         select_view_layout.insertStretch(-1)
 
-        view_group_box = QGroupBox('View Options',self)
+        view_group_box = QGroupBox('Column Options',self)
         layout.addWidget(view_group_box)
         view_group_box_layout = QVBoxLayout()
         view_group_box.setLayout(view_group_box_layout)
@@ -408,9 +408,10 @@ class ConfigWidget(QWidget):
         view_group_box_layout.addLayout(customise_layout, 1)
 
         if self.has_splitter:
-            self.columns_label = QLabel('Columns in left (default) view:', self)
+            columns_label = 'Columns in left (default) view'
         else:
-            self.columns_label = QLabel('Columns in view:', self)
+            columns_label = 'Columns in view'
+        self.columns_apply = QCheckBox(columns_label, self)
         self.columns_list = ColumnListWidget(self, self.gui)
         self.move_column_up_button = QtGui.QToolButton(self)
         self.move_column_up_button.setToolTip('Move column up')
@@ -420,17 +421,12 @@ class ConfigWidget(QWidget):
         self.move_column_down_button.setIcon(QIcon(I('arrow-down.png')))
         self.move_column_up_button.clicked.connect(self.columns_list.move_column_up)
         self.move_column_down_button.clicked.connect(self.columns_list.move_column_down)
-        self.columns_apply = QCheckBox('Save/Apply Columns Shown', self)
-        self.columns_apply_sizes = QCheckBox('Save/Apply Column Sizes', self)
 
         ## Create, but don't show on older versions.  For the few
         ## (like me during testing) who switch back and forth between
         ## new and old calibre versions.
-        self.split_columns_label = QLabel('Columns in right (split) view:', self)
+        self.split_columns_apply = QCheckBox('Columns in right (split) view', self)
         self.split_columns_list = ColumnListWidget(self, self.gui)
-        self.splitter_apply = QCheckBox('Save/Apply Split Book List', self)
-        self.split_columns_apply = QCheckBox('Save/Apply Columns Shown', self)
-        self.split_columns_apply_sizes = QCheckBox('Save/Apply Column Sizes', self)
         if self.has_splitter:
             self.move_split_column_up_button = QtGui.QToolButton(self)
             self.move_split_column_up_button.setToolTip('Move column up')
@@ -441,7 +437,7 @@ class ConfigWidget(QWidget):
             self.move_split_column_up_button.clicked.connect(self.split_columns_list.move_column_up)
             self.move_split_column_down_button.clicked.connect(self.split_columns_list.move_column_down)
 
-        self.sort_label = QLabel('Sort order:', self)
+        self.sort_apply = QCheckBox('Sort order', self)
         self.sort_list = SortColumnListWidget(self, self.gui)
         self.move_sort_up_button = QtGui.QToolButton(self)
         self.move_sort_up_button.setToolTip('Move sort column up')
@@ -451,46 +447,32 @@ class ConfigWidget(QWidget):
         self.move_sort_down_button.setIcon(QIcon(I('arrow-down.png')))
         self.move_sort_up_button.clicked.connect(self.sort_list.move_column_up)
         self.move_sort_down_button.clicked.connect(self.sort_list.move_column_down)
-        self.sort_apply = QCheckBox('Save/Apply Sort', self)
-        self.sort_limit_label = QLabel('Sort Column Limit', self)
-        self.sort_limit_spin = QSpinBox(self)
 
         layout_col = 0 # calculate layout because split column only shown if available.
-        customise_layout.addWidget(self.columns_label, 0, layout_col, 1, 1)
+        customise_layout.addWidget(self.columns_apply, 0, layout_col, 1, 1)
         customise_layout.addWidget(self.columns_list, 1, layout_col, 3, 1)
-        customise_layout.addWidget(self.columns_apply, 4, layout_col, 1, 1)
-        customise_layout.addWidget(self.columns_apply_sizes, 5, layout_col, 1, 1)
         layout_col = layout_col + 1
         customise_layout.addWidget(self.move_column_up_button, 1, layout_col, 1, 1)
         customise_layout.addWidget(self.move_column_down_button, 3, layout_col, 1, 1)
         layout_col = layout_col + 1
 
         if self.has_splitter:
-            customise_layout.addWidget(self.split_columns_label, 0, layout_col, 1, 1)
+            customise_layout.addWidget(self.split_columns_apply, 0, layout_col, 1, 1)
             customise_layout.addWidget(self.split_columns_list, 1, layout_col, 3, 1)
-            customise_layout.addWidget(self.splitter_apply, 4, layout_col, 1, 1)
-            customise_layout.addWidget(self.split_columns_apply, 5, layout_col, 1, 1)
-            customise_layout.addWidget(self.split_columns_apply_sizes, 6, layout_col, 1, 1)
             layout_col = layout_col + 1
             customise_layout.addWidget(self.move_split_column_up_button, 1, layout_col, 1, 1)
             customise_layout.addWidget(self.move_split_column_down_button, 3, layout_col, 1, 1)
             layout_col = layout_col + 1
         
-        customise_layout.addWidget(self.sort_label, 0, layout_col, 1, 1)
+        customise_layout.addWidget(self.sort_apply, 0, layout_col, 1, 1)
         customise_layout.addWidget(self.sort_list, 1, layout_col, 3, 1)
-        customise_layout.addWidget(self.sort_apply, 4, layout_col, 1, 1)
-        customise_layout.addWidget(self.sort_limit_label, 5, layout_col, 1, 1)
-        horz = QHBoxLayout()
-        horz.addWidget(self.sort_limit_spin)
-        horz.addWidget(self.sort_limit_label)
-        customise_layout.addLayout(horz, 5, layout_col, 1, 1)
         layout_col = layout_col + 1
         
         customise_layout.addWidget(self.move_sort_up_button, 1, layout_col, 1, 1)
         customise_layout.addWidget(self.move_sort_down_button, 3, layout_col, 1, 1)
         layout_col = layout_col + 1
 
-        self.columns_label.setMaximumHeight(self.columns_label.sizeHint().height())
+#        self.columns_label.setMaximumHeight(self.columns_label.sizeHint().height())
 
         search_group_box = QGroupBox("Search and Virtual Library Options",self)
         layout.addWidget(search_group_box)
