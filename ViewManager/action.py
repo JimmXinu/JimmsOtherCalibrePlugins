@@ -4,7 +4,7 @@ from __future__ import (unicode_literals, division, absolute_import,
                         print_function)
 
 __license__   = 'GPL v3'
-__copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
+__copyright__ = '2011, Grant Drake <grant.drake@gmail.com>, 2018, Jim Miller'
 __docformat__ = 'restructuredtext en'
 
 import pprint
@@ -167,11 +167,9 @@ class ViewManagerAction(InterfaceAction):
                 if view_name.lower() == new_view_name.lower():
                     return error_dialog(self.gui, 'Add Failed', 'A view with the same name already exists', show=True)
 
-            view_info = { cfg.KEY_COLUMNS: [], cfg.KEY_SORT: [],
-                          cfg.KEY_APPLY_RESTRICTION: False, cfg.KEY_RESTRICTION: '',
-                          cfg.KEY_APPLY_SEARCH: False, cfg.KEY_SEARCH: '',
-                          cfg.KEY_PIN_COLUMNS: [], cfg.KEY_PIN_VISIBLE: False,
-                          cfg.KEY_PIN_SPLITTER_STATE: None }
+            view_info = cfg.get_empty_view()
+            if self.has_splitter:
+                view_info[cfg.KEY_APPLY_PIN_COLUMNS] = self.gui.library_view.pin_view.isVisible()
             views[new_view_name] = view_info
         else:
             view_info = views[self.current_view]
@@ -183,21 +181,7 @@ class ViewManagerAction(InterfaceAction):
         print("state:")
         pp.pprint(state)
 
-
-        ## Not used--config only handles saved/named searches.  Also
-        ## needs to deal with saved from 'current search'.  Similar
-        ## issue with saving search.
-        # Save search restriction
-        # search_restrict = unicode(self.gui.search_restriction.currentText())
-        # print("search_restrict:%s"%search_restrict)
-        # if search_restrict:
-        #     view_info[cfg.KEY_APPLY_RESTRICTION] = True
-        #     view_info[cfg.KEY_RESTRICTION] = search_restrict
-        # else:
-        #     view_info[cfg.KEY_APPLY_RESTRICTION] = False
-        #     view_info[cfg.KEY_RESTRICTION] = ''
-
-        if self.has_splitter:
+        if self.has_splitter and view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False):
             # print("pin isVisible:%s"%self.gui.library_view.pin_view.isVisible())
             pin_state = self.gui.library_view.pin_view.get_state()
             print("pin_state:")
@@ -208,7 +192,7 @@ class ViewManagerAction(InterfaceAction):
             new_config_cols = self.contruct_config_cols(cfg.KEY_PIN_COLUMNS,view_info,pin_state)
             # Persist the updated view column info
             view_info[cfg.KEY_PIN_COLUMNS] = new_config_cols
-            view_info[cfg.KEY_PIN_VISIBLE] = self.gui.library_view.pin_view.isVisible()
+            view_info[cfg.KEY_APPLY_PIN_COLUMNS] = self.gui.library_view.pin_view.isVisible()
             # self.gui.library_view.pin_view.save_state() # force pin_view to update splitter state.
             # view_info[cfg.KEY_PIN_SPLITTER_STATE] = gprefs.get('book_list_pin_splitter_state',None)
             if hasattr(self.gui.library_view.pin_view.splitter,'splitter_state'):
@@ -227,8 +211,12 @@ class ViewManagerAction(InterfaceAction):
 
         new_config_cols = self.contruct_config_cols(cfg.KEY_COLUMNS,view_info,state)
         # Persist the updated view column info
-        view_info[cfg.KEY_COLUMNS] = new_config_cols
-        view_info[cfg.KEY_SORT] = new_config_sort
+
+        if view_info.get(cfg.KEY_APPLY_COLUMNS,True):
+            view_info[cfg.KEY_COLUMNS] = new_config_cols
+
+        if view_info.get(cfg.KEY_APPLY_SORT,True):
+            view_info[cfg.KEY_SORT] = new_config_sort
 
         library_config[cfg.KEY_VIEWS] = views
         cfg.set_library_config(self.gui.current_db, library_config)
@@ -309,55 +297,55 @@ class ViewManagerAction(InterfaceAction):
         print("apply view_info:")
         pp.pprint(view_info)
 
-        state = self.contruct_state_from_view_info(cfg.KEY_COLUMNS,view_info)
-        print("set state:")
-        pp.pprint(state)
+        if view_info.get(cfg.KEY_APPLY_COLUMNS,True):
+            state = self.contruct_state_from_view_info(cfg.KEY_COLUMNS,view_info)
+            print("set state:")
+            pp.pprint(state)
+        else:
+            state = self.gui.library_view.get_state()
 
-        model = self.gui.library_view.model()
-        colmap = list(model.column_map)
-        # Now setup the sorting
-        sort_cols = view_info[cfg.KEY_SORT]
-        # Make sure our config contains only valid columns
-        sort_cols = [(c, asc) for c, asc in sort_cols if c in colmap]
-        sh = []
-        for col, asc in sort_cols:
-            sh.append((col, asc==0))
+        if view_info.get(cfg.KEY_APPLY_SORT,True):
+            model = self.gui.library_view.model()
+            colmap = list(model.column_map)
+            # Now setup the sorting
+            sort_cols = view_info[cfg.KEY_SORT]
+            # Make sure our config contains only valid columns
+            sort_cols = [(c, asc) for c, asc in sort_cols if c in colmap]
+            sh = []
+            for col, asc in sort_cols:
+                sh.append((col, asc==0))
+            print("set sort history:")
+            pp.pprint(sh)
+            state['sort_history'] = sh
+            self.gui.library_view.apply_state(state,max_sort_levels=len(state['sort_history']))
+        else:
+            self.gui.library_view.apply_state(state)
 
-        print("set sort history:")
-        pp.pprint(sh)
-
-        state['sort_history'] = sh
-
-        self.gui.library_view.apply_state(state,max_sort_levels=len(state['sort_history']))
         self.gui.library_view.save_state()
 
         if self.has_splitter:
-            if cfg.KEY_PIN_COLUMNS in view_info:
-                pin_state = self.contruct_state_from_view_info(cfg.KEY_PIN_COLUMNS,view_info)
-                print("set pin_state:")
-                pp.pprint(pin_state)
+            # if previous setting doesn't have pin/splitter settings,
+            # assume view should not be split.
+            # Set splitter visible or hidden:
+            self.gui.library_view.pin_view.setVisible(view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False))
 
-                self.gui.library_view.pin_view.setVisible(view_info.get(cfg.KEY_PIN_VISIBLE,False))
-                
-                print("splitter.saveState:")
-                pp.pprint(self.gui.library_view.pin_view.splitter.saveState())
+            if cfg.KEY_PIN_COLUMNS in view_info and view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False):
+                # set the splitter location
                 if hasattr(self.gui.library_view.pin_view.splitter,'splitter_state'):
                     print("splitter_state")
+                    # not added until Calibre 2.23.
                     self.gui.library_view.pin_view.splitter.splitter_state = view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None)
                 else:
                     if view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None):
                         self.gui.library_view.pin_view.splitter.restoreState(view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None))
                 print("splitter.saveState:")
                 pp.pprint(self.gui.library_view.pin_view.splitter.saveState())
-
-
+                # actual columns:
+                pin_state = self.contruct_state_from_view_info(cfg.KEY_PIN_COLUMNS,view_info)
+                print("set pin_state:")
+                pp.pprint(pin_state)
                 self.gui.library_view.pin_view.apply_state(pin_state)
                 self.gui.library_view.pin_view.save_state()
-            else:
-                # if previous setting doesn't have pin/splitter
-                # settings, assume view should not be split.
-                self.gui.library_view.pin_view.setVisible(False)
-
 
     def show_configuration(self):
         self.interface_action_base_plugin.do_user_config(self.gui)
