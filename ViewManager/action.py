@@ -155,7 +155,6 @@ class ViewManagerAction(InterfaceAction):
         views = library_config[cfg.KEY_VIEWS]
         new_view_name = None
         if create:
-            ## code
             new_view_name, ok = QInputDialog.getText(self.gui, 'Add new view',
                                                      'Enter a unique display name for this view:', text='Default')
             if not ok:
@@ -188,12 +187,12 @@ class ViewManagerAction(InterfaceAction):
                 pin_state = self.gui.library_view.pin_view.get_state()
                 print("pin_state:")
                 pp.pprint(pin_state)
-                # print("gprefs['book_list_pin_splitter_state']:")
-                # pp.pprint(gprefs.get('book_list_pin_splitter_state',None))
 
                 new_config_cols = self.contruct_config_cols(cfg.KEY_PIN_COLUMNS,view_info,pin_state)
-                # Persist the updated view column info
+                # Persist the updated pin view column info
                 view_info[cfg.KEY_PIN_COLUMNS] = new_config_cols
+
+            # only save splitter position if view explicitly shows splitter.
             if view_info.get(cfg.KEY_SHOW_SPLIT,cfg.HIDE_SPLIT) == cfg.SHOW_SPLIT:
                 if hasattr(self.gui.library_view.pin_view.splitter,'splitter_state'):
                     print("splitter_state")
@@ -329,12 +328,12 @@ class ViewManagerAction(InterfaceAction):
 
         if self.has_splitter:
             # if previous setting doesn't have pin/splitter settings,
-            # assume view should left as is.
+            # assume view should left as is to emulate previous behavior.
             # Set splitter visible or hidden:
             split_val = view_info.get(cfg.KEY_SHOW_SPLIT,cfg.LEAVE_SPLIT)
             ## Need to call
-            ## column_header_context_handler(action='split')--which
-            ## toggles--to both change split and save it to gprefs.
+            ## column_header_context_handler(action='split') -- which
+            ## toggles -- to both change split and save it to gprefs.
             if ( (split_val == cfg.HIDE_SPLIT and self.gui.library_view.pin_view.isVisible()) or
                  (split_val == cfg.SHOW_SPLIT and not self.gui.library_view.pin_view.isVisible()) ):
                 self.gui.library_view.column_header_context_handler(action='split')

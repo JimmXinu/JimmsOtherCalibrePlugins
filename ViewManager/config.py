@@ -108,7 +108,7 @@ def get_empty_view():
              KEY_RESTRICTION: '',
              KEY_APPLY_SEARCH: False,
              KEY_SEARCH: '',
-             KEY_SHOW_SPLIT: 0,
+             KEY_SHOW_SPLIT: LEAVE_SPLIT,
              KEY_APPLY_COLUMNS: True,
              KEY_APPLY_PIN_COLUMNS: False,
              KEY_APPLY_SORT: True,
@@ -695,7 +695,7 @@ class ConfigWidget(QWidget):
             apply_columns = view_info.get(KEY_APPLY_COLUMNS,True)
             apply_pin_columns = view_info.get(KEY_APPLY_PIN_COLUMNS,False)
             apply_sort = view_info.get(KEY_APPLY_SORT,True)
-            show_split = view_info.get(KEY_SHOW_SPLIT,0)
+            show_split = view_info.get(KEY_SHOW_SPLIT,LEAVE_SPLIT)
             apply_restriction = view_info[KEY_APPLY_RESTRICTION]
             restriction_to_apply = view_info[KEY_RESTRICTION]
             apply_search = view_info[KEY_APPLY_SEARCH]
