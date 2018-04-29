@@ -329,13 +329,15 @@ class ViewManagerAction(InterfaceAction):
 
         if self.has_splitter:
             # if previous setting doesn't have pin/splitter settings,
-            # assume view should not be split.
+            # assume view should left as is.
             # Set splitter visible or hidden:
-            split_val = view_info.get(cfg.KEY_SHOW_SPLIT,cfg.HIDE_SPLIT)
-            if split_val == cfg.HIDE_SPLIT:
-                self.gui.library_view.pin_view.setVisible(False)
-            if split_val == cfg.SHOW_SPLIT:
-                self.gui.library_view.pin_view.setVisible(True)
+            split_val = view_info.get(cfg.KEY_SHOW_SPLIT,cfg.LEAVE_SPLIT)
+            ## Need to call
+            ## column_header_context_handler(action='split')--which
+            ## toggles--to both change split and save it to gprefs.
+            if ( (split_val == cfg.HIDE_SPLIT and self.gui.library_view.pin_view.isVisible()) or
+                 (split_val == cfg.SHOW_SPLIT and not self.gui.library_view.pin_view.isVisible()) ):
+                self.gui.library_view.column_header_context_handler(action='split')
                 # set the splitter location
                 if hasattr(self.gui.library_view.pin_view.splitter,'splitter_state'):
                     print("splitter_state")
