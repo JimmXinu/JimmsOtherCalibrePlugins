@@ -182,6 +182,10 @@ class ViewManagerAction(InterfaceAction):
         pp.pprint(state)
 
         if self.has_splitter:
+            # save split state unless set to 'leave'
+            if view_info.get(cfg.KEY_SHOW_SPLIT,cfg.HIDE_SPLIT) != cfg.LEAVE_SPLIT:
+                view_info[cfg.KEY_SHOW_SPLIT] = cfg.SHOW_SPLIT if self.gui.library_view.pin_view.isVisible() else cfg.HIDE_SPLIT
+
             # only save pin columns if apply *and* currently showing.
             if view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False) and self.gui.library_view.pin_view.isVisible():
                 pin_state = self.gui.library_view.pin_view.get_state()
@@ -337,6 +341,8 @@ class ViewManagerAction(InterfaceAction):
             if ( (split_val == cfg.HIDE_SPLIT and self.gui.library_view.pin_view.isVisible()) or
                  (split_val == cfg.SHOW_SPLIT and not self.gui.library_view.pin_view.isVisible()) ):
                 self.gui.library_view.column_header_context_handler(action='split')
+
+            if self.gui.library_view.pin_view.isVisible():
                 # set the splitter location
                 if hasattr(self.gui.library_view.pin_view.splitter,'splitter_state'):
                     print("splitter_state")
