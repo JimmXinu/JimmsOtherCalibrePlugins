@@ -50,13 +50,16 @@ class ViewManagerAction(InterfaceAction):
         # Assign our menu to this action and an icon
         self.qaction.setMenu(self.menu)
         self.qaction.setIcon(get_icon(PLUGIN_ICONS[0]))
-        self.has_splitter = False
+        self.has_pin_view = False
 
     def initialization_complete(self):
         self.current_view = None
         if not self.check_switch_to_last_view_for_library():
             self.rebuild_menus()
-        self.has_splitter = hasattr(self.gui.library_view,'pin_view')
+        self.has_pin_view = hasattr(self.gui.library_view,'pin_view')
+
+    def show_configuration(self):
+        self.interface_action_base_plugin.do_user_config(self.gui)
 
     def library_changed(self, db):
         # We need to rebuild out menus when the library is changed, as each library
@@ -90,7 +93,7 @@ class ViewManagerAction(InterfaceAction):
                 if is_checked:
                     has_checked_view = True
             m.addSeparator()
-            save_ac = create_menu_action_unique(self, m, '&Save columns, widths and sorts', 'column.png',
+            save_ac = create_menu_action_unique(self, m, '&Save View', 'column.png',
                                                   triggered=self.save_view)
             #self.actions_unique_map[save_ac.calibre_shortcut_unique_name] = save_ac.calibre_shortcut_unique_name
             self.menu_actions.append(save_ac)
@@ -167,9 +170,8 @@ class ViewManagerAction(InterfaceAction):
                     return error_dialog(self.gui, 'Add Failed', 'A view with the same name already exists', show=True)
 
             view_info = cfg.get_empty_view()
-            if self.has_splitter:
+            if self.has_pin_view:
                 view_info[cfg.KEY_APPLY_PIN_COLUMNS] = self.gui.library_view.pin_view.isVisible()
-                view_info[cfg.KEY_SHOW_SPLIT] = cfg.SHOW_SPLIT if self.gui.library_view.pin_view.isVisible() else cfg.HIDE_SPLIT
             views[new_view_name] = view_info
         else:
             view_info = views[self.current_view]
@@ -181,10 +183,11 @@ class ViewManagerAction(InterfaceAction):
         print("state:")
         pp.pprint(state)
 
-        if self.has_splitter:
-            # save split state unless set to 'leave'
-            if view_info.get(cfg.KEY_SHOW_SPLIT,cfg.HIDE_SPLIT) != cfg.LEAVE_SPLIT:
-                view_info[cfg.KEY_SHOW_SPLIT] = cfg.SHOW_SPLIT if self.gui.library_view.pin_view.isVisible() else cfg.HIDE_SPLIT
+        if self.has_pin_view:
+            # automatic type views, adjust KEY_APPLY_PIN_COLUMNS to
+            # match current view.
+            if cfg.VIEW_TYPE_AUTO == view_info.get(cfg.KEY_VIEW_TYPE,cfg.VIEW_TYPE_AUTO):
+                view_info[cfg.KEY_APPLY_PIN_COLUMNS] = self.gui.library_view.pin_view.isVisible()
 
             # only save pin columns if apply *and* currently showing.
             if view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False) and self.gui.library_view.pin_view.isVisible():
@@ -196,13 +199,8 @@ class ViewManagerAction(InterfaceAction):
                 # Persist the updated pin view column info
                 view_info[cfg.KEY_PIN_COLUMNS] = new_config_cols
 
-            # only save splitter position if view explicitly shows splitter.
-            if view_info.get(cfg.KEY_SHOW_SPLIT,cfg.HIDE_SPLIT) == cfg.SHOW_SPLIT:
-                if hasattr(self.gui.library_view.pin_view.splitter,'splitter_state'):
-                    print("splitter_state")
-                    view_info[cfg.KEY_PIN_SPLITTER_STATE] = self.gui.library_view.pin_view.splitter.splitter_state
-                else:
-                    view_info[cfg.KEY_PIN_SPLITTER_STATE] = bytearray(self.gui.library_view.pin_view.splitter.saveState())
+                # Save splitter location
+                view_info[cfg.KEY_PIN_SPLITTER_STATE] = self.get_pin_splitter_state()
 
         new_config_sort = []
         already_sorted = {}
@@ -330,37 +328,36 @@ class ViewManagerAction(InterfaceAction):
 
         self.gui.library_view.save_state()
 
-        if self.has_splitter:
-            # if previous setting doesn't have pin/splitter settings,
-            # assume view should left as is to emulate previous behavior.
-            # Set splitter visible or hidden:
-            split_val = view_info.get(cfg.KEY_SHOW_SPLIT,cfg.LEAVE_SPLIT)
-            ## Need to call
-            ## column_header_context_handler(action='split') -- which
-            ## toggles -- to both change split and save it to gprefs.
-            if ( (split_val == cfg.HIDE_SPLIT and self.gui.library_view.pin_view.isVisible()) or
-                 (split_val == cfg.SHOW_SPLIT and not self.gui.library_view.pin_view.isVisible()) ):
-                self.gui.library_view.column_header_context_handler(action='split')
+        if self.has_pin_view:
+            self.set_pin_view(view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False))
+            if view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False):
+                if cfg.KEY_PIN_COLUMNS in view_info and view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False) and self.gui.library_view.pin_view.isVisible():
+                    # actual columns:
+                    pin_state = self.contruct_state_from_view_info(cfg.KEY_PIN_COLUMNS,view_info)
+                    print("set pin_state:")
+                    pp.pprint(pin_state)
+                    self.gui.library_view.pin_view.apply_state(pin_state)
+                    self.gui.library_view.pin_view.save_state()
+                # set splitter location
+                self.set_pin_splitter_state(view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None))
 
-            if self.gui.library_view.pin_view.isVisible():
-                # set the splitter location
-                if hasattr(self.gui.library_view.pin_view.splitter,'splitter_state'):
-                    print("splitter_state")
-                    # not added until Calibre 2.23.
-                    self.gui.library_view.pin_view.splitter.splitter_state = view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None)
-                else:
-                    if view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None):
-                        self.gui.library_view.pin_view.splitter.restoreState(view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None))
-                print("splitter.saveState:")
-                pp.pprint(self.gui.library_view.pin_view.splitter.saveState())
+    def set_pin_view(self, show=True):
+        ## Need to call column_header_context_handler(action='split')
+        ## -- which toggles -- to both change split and save it to
+        ## gprefs.
+        if self.gui.library_view.pin_view.isVisible() != show:
+            self.gui.library_view.column_header_context_handler(action='split')
 
-            if cfg.KEY_PIN_COLUMNS in view_info and view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False) and self.gui.library_view.pin_view.isVisible():
-                # actual columns:
-                pin_state = self.contruct_state_from_view_info(cfg.KEY_PIN_COLUMNS,view_info)
-                print("set pin_state:")
-                pp.pprint(pin_state)
-                self.gui.library_view.pin_view.apply_state(pin_state)
-                self.gui.library_view.pin_view.save_state()
+    def get_pin_splitter_state(self):
+        if hasattr(self.gui.library_view.pin_view.splitter,'splitter_state'):
+            # not added until Calibre 2.23.
+            return self.gui.library_view.pin_view.splitter.splitter_state
+        else:
+            return bytearray(self.gui.library_view.pin_view.splitter.saveState())
 
-    def show_configuration(self):
-        self.interface_action_base_plugin.do_user_config(self.gui)
+    def set_pin_splitter_state(self, state):
+        if hasattr(self.gui.library_view.pin_view.splitter,'splitter_state'):
+            # not added until Calibre 2.23.
+            self.gui.library_view.pin_view.splitter.splitter_state = state
+        elif state:
+            self.gui.library_view.pin_view.splitter.restoreState(state)

@@ -76,16 +76,15 @@ KEY_APPLY_RESTRICTION = 'applyRestriction'
 KEY_RESTRICTION = 'restrictionToApply'
 KEY_APPLY_SEARCH = 'applySearch'
 KEY_SEARCH = 'searchToApply'
-KEY_SHOW_SPLIT = 'showSplit' # 0:unchanged 1:split 2:unsplit
+KEY_VIEW_TYPE = 'viewType' # 0:Automatic 1: Manual
 KEY_APPLY_COLUMNS = 'applyColumns'
 KEY_APPLY_PIN_COLUMNS = 'applyPinColumns'
 KEY_APPLY_SORT = 'applySort'
 KEY_PIN_COLUMNS = 'pin_columns'
 KEY_PIN_SPLITTER_STATE = 'pin_splitter_state' # splitter position
 
-LEAVE_SPLIT = 0
-SHOW_SPLIT = 1
-HIDE_SPLIT = 2
+VIEW_TYPE_AUTO = 0
+VIEW_TYPE_MAN  = 1
 
 LAST_VIEW_ITEM = '*Last View Used'
 
@@ -108,7 +107,7 @@ def get_empty_view():
              KEY_RESTRICTION: '',
              KEY_APPLY_SEARCH: False,
              KEY_SEARCH: '',
-             KEY_SHOW_SPLIT: LEAVE_SPLIT,
+             KEY_VIEW_TYPE: VIEW_TYPE_AUTO,
              KEY_APPLY_COLUMNS: True,
              KEY_APPLY_PIN_COLUMNS: False,
              KEY_APPLY_SORT: True,
@@ -384,7 +383,7 @@ class ConfigWidget(QWidget):
         self.all_columns = self.get_current_columns()
         self.view_name = None
 
-        self.has_splitter = hasattr(self.gui.library_view,'pin_view')
+        self.has_pin_view = hasattr(self.gui.library_view,'pin_view')
 
         toplayout = QVBoxLayout(self)
         self.setLayout(toplayout)
@@ -430,8 +429,8 @@ class ConfigWidget(QWidget):
         customise_layout = QGridLayout()
         view_group_box_layout.addLayout(customise_layout, 1)
 
-        if self.has_splitter:
-            columns_label = 'Columns in left (default) pane'
+        if self.has_pin_view:
+            columns_label = 'Columns in Default (Left) pane'
         else:
             columns_label = 'Columns in view'
         self.apply_columns_checkbox = QCheckBox(columns_label, self)
@@ -457,40 +456,39 @@ class ConfigWidget(QWidget):
         col_abled()
         self.apply_columns_checkbox.stateChanged.connect(col_abled)
 
-        if self.has_splitter:
-            tooltip = "Choose whether this View will <i>Split</i> the book list, <i>Un-Split</i> it, or leave it as it is(<i>Don't Change</i>)."
-            splitl = QHBoxLayout()
-            label = QLabel(_('Split Book List:'))
+        if self.has_pin_view:
+            tooltip = "Choose whether this View will automatically save and update column order, splitter state and sort order or whether you will control those things manually.  Column <i>sizes</i> can be saved from the plugin menu either way."
+            view_type_layout = QHBoxLayout()
+            label = QLabel(_('View Type:'))
             label.setToolTip(tooltip)
-            splitl.addWidget(label)
-            self.split_action = QComboBox(self)
-            self.split_action.addItem("Don't Change") # LEAVE_SPLIT = 0 # Okay to change text,
-            self.split_action.addItem('Split')        # SHOW_SPLIT = 1  # but if order changes,
-            self.split_action.addItem('Un-Split')     # HIDE_SPLIT = 2  # need to deal with it.
-            self.split_action.setToolTip(tooltip)
-            label.setBuddy(self.split_action)
-            splitl.addWidget(self.split_action)
+            view_type_layout.addWidget(label)
+            self.view_type_combo = QComboBox(self)
+            self.view_type_combo.addItem("Automatic") # VIEW_TYPE_AUTO = 0
+            self.view_type_combo.addItem("Manual")    # VIEW_TYPE_MAN  = 1
+            self.view_type_combo.setToolTip(tooltip)
+            label.setBuddy(self.view_type_combo)
+            view_type_layout.addWidget(self.view_type_combo)
 
-            self.apply_pin_columns_checkbox = QCheckBox('Columns in right (split) pane', self)
-            self.apply_pin_columns_checkbox.setToolTip('Columns in the split or right pane will <i>only</i> be saved or applied if this is checked'+
-                                                       ' <b><i>and</i></b> the book list is currently split.')
-            self.split_columns_list = ColumnListWidget(self, self.gui)
-            self.move_split_column_up_button = QtGui.QToolButton(self)
-            self.move_split_column_up_button.setToolTip('Move column up')
-            self.move_split_column_up_button.setIcon(QIcon(I('arrow-up.png')))
-            self.move_split_column_down_button = QtGui.QToolButton(self)
-            self.move_split_column_down_button.setToolTip('Move column down')
-            self.move_split_column_down_button.setIcon(QIcon(I('arrow-down.png')))
-            self.move_split_column_up_button.clicked.connect(self.split_columns_list.move_column_up)
-            self.move_split_column_down_button.clicked.connect(self.split_columns_list.move_column_down)
+            self.apply_pin_columns_checkbox = QCheckBox('Columns in Split (Right) Pane', self)
+            self.apply_pin_columns_checkbox.setToolTip('Split and columns in the right pane will <i>only</i> be shown or saved if this is checked.<br>'+
+                                                       'When View Type: Manual, you have to change whether to show split or not here and right pane columns will only be Saved from menu when the splitter is shown.')
+            self.pin_columns_list = ColumnListWidget(self, self.gui)
+            self.move_pin_column_up_button = QtGui.QToolButton(self)
+            self.move_pin_column_up_button.setToolTip('Move column up')
+            self.move_pin_column_up_button.setIcon(QIcon(I('arrow-up.png')))
+            self.move_pin_column_down_button = QtGui.QToolButton(self)
+            self.move_pin_column_down_button.setToolTip('Move column down')
+            self.move_pin_column_down_button.setIcon(QIcon(I('arrow-down.png')))
+            self.move_pin_column_up_button.clicked.connect(self.pin_columns_list.move_column_up)
+            self.move_pin_column_down_button.clicked.connect(self.pin_columns_list.move_column_down)
 
-            split_abled = partial(group_abled,
-                                [self.split_columns_list,
-                                 self.move_split_column_up_button,
-                                 self.move_split_column_down_button],
+            pin_abled = partial(group_abled,
+                                [self.pin_columns_list,
+                                 self.move_pin_column_up_button,
+                                 self.move_pin_column_down_button],
                                 self.apply_pin_columns_checkbox)
-            split_abled()
-            self.apply_pin_columns_checkbox.stateChanged.connect(split_abled)
+            pin_abled()
+            self.apply_pin_columns_checkbox.stateChanged.connect(pin_abled)
 
         self.apply_sort_checkbox = QCheckBox('Sort order', self)
         self.apply_sort_checkbox.setToolTip('Columns to Sort by will <i>only</i> be saved or applied if this is checked.')
@@ -511,7 +509,11 @@ class ConfigWidget(QWidget):
         sort_abled()
         self.apply_sort_checkbox.stateChanged.connect(sort_abled)
 
-        layout_col = 0 # calculate layout because split column only shown if available.
+        if self.has_pin_view:
+            self.view_type_combo.currentIndexChanged.connect(self.auto_man_switch)
+            self.auto_man_switch()
+
+        layout_col = 0 # calculate layout because pin column only shown if available.
         customise_layout.addWidget(self.apply_columns_checkbox, 1, layout_col, 1, 1)
         customise_layout.addWidget(self.columns_list, 2, layout_col, 3, 1)
         layout_col = layout_col + 1
@@ -519,13 +521,13 @@ class ConfigWidget(QWidget):
         customise_layout.addWidget(self.move_column_down_button, 4, layout_col, 1, 1)
         layout_col = layout_col + 1
 
-        if self.has_splitter:
-            customise_layout.addLayout(splitl, 0, layout_col, 1, 2)
+        if self.has_pin_view:
+            customise_layout.addLayout(view_type_layout, 0, layout_col, 1, 2)
             customise_layout.addWidget(self.apply_pin_columns_checkbox, 1, layout_col, 1, 1)
-            customise_layout.addWidget(self.split_columns_list, 2, layout_col, 3, 1)
+            customise_layout.addWidget(self.pin_columns_list, 2, layout_col, 3, 1)
             layout_col = layout_col + 1
-            customise_layout.addWidget(self.move_split_column_up_button, 2, layout_col, 1, 1)
-            customise_layout.addWidget(self.move_split_column_down_button, 4, layout_col, 1, 1)
+            customise_layout.addWidget(self.move_pin_column_up_button, 2, layout_col, 1, 1)
+            customise_layout.addWidget(self.move_pin_column_down_button, 4, layout_col, 1, 1)
             layout_col = layout_col + 1
 
         customise_layout.addWidget(self.apply_sort_checkbox, 1, layout_col, 1, 1)
@@ -621,6 +623,15 @@ class ConfigWidget(QWidget):
         self.select_view_combo.currentIndexChanged.connect(
                     partial(self.select_view_combo_index_changed, save_previous=True))
 
+    def auto_man_switch(self):
+        auto = self.view_type_combo.currentIndex() == VIEW_TYPE_AUTO
+        for el in [self.apply_columns_checkbox,
+                   #self.apply_pin_columns_checkbox,
+                   self.apply_sort_checkbox]:
+            el.setEnabled(not auto)
+            if auto:
+                el.setCheckState(Qt.Checked)
+
     def save_settings(self):
         # We only need to update the store for the current view, as switching views
         # will have updated the other stores
@@ -641,10 +652,10 @@ class ConfigWidget(QWidget):
         view_info[KEY_SORT] = self.sort_list.get_data()
         view_info[KEY_APPLY_COLUMNS] = self.apply_columns_checkbox.checkState() == Qt.Checked
         view_info[KEY_APPLY_SORT] = self.apply_sort_checkbox.checkState() == Qt.Checked
-        if self.has_splitter:
-            view_info[KEY_SHOW_SPLIT] = self.split_action.currentIndex()
+        if self.has_pin_view:
+            view_info[KEY_VIEW_TYPE] = self.view_type_combo.currentIndex()
             view_info[KEY_APPLY_PIN_COLUMNS] = self.apply_pin_columns_checkbox.checkState() == Qt.Checked
-            view_info[KEY_PIN_COLUMNS] = self.split_columns_list.get_data()
+            view_info[KEY_PIN_COLUMNS] = self.pin_columns_list.get_data()
         view_info[KEY_APPLY_RESTRICTION] = self.apply_restriction_checkbox.checkState() == Qt.Checked
         if view_info[KEY_APPLY_RESTRICTION]:
             view_info[KEY_RESTRICTION] = unicode(self.search_restriction_combo.currentText()).strip()
@@ -678,7 +689,7 @@ class ConfigWidget(QWidget):
         apply_columns = True
         apply_pin_columns = False
         apply_sort = True
-        show_split = 0
+        view_type = VIEW_TYPE_AUTO
         apply_restriction = False
         restriction_to_apply = ''
         apply_search = False
@@ -688,14 +699,14 @@ class ConfigWidget(QWidget):
         if self.view_name:
             view_info = self.views[self.view_name]
             columns = copy.deepcopy(view_info[KEY_COLUMNS])
-            split_columns = copy.deepcopy(view_info.get(KEY_PIN_COLUMNS,{}))
+            pin_columns = copy.deepcopy(view_info.get(KEY_PIN_COLUMNS,{}))
             sort_columns = copy.deepcopy(view_info[KEY_SORT])
             all_columns = self.all_columns
             apply_virtlib = view_info.get(KEY_APPLY_VIRTLIB,False)
             apply_columns = view_info.get(KEY_APPLY_COLUMNS,True)
             apply_pin_columns = view_info.get(KEY_APPLY_PIN_COLUMNS,False)
             apply_sort = view_info.get(KEY_APPLY_SORT,True)
-            show_split = view_info.get(KEY_SHOW_SPLIT,LEAVE_SPLIT)
+            view_type = view_info.get(KEY_VIEW_TYPE,VIEW_TYPE_AUTO)
             apply_restriction = view_info[KEY_APPLY_RESTRICTION]
             restriction_to_apply = view_info[KEY_RESTRICTION]
             apply_search = view_info[KEY_APPLY_SEARCH]
@@ -706,9 +717,9 @@ class ConfigWidget(QWidget):
         self.columns_list.populate(columns, all_columns)
         self.sort_list.populate(sort_columns, all_columns)
         self.apply_columns_checkbox.setCheckState(Qt.Checked if apply_columns else Qt.Unchecked)
-        if self.has_splitter:
-            self.split_action.setCurrentIndex(show_split)
-            self.split_columns_list.populate(split_columns, all_columns)
+        if self.has_pin_view:
+            self.view_type_combo.setCurrentIndex(view_type)
+            self.pin_columns_list.populate(pin_columns, all_columns)
             self.apply_pin_columns_checkbox.setCheckState(Qt.Checked if apply_pin_columns else Qt.Unchecked)
         self.apply_sort_checkbox.setCheckState(Qt.Checked if apply_sort else Qt.Unchecked)
         self.apply_restriction_checkbox.setCheckState(Qt.Checked if apply_restriction else Qt.Unchecked)
