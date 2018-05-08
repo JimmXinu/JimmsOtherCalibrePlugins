@@ -166,7 +166,11 @@ def get_library_config(db):
         library_config = db.prefs.get_namespaced(PREFS_NAMESPACE, PREFS_KEY_SETTINGS,
                                                  copy.deepcopy(DEFAULT_LIBRARY_VALUES))
     migrate_library_config_if_required(db, library_config)
-    return library_config
+    # return a *copy* because add/rename/del_view change the contents
+    # which then causes problems because what
+    # db.prefs.get_namespaced() returns now disagrees with what's
+    # actually saved.
+    return copy.deepcopy(library_config)
 
 def set_library_config(db, library_config):
     db.prefs.set_namespaced(PREFS_NAMESPACE, PREFS_KEY_SETTINGS, library_config)
