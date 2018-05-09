@@ -20,7 +20,6 @@ except ImportError as e:
 
 from calibre.gui2.actions import InterfaceAction
 from calibre.constants import numeric_version as calibre_version
-from calibre.gui2 import gprefs
 
 from calibre.gui2 import error_dialog
 import calibre_plugins.view_manager.config as cfg
@@ -184,10 +183,7 @@ class ViewManagerAction(InterfaceAction):
         pp.pprint(state)
 
         if self.has_pin_view:
-            # automatic type views, adjust KEY_APPLY_PIN_COLUMNS to
-            # match current view.
-            if cfg.VIEW_TYPE_AUTO == view_info.get(cfg.KEY_VIEW_TYPE,cfg.VIEW_TYPE_AUTO):
-                view_info[cfg.KEY_APPLY_PIN_COLUMNS] = self.gui.library_view.pin_view.isVisible()
+            view_info[cfg.KEY_APPLY_PIN_COLUMNS] = self.gui.library_view.pin_view.isVisible()
 
             # only save pin columns if apply *and* currently showing.
             if view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False) and self.gui.library_view.pin_view.isVisible():
@@ -212,12 +208,8 @@ class ViewManagerAction(InterfaceAction):
 
         new_config_cols = self.contruct_config_cols(cfg.KEY_COLUMNS,view_info,state)
         # Persist the updated view column info
-
-        if view_info.get(cfg.KEY_APPLY_COLUMNS,True):
-            view_info[cfg.KEY_COLUMNS] = new_config_cols
-
-        if view_info.get(cfg.KEY_APPLY_SORT,True):
-            view_info[cfg.KEY_SORT] = new_config_sort
+        view_info[cfg.KEY_COLUMNS] = new_config_cols
+        view_info[cfg.KEY_SORT] = new_config_sort
 
         library_config[cfg.KEY_VIEWS] = views
         cfg.set_library_config(self.gui.current_db, library_config)
@@ -302,29 +294,23 @@ class ViewManagerAction(InterfaceAction):
         print("apply view_info:")
         pp.pprint(view_info)
 
-        if view_info.get(cfg.KEY_APPLY_COLUMNS,True):
-            state = self.contruct_state_from_view_info(cfg.KEY_COLUMNS,view_info)
-            print("set state:")
-            pp.pprint(state)
-        else:
-            state = self.gui.library_view.get_state()
+        state = self.contruct_state_from_view_info(cfg.KEY_COLUMNS,view_info)
+        print("set state:")
+        pp.pprint(state)
 
-        if view_info.get(cfg.KEY_APPLY_SORT,True):
-            model = self.gui.library_view.model()
-            colmap = list(model.column_map)
-            # Now setup the sorting
-            sort_cols = view_info[cfg.KEY_SORT]
-            # Make sure our config contains only valid columns
-            sort_cols = [(c, asc) for c, asc in sort_cols if c in colmap]
-            sh = []
-            for col, asc in sort_cols:
-                sh.append((col, asc==0))
-            print("set sort history:")
-            pp.pprint(sh)
-            state['sort_history'] = sh
-            self.gui.library_view.apply_state(state,max_sort_levels=len(state['sort_history']))
-        else:
-            self.gui.library_view.apply_state(state)
+        model = self.gui.library_view.model()
+        colmap = list(model.column_map)
+        # Now setup the sorting
+        sort_cols = view_info[cfg.KEY_SORT]
+        # Make sure our config contains only valid columns
+        sort_cols = [(c, asc) for c, asc in sort_cols if c in colmap]
+        sh = []
+        for col, asc in sort_cols:
+            sh.append((col, asc==0))
+        print("set sort history:")
+        pp.pprint(sh)
+        state['sort_history'] = sh
+        self.gui.library_view.apply_state(state,max_sort_levels=len(state['sort_history']))
 
         self.gui.library_view.save_state()
 
