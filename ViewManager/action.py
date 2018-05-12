@@ -92,12 +92,17 @@ class ViewManagerAction(InterfaceAction):
                 if is_checked:
                     has_checked_view = True
             m.addSeparator()
-            save_ac = create_menu_action_unique(self, m, '&Save View', 'column.png',
+            save_ac = create_menu_action_unique(self, m, '&Save View Columns', 'column.png',
                                                   triggered=self.save_view)
             #self.actions_unique_map[save_ac.calibre_shortcut_unique_name] = save_ac.calibre_shortcut_unique_name
             self.menu_actions.append(save_ac)
+            save_sort_ac = create_menu_action_unique(self, m, '&Save View Sort', 'sort.png',
+                                                  triggered=partial(self.save_view,save_sort=True))
+            #self.actions_unique_map[save_sort_ac.calibre_shortcut_unique_name] = save_sort_ac.calibre_shortcut_unique_name
+            self.menu_actions.append(save_sort_ac)
             if not has_checked_view:
                 save_ac.setEnabled(False)
+                save_sort_ac.setEnabled(False)
 
         new_ac = create_menu_action_unique(self, m, '&Create new View', 'plus.png',
                                                   triggered=partial(self.save_view,create=True))
@@ -149,7 +154,7 @@ class ViewManagerAction(InterfaceAction):
 
         return new_config_cols
 
-    def save_view(self,create=False):
+    def save_view(self,create=False,save_sort=False):
         if self.current_view is None and not create:
             return
 
@@ -175,6 +180,9 @@ class ViewManagerAction(InterfaceAction):
         else:
             view_info = views[self.current_view]
 
+        save_sort = save_sort or create
+        save_columns = not save_sort or create
+
         print("pre-view_info:")
         pp.pprint(view_info)
 
@@ -182,34 +190,36 @@ class ViewManagerAction(InterfaceAction):
         print("state:")
         pp.pprint(state)
 
-        if self.has_pin_view:
-            view_info[cfg.KEY_APPLY_PIN_COLUMNS] = self.gui.library_view.pin_view.isVisible()
+        if save_sort:
+            new_config_sort = []
+            already_sorted = {}
+            TF_map = { True:0, False:1 } # no idea why VM records asc/desc that way...
+            for col, direct in state['sort_history']:
+                if col not in already_sorted:
+                    already_sorted[col] = direct
+                    new_config_sort.append([unicode(col),TF_map[direct]])
+            view_info[cfg.KEY_SORT] = new_config_sort
 
-            # only save pin columns if apply *and* currently showing.
-            if view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False) and self.gui.library_view.pin_view.isVisible():
-                pin_state = self.gui.library_view.pin_view.get_state()
-                print("pin_state:")
-                pp.pprint(pin_state)
+        if save_columns:
+            if self.has_pin_view:
+                view_info[cfg.KEY_APPLY_PIN_COLUMNS] = self.gui.library_view.pin_view.isVisible()
 
-                new_config_cols = self.contruct_config_cols(cfg.KEY_PIN_COLUMNS,view_info,pin_state)
-                # Persist the updated pin view column info
-                view_info[cfg.KEY_PIN_COLUMNS] = new_config_cols
+                # only save pin columns if apply *and* currently showing.
+                if view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False) and self.gui.library_view.pin_view.isVisible():
+                    pin_state = self.gui.library_view.pin_view.get_state()
+                    print("pin_state:")
+                    pp.pprint(pin_state)
 
-                # Save splitter location
-                view_info[cfg.KEY_PIN_SPLITTER_STATE] = self.get_pin_splitter_state()
+                    new_config_cols = self.contruct_config_cols(cfg.KEY_PIN_COLUMNS,view_info,pin_state)
+                    # Persist the updated pin view column info
+                    view_info[cfg.KEY_PIN_COLUMNS] = new_config_cols
 
-        new_config_sort = []
-        already_sorted = {}
-        TF_map = { True:0, False:1 } # no idea why VM records asc/desc that way...
-        for col, direct in state['sort_history']:
-            if col not in already_sorted:
-                already_sorted[col] = direct
-                new_config_sort.append([unicode(col),TF_map[direct]])
+                    # Save splitter location
+                    view_info[cfg.KEY_PIN_SPLITTER_STATE] = self.get_pin_splitter_state()
 
-        new_config_cols = self.contruct_config_cols(cfg.KEY_COLUMNS,view_info,state)
-        # Persist the updated view column info
-        view_info[cfg.KEY_COLUMNS] = new_config_cols
-        view_info[cfg.KEY_SORT] = new_config_sort
+            new_config_cols = self.contruct_config_cols(cfg.KEY_COLUMNS,view_info,state)
+            # Persist the updated view column info
+            view_info[cfg.KEY_COLUMNS] = new_config_cols
 
         library_config[cfg.KEY_VIEWS] = views
         cfg.set_library_config(self.gui.current_db, library_config)
