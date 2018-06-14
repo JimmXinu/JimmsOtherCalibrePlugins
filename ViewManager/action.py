@@ -183,12 +183,12 @@ class ViewManagerAction(InterfaceAction):
         save_sort = save_sort or create
         save_columns = not save_sort or create
 
-        print("pre-view_info:")
-        pp.pprint(view_info)
+        # print("pre-view_info:")
+        # pp.pprint(view_info)
 
         state = self.gui.library_view.get_state()
-        print("state:")
-        pp.pprint(state)
+        # print("state:")
+        # pp.pprint(state)
 
         if save_sort:
             new_config_sort = []
@@ -207,8 +207,8 @@ class ViewManagerAction(InterfaceAction):
                 # only save pin columns if apply *and* currently showing.
                 if view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False) and self.gui.library_view.pin_view.isVisible():
                     pin_state = self.gui.library_view.pin_view.get_state()
-                    print("pin_state:")
-                    pp.pprint(pin_state)
+                    # print("pin_state:")
+                    # pp.pprint(pin_state)
 
                     new_config_cols = self.contruct_config_cols(cfg.KEY_PIN_COLUMNS,view_info,pin_state)
                     # Persist the updated pin view column info
@@ -224,8 +224,8 @@ class ViewManagerAction(InterfaceAction):
         library_config[cfg.KEY_VIEWS] = views
         cfg.set_library_config(self.gui.current_db, library_config)
 
-        print("post-view_info:")
-        pp.pprint(view_info)
+        # print("post-view_info:")
+        # pp.pprint(view_info)
         if create:
             self.rebuild_menus()
             self.switch_view(new_view_name)
@@ -301,12 +301,12 @@ class ViewManagerAction(InterfaceAction):
         return state
 
     def apply_column_and_sort(self, view_info):
-        print("apply view_info:")
-        pp.pprint(view_info)
+        # print("apply view_info:")
+        # pp.pprint(view_info)
 
         state = self.contruct_state_from_view_info(cfg.KEY_COLUMNS,view_info)
-        print("set state:")
-        pp.pprint(state)
+        # print("set state:")
+        # pp.pprint(state)
 
         model = self.gui.library_view.model()
         colmap = list(model.column_map)
@@ -317,8 +317,8 @@ class ViewManagerAction(InterfaceAction):
         sh = []
         for col, asc in sort_cols:
             sh.append((col, asc==0))
-        print("set sort history:")
-        pp.pprint(sh)
+        # print("set sort history:")
+        # pp.pprint(sh)
         state['sort_history'] = sh
         self.gui.library_view.apply_state(state,max_sort_levels=len(state['sort_history']))
 
@@ -330,8 +330,8 @@ class ViewManagerAction(InterfaceAction):
                 if cfg.KEY_PIN_COLUMNS in view_info and view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False) and self.gui.library_view.pin_view.isVisible():
                     # actual columns:
                     pin_state = self.contruct_state_from_view_info(cfg.KEY_PIN_COLUMNS,view_info)
-                    print("set pin_state:")
-                    pp.pprint(pin_state)
+                    # print("set pin_state:")
+                    # pp.pprint(pin_state)
                     self.gui.library_view.pin_view.apply_state(pin_state)
                     self.gui.library_view.pin_view.save_state()
                 # set splitter location
