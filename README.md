@@ -6,3 +6,11 @@ This is a repository for me to keep my 'other' calibre plugins, IE, not
 FFDL, EpubMerge, EpubSplit and SmartEject.
 
 You're welcome to try using these, but I'm not going to offer very much support.
+
+## Other People's Plugins
+
+ViewManager, FavouritesMenu, etc
+
+Sometimes plugins need work to be brought up to date.  I'm also
+throwing those that I work on here to benefit from versioning.  I
+don't necessarily promise to maintain them beyond my own use.
