@@ -4,8 +4,11 @@ from __future__ import (unicode_literals, division, absolute_import,
                         print_function)
 
 __license__   = 'GPL v3'
-__copyright__ = '2011, Grant Drake <grant.drake@gmail.com>, 2018, Jim Miller'
+__copyright__ = '2011, Grant Drake <grant.drake@gmail.com>, 2019, Jim Miller'
 __docformat__ = 'restructuredtext en'
+
+import six
+from six import text_type as unicode
 
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
@@ -112,7 +115,7 @@ class ViewManagerAction(InterfaceAction):
         cfg_ac = create_menu_action_unique(self, m, _('&Customize plugin')+'...', 'config.png',
                                            triggered=self.show_configuration)
         self.menu_actions.append(cfg_ac)
-        # for menu_id, unique_name in self.old_actions_unique_map.iteritems():
+        # for menu_id, unique_name in six.iteritems(self.old_actions_unique_map):
         #     if menu_id not in self.actions_unique_map:
         #         self.gui.keyboard.unregister_shortcut(unique_name)
         # self.old_actions_unique_map = self.actions_unique_map
@@ -144,7 +147,7 @@ class ViewManagerAction(InterfaceAction):
         # ordered columns list from col_id->position map.
         ordered_cols = sorted(state['column_positions'], key=state['column_positions'].get)# state['column_positions'].items().sort(key=lambda x: x[1])
         # filter out hidden columns.
-        ordered_cols = filter(lambda x : x not in state['hidden_columns'], ordered_cols)
+        ordered_cols = [x for x in ordered_cols if x not in state['hidden_columns']]
         for col in ordered_cols:
             # I'm not sure under what circumstances the saved col size
             # would be needed, but the previous code fell back to it.
@@ -285,14 +288,12 @@ class ViewManagerAction(InterfaceAction):
         hidden_cols = [c for c in colmap if c not in config_cols]
         if 'ondevice' in hidden_cols:
             hidden_cols.remove('ondevice')
-        def col_pos(x, y):
-            xidx = config_cols.index(x) if x in config_cols else sys.maxint
-            yidx = config_cols.index(y) if y in config_cols else sys.maxint
-            return cmp(xidx, yidx)
+        def col_key(x):
+            return config_cols.index(x) if x in config_cols else sys.maxsize
         positions = {}
-        for i, col in enumerate((sorted(model.column_map, cmp=col_pos))):
+        for i, col in enumerate(sorted(model.column_map, key=col_key)):
             positions[col] = i
-        resize_cols = dict([(cname, width) for cname, width in valid_cols.iteritems() if width > 0])
+        resize_cols = dict([(cname, width) for cname, width in six.iteritems(valid_cols) if width > 0])
 
         state = {'hidden_columns': hidden_cols,
                  'column_positions': positions,

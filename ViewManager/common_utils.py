@@ -7,20 +7,23 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+import six
+from six import text_type as unicode
+
 import os
 try:
     from PyQt5 import QtWidgets as QtGui
     from PyQt5.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
                           QTableWidgetItem, QFont, QLineEdit, QComboBox,
                           QVBoxLayout, QDialogButtonBox, QStyledItemDelegate, QDateTime,
-                          QRegExpValidator, QRegExp, QTextEdit, 
+                          QRegExpValidator, QRegExp, QTextEdit,
                           QListWidget, QAbstractItemView)
 except ImportError as e:
     from PyQt4 import QtGui
     from PyQt4.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
                           QTableWidgetItem, QFont, QLineEdit, QComboBox,
                           QVBoxLayout, QDialogButtonBox, QStyledItemDelegate, QDateTime,
-                          QRegExpValidator, QRegExp, QTextEdit, 
+                          QRegExpValidator, QRegExp, QTextEdit,
                           QListWidget, QAbstractItemView)
 
 try:
@@ -268,22 +271,22 @@ class SizePersistedDialog(QDialog):
         geom = bytearray(self.saveGeometry())
         gprefs[self.unique_pref_name] = geom
         self.persist_custom_prefs()
-        
+
     def persist_custom_prefs(self):
         '''
         Invoked when the dialog is closing. Override this function to call
         save_custom_pref() if you have a setting you want persisted that you can
-        retrieve in your __init__() using load_custom_pref() when next opened 
+        retrieve in your __init__() using load_custom_pref() when next opened
         '''
         pass
-    
+
     def load_custom_pref(self, name, default=None):
         return gprefs.get(self.unique_pref_name+':'+name, default)
 
     def save_custom_pref(self, name, value):
         gprefs[self.unique_pref_name+':'+name] = value
-        
-        
+
+
 class ReadOnlyTableWidgetItem(QTableWidgetItem):
 
     def __init__(self, text):
@@ -396,7 +399,7 @@ class KeyValueComboBox(QComboBox):
     def populate_combo(self, selected_key):
         self.clear()
         selected_idx = idx = -1
-        for key, value in self.values.iteritems():
+        for key, value in six.iteritems(self.values):
             idx = idx + 1
             self.addItem(value)
             if key == selected_key:
@@ -404,7 +407,7 @@ class KeyValueComboBox(QComboBox):
         self.setCurrentIndex(selected_idx)
 
     def selected_key(self):
-        for key, value in self.values.iteritems():
+        for key, value in six.iteritems(self.values):
             if value == unicode(self.currentText()).strip():
                 return key
 
@@ -567,7 +570,7 @@ def get_title_authors_text(db, book_id):
 
 
 class PrefsViewerDialog(SizePersistedDialog):
-    
+
     def __init__(self, gui, namespace):
         SizePersistedDialog.__init__(self, gui, 'Prefs Viewer dialog')
         self.setWindowTitle('Preferences for: '+namespace)
@@ -576,19 +579,19 @@ class PrefsViewerDialog(SizePersistedDialog):
         self.namespace = namespace
         self._init_controls()
         self.resize_dialog()
-        
+
         self._populate_settings()
-        
+
         if self.keys_list.count():
             self.keys_list.setCurrentRow(0)
-        
+
     def _init_controls(self):
         layout = QVBoxLayout(self)
         self.setLayout(layout)
-        
+
         ml = QHBoxLayout()
         layout.addLayout(ml, 1)
-        
+
         self.keys_list = QListWidget(self)
         self.keys_list.setSelectionMode(QAbstractItemView.SingleSelection)
         self.keys_list.setFixedWidth(150)
@@ -598,20 +601,20 @@ class PrefsViewerDialog(SizePersistedDialog):
         self.value_text.setTabStopWidth(24)
         self.value_text.setReadOnly(True)
         ml.addWidget(self.value_text, 1)
- 
+
         button_box = QDialogButtonBox(QDialogButtonBox.Ok)
         button_box.accepted.connect(self.accept)
         button_box.setCenterButtons(True)
         layout.addWidget(button_box)
-        
+
     def _populate_settings(self):
         self.keys_list.clear()
-        ns_prefix = 'namespaced:%s:'% self.namespace 
-        keys = sorted([k[len(ns_prefix):] for k in self.db.prefs.iterkeys() 
+        ns_prefix = 'namespaced:%s:'% self.namespace
+        keys = sorted([k[len(ns_prefix):] for k in six.iterkeys(self.db.prefs)
                        if k.startswith(ns_prefix)])
         for key in keys:
             self.keys_list.addItem(key)
-        self.keys_list.setMinimumWidth(self.keys_list.sizeHintForColumn(0)) 
+        self.keys_list.setMinimumWidth(self.keys_list.sizeHintForColumn(0))
         self.keys_list.currentRowChanged[int].connect(self._current_row_changed)
 
     def _current_row_changed(self, new_row):
@@ -621,4 +624,4 @@ class PrefsViewerDialog(SizePersistedDialog):
         key = unicode(self.keys_list.currentItem().text())
         val = self.db.prefs.get_namespaced(self.namespace, key, '')
         self.value_text.setPlainText(self.db.prefs.to_raw(val))
-        
+

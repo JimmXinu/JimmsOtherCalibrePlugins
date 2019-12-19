@@ -4,8 +4,12 @@ from __future__ import (unicode_literals, division, absolute_import,
                         print_function)
 
 __license__   = 'GPL v3'
-__copyright__ = '2011, Grant Drake <grant.drake@gmail.com>, 2018, Jim Miller'
+__copyright__ = '2011, Grant Drake <grant.drake@gmail.com>, 2019, Jim Miller'
 __docformat__ = 'restructuredtext en'
+
+import six
+from six import text_type as unicode
+from six.moves import range
 
 import copy, os
 from functools import partial
@@ -258,7 +262,7 @@ class ColumnListWidget(QListWidget):
 
     def get_data(self):
         cols = []
-        for idx in xrange(self.count()):
+        for idx in range(self.count()):
             item = self.item(idx)
             data = convert_qvariant(item.data(Qt.UserRole)).strip()
             if item.checkState() == Qt.Checked or data == 'ondevice':
@@ -359,7 +363,7 @@ class SortColumnListWidget(ColumnListWidget):
 
     def get_data(self):
         cols = []
-        for idx in xrange(self.count()):
+        for idx in range(self.count()):
             item = self.item(idx)
             data = convert_qvariant(item.data(Qt.UserRole)).strip().split('|')
             if item.checkState() == Qt.Checked:
@@ -577,7 +581,7 @@ class ConfigWidget(QWidget):
         keyboard_layout.addStretch(1)
 
         # Force an initial display of view information
-        if KEY_LAST_VIEW in self.library.keys():
+        if KEY_LAST_VIEW in list(self.library.keys()):
             last_view = self.library[KEY_LAST_VIEW]
             if last_view in self.views:
                 self.select_view_combo.select_view(self.library[KEY_LAST_VIEW])
@@ -764,7 +768,7 @@ class ConfigWidget(QWidget):
         colmap = list(model.column_map)
         state = self.columns_state(defaults)
         positions = state['column_positions']
-        colmap.sort(cmp=lambda x,y: cmp(positions[x], positions[y]))
+        colmap.sort(key=lambda x: positions[x])
         hidden_cols = state['hidden_columns']
         if visible_only:
             colmap = [col for col in colmap if col not in hidden_cols or col == 'ondevice']
