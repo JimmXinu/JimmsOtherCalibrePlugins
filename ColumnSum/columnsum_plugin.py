@@ -4,12 +4,14 @@ from __future__ import (unicode_literals, division, absolute_import,
                         print_function)
 
 __license__   = 'GPL v3'
-__copyright__ = '2014, Jim Miller'
+__copyright__ = '2019, Jim Miller'
 __docformat__ = 'restructuredtext en'
 
 from functools import partial
 import string
 import copy
+import six
+from six import text_type as unicode
 
 from PyQt5.Qt import ( QProgressDialog, QTimer )
 
@@ -95,7 +97,7 @@ class ColumnSumPlugin(InterfaceAction):
         custom_columns = copy.deepcopy(self.gui.library_view.model().custom_columns)
 
         num_cust_cols=[]
-        for col,coldef in custom_columns.iteritems():
+        for col,coldef in six.iteritems(custom_columns):
             if coldef['datatype'] in ('int','float'):
                 num_cust_cols.append(coldef)
         
@@ -120,7 +122,10 @@ class ColumnSumPlugin(InterfaceAction):
                 col['values'].append(value)
 
     def do_sum(self, x):
-        return x['display']['number_format'].format(sum(x['values']))
+        if x['display']['number_format']:
+            return x['display']['number_format'].format(sum(x['values']))
+        else:
+            return unicode(sum(x['values']))
     
     def do_average(self, x):
         if len(x['values']) > 0 :
@@ -152,7 +157,7 @@ class ColumnSumPlugin(InterfaceAction):
                 aver=float(sum(x['values']))/float(len(x['values']))
             import math
             def average(s): return sum(s) * 1.0 / len(s)
-            variance = map(lambda y: (y - aver)**2, x['values'])
+            variance = [(y - aver)**2 for y in x['values']]
             return '{:,.1f}'.format(math.sqrt(average(variance))) #x['display']['number_format'].replace('d','.1f')
         else:
             return "0.0"

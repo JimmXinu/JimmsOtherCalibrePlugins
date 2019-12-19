@@ -3,13 +3,13 @@
 
 
 __license__   = 'GPL v3'
-__copyright__ = '2014, Jim Miller'
+__copyright__ = '2019, Jim Miller'
 __docformat__ = 'restructuredtext en'
 
 import os
 from glob import glob
 
-from makezip import createZipFile
+import makezip
 
 if __name__=="__main__":
     
@@ -20,6 +20,6 @@ if __name__=="__main__":
     files=['translations',]
     files.extend(glob('*.py'))
     files.extend(glob('plugin-import-name-*.txt'))
-    createZipFile(filename,"w",
-                  files,exclude=exclude)
+    makezip.createZipFile(filename,"w",
+                          files,exclude=exclude)
     

@@ -5,7 +5,7 @@ from __future__ import (unicode_literals, division, absolute_import,
                         print_function)
 
 __license__   = 'GPL v3'
-__copyright__ = '2014, Jim Miller'
+__copyright__ = '2019, Jim Miller'
 __docformat__ = 'restructuredtext en'
 
 # The class that all Interface Action plugin wrappers must inherit from
@@ -29,8 +29,8 @@ class ColumnSumBase(InterfaceActionBase):
     description         = _('UI plugin to calculate aggregate values for numeric columns of selected books.')
     supported_platforms = ['windows', 'osx', 'linux']
     author              = 'Jim Miller'
-    version             = (2, 0, 0)
-    minimum_calibre_version = (2, 5, 0)
+    version             = (2, 1, 0)
+    minimum_calibre_version = (2, 85, 1)
 
     #: This field defines the GUI plugin class that contains all the code
     #: that actually does something. Its format is module_path:class_name
