@@ -7,6 +7,10 @@ __license__ = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+import six
+from six import text_type as unicode
+from six.moves import range
+
 try:
     from PyQt5.Qt import (QWidget, QHBoxLayout, QMenu, QTreeWidget, Qt, QIcon,
                           QTreeWidgetItem, QListWidget, QListWidgetItem, QSize,
@@ -107,7 +111,7 @@ class FavMenusListWidget(QListWidget):
 
     def remove_matching_item(self, remove_fav_menu):
         paths_text = '/'.join(remove_fav_menu['path'])
-        for row in xrange(self.count()):
+        for row in range(self.count()):
             lw = self.item(row)
             data = convert_qvariant(lw.data(Qt.UserRole))
             if data is not None:
@@ -118,7 +122,7 @@ class FavMenusListWidget(QListWidget):
 
     def get_fav_menus(self):
         fav_menus = []
-        for row in xrange(self.count()):
+        for row in range(self.count()):
             lw = self.item(row)
             data = convert_qvariant(lw.data(Qt.UserRole))
             if data is None:
@@ -233,7 +237,7 @@ class ConfigWidget(QWidget):
     def _remove_item(self):
 
         def find_child(twi, paths):
-            for i in xrange(0, twi.childCount()):
+            for i in range(0, twi.childCount()):
                 c = twi.child(i)
                 text = unicode(c.text(0))
                 if text == paths[0]:
@@ -319,11 +323,11 @@ class ConfigWidget(QWidget):
         # Lets re-sort the keys so that items will appear on screen sorted
         # by their display name (not by their key)
         skeys_map = {}
-        for plugin_name, iaction in self.gui.iactions.iteritems():
+        for plugin_name, iaction in six.iteritems(self.gui.iactions):
             if plugin_name == self.plugin_action.name:
                 continue
             if 'toolbar' in iaction.dont_add_to and 'toolbar-device' in iaction.dont_add_to:
-                print('Not adding:', plugin_name)
+                print(('Not adding:', plugin_name))
                 continue
             display_name = unicode(iaction.qaction.text())
             if plugin_name == 'Choose Library':
@@ -402,7 +406,7 @@ class ConfigWidget(QWidget):
 
     def _is_in_menu(self, possible_menus, paths=[]):
         path_text = '|'.join(paths)
-        for x in xrange(0, len(possible_menus)):
+        for x in range(0, len(possible_menus)):
             fav_menu = possible_menus[x]
             if fav_menu['paths_text'] == path_text:
                 del possible_menus[x]

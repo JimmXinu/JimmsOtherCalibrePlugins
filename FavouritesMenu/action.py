@@ -8,6 +8,8 @@ __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
 import weakref
+from six import text_type as unicode
+
 try:
     from PyQt5.Qt import (QToolButton, QMenu, QAction)
 except ImportError as e:
