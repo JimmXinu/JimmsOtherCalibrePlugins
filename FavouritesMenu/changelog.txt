@@ -1,0 +1,11 @@
+[B]Version 1.0.3[/B] - 05 Nov 2012
+Ensure submenus for plugins can have their states updated by emitting the aboutToShow signal for every plugin that has an associated .menu set for it
+
+[B]Version 1.0.2[/B] - 30 Jul 2012
+Support dynamically named menu names if they have a .favourites_menu_unique_name attribute
+
+[B]Version 1.0.1[/B] - 30 Jun 2012
+Add a hack to allow menu items from the Reading List plugin that have counts in them still be used in this plugin (without the counts)
+
+[B]Version 1.0.0[/B] - 27 Jun 2012
+Initial release of the Favourites Menu plugin
