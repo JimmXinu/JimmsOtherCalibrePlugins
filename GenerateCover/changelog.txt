@@ -1,0 +1,127 @@
+[B]Version 1.5.17[/B] - 04 Apr 2015
+Fix for PyQT 5.4.1 QPixmap() issue.
+
+[B]Version 1.5.14[/B] - 29 Sep 2013
+Fix for the user typing \n or or <br> or <br/> as part of the author to control split across multiple lines
+
+[B]Version 1.5.13[/B] - 24 Sep 2013
+Support the user typing \n or or <br> or <br/> as part of the title or series to control split across multiple lines
+Add a checkbox option to allow scaling up the cover image to fit the available area if it is too small.
+
+[B]Version 1.5.12[/B] - 03 May 2013
+Fix for change made to calibre API in 0.9.29
+
+[B]Version 1.5.11[/B] - 17 Mar 2013
+Fix bug of import saved cover settings not working
+
+[B]Version 1.5.10[/B] - 06 Mar 2013
+Re-release of 1.5.9 due to problem with zip file
+
+[B]Version 1.5.9[/B] - 06 Mar 2013
+Add a "Metadata" section to the "Content" tab allowing the user to override title/author/series for one-off covers
+Add ability to configure a custom column (or tags column) to contain a value any time a cover is generated for a book
+
+[B]Version 1.5.8[/B] - 09 Dec 2012
+Automatically "correct" any corrupted json files when users upgrade to this version
+Check for corruption every time Generate Cover is opened. If found, show error dialog and autofix.
+Prevent plugin being used in Device View or on Device View context menu
+
+[B]Version 1.5.7[/B] - 14 Nov 2012
+Fix bug in stretch cover/resize option not finding full path to image.
+
+[B]Version 1.5.6[/B] - 03 Nov 2012
+Add support for calibre 0.9.5 which changed how Fonts are loaded.
+
+[B]Version 1.5.5[/B] - 14 Aug 2012
+No longer use a calibre ImageView to preview cover as it has right-click menu and drag/drop not relevant to this plugin
+Add protection against failed upgrades of the seriesText field.
+
+[B]Version 1.5.4[/B] - 01 Jun 2012
+Make the series text an option so foreign language users can change it
+No longer respect the calibre preferences Roman Numerals setting - series index will always be displayed numerically.
+
+[B]Version 1.5.3[/B] - 31 May 2012
+Ensure paths to images used by this plugin are stored as relative paths for portability
+Change the calibre library image to appear as {Default Image} in the images list
+Reorder the images list so {Default Image} and {Current Cover} appear at the top
+Allow renaming images changing only their casing
+
+[B]Version 1.5.2[/B] - 20 May 2012
+Ensure code is more command line friendly via the API for external script usage
+Add a 'Resize cover dimensions to match background image' suboption for if you have stretch image to use as cover background enabled.
+
+[B]Version 1.5.1[/B] - 03 May 2012
+Fix issue of version number not incremented for 1.5.0
+
+[B]Version 1.5.0[/B] - 02 May 2012
+Fix bug occurring with selection changes and corrupted multiple cover settings
+Set maximum font size to 999 instead of 99
+Add a separate right margin option, rather than using left margin for both
+On the Fonts tab allow specifying the alignment for each text item of left, centre, right rather than always centre
+Expose API methods to allow more conveniently calling from other plugins
+Add export and import capability for sharing settings/images with other users
+Add an 'Autosave setting' option to Settings tab. When checked, any changes to settings are always saved (except when Cancel pressed)
+When clicking OK (or Import or Export) prompt user to save settings if changed before continuing.
+If font assigned to a setting (whether existing or imported) is not found, use the default font rather than erroring
+If user renames image just by stripping extension, treat this same as if user cancelled rename operation
+Allow importing of multiple images at once.
+Allow importing of multiple setting zips at once.
+
+[B]Version 1.4.0[/B] - 11 Sep 2011
+Upgrade to support the centralised keyboard shortcut management in Calibre
+
+[B]Version 1.3.8[/B] - 03 Jul 2011
+Replace the deprecated composite_formatter with SafeFormat()
+
+[B]Version 1.3.7[/B] - 04 Jun 2011
+Use a progress dialog while generating covers
+
+[B]Version 1.3.6[/B] - 03 Jun 2011
+Bug fix for fonts being set to "Default" resulting in null in config file causing an error
+
+[B]Version 1.3.5[/B] - 01 Jun 2011
+Add a special token to the list of images representing the current cover for the book to allow embedding
+Abort autosize logic with replaced text when text is too large to fit so plugin does not lockup
+
+[B]Version 1.3.4[/B] - 27 Apr 2011
+Allow custom text field to be formatted using Calibre template engine
+Change custom text field so it is a multiline field for more space and complex content
+
+[B]Version 1.3.3[/B] - 23 Apr 2011
+Ensure that margins are set to zero if set to too high a value to prevent crash
+
+[B]Version 1.3.2[/B] - 09 Apr 2011
+Support skinning of icons by putting them in a plugin name subfolder of local resources/images
+
+[B]Version 1.3.1[/B] - 04 Apr 2011
+Fix error for users migrating from particular previous versions
+
+[B]Version 1.3[/B] - 03 Apr 2011
+Rewritten for new plugin infrastructure in Calibre 0.7.53
+
+[B]Version 1.2.1[/B] - 26 Mar 2011
+Ensure version number put in config file for first-time user
+
+[B]Version 1.2[/B] - 26 Mar 2011
+Support freeform text added to cover.
+Add option to autosize text to fit on one line.
+Add a timer to ensure GUI does not redraw preview as every UI change made.
+
+[B]Version 1.1[/B] - 16 Mar 2011
+Redesign GUI.
+Support drag/drop images.
+Support text colors.
+Support image as background.
+Support linking single font.
+Support named saved settings.
+Copy image files to resources directory.
+Support renaming image files.
+
+[B]Version 1.0.2[/B] - 05 Mar 2011
+Fix error appearing if trying to customize through preferences
+
+[B]Version 1.0.1[/B] - 05 Mar 2011
+Remove fixed widths for users with large fonts
+
+[B]Version 1.0[/B] - 05 Mar 2011
+Initial release of Generate Cover plugin
