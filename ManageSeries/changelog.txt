@@ -1,0 +1,45 @@
+[B]Version 1.2.7[/B] - 04 May 2013
+Fix issue introduced with changes to calibre in v0.9.29
+
+[B]Version 1.2.6[/B] - 03 Mar 2013
+Fix bug where trying to lock series index for a book without a series
+Prevent plugin being used in Device View or on Device View context menu
+
+[B]Version 1.2.5[/B] - 26 Jul 2012
+Rename "Sort by Original Series" to "Sort by Original Series Index"
+Add a "Sort by Original Series Name" feature for users who are appending series together that overlap indexes
+
+[B]Version 1.2.4[/B] - 05 Jul 2012
+Bug fix for empty book where the pubdate column would error from a null date.
+
+[B]Version 1.2.3[/B] - 23 Jun 2012
+Ensure lock series index maximum value is far higher.
+Ensure the lock series index text is all selected by default to allow overtyping when dialog displayed
+
+[B]Version 1.2.2[/B] - 04 Jun 2012
+Put checkbox option on the Lock Index dialog when locking multiple series rows to allow setting all remaining to the specified index value
+Add a new context menu option of "Lock old series index" as a fast way to lock series index values to their old values for selected books
+Allow editing the pubdate column for books on this dialog.
+Fix bug where column headings for series columns were not correctly displayed on first opening dialog
+Fix bug where context menus not always updating until selection changed
+
+[B]Version 1.2.1[/B] - 17 Sep 2011
+Only save series indexes for the last selected series column in the dialog
+If multi-select rows to assign an index, clicking Cancel will cancel asking for any further changes
+
+[B]Version 1.2.0[/B] - 11 Sep 2011
+Upgrade to support the centralised keyboard shortcut management in Calibre
+
+[B]Version 1.1.2[/B] - 08 May 2011
+Change webbrowser launching to use Calibre's wrapper for the default browser for better Linux support
+
+[B]Version 1.1.1[/B] - 09 Apr 2011
+Support skinning of icons by putting them in a plugin name subfolder of local resources/images
+Ensure that encoding for launching website url ignores failures.
+
+[B]Version 1.1[/B] - 03 Apr 2011
+Rewritten for new plugin infrastructure in Calibre 0.7.53
+Change to use OrderedDict from collections (deprecated code in Calibre)
+
+[B]Version 1.0[/B] - 16 Mar 2011
+Initial release of Manage Series plugin
