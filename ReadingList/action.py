@@ -11,6 +11,9 @@ import threading, re
 from collections import OrderedDict
 from functools import partial
 
+import six
+from six import text_type as unicode
+
 try:
     from PyQt5.Qt import QMenu, QToolButton, pyqtSignal
 except ImportError:
@@ -56,7 +59,7 @@ class ReadingListAction(InterfaceAction):
         self.menus_lock = threading.RLock()
         self.sync_lock = threading.RLock()
         self.menu = QMenu(self.gui)
-        
+
         self.menu_actions = []
         #self.old_actions_unique_map = {}
 
@@ -97,7 +100,7 @@ class ReadingListAction(InterfaceAction):
                 if calibre_version >= (2,10,0):
                     self.gui.removeAction(action)
             self.menu_actions = []
-            
+
             db = self.gui.current_db
 
             library = cfg.get_library_config(db)
@@ -274,7 +277,7 @@ class ReadingListAction(InterfaceAction):
                     self.sync_now_action.setText('Sync Now (%d)' % sync_total)
 
             # Before we finalize, make sure we delete any actions for menus that are no longer displayed
-            # for menu_id, unique_name in self.old_actions_unique_map.iteritems():
+            # for menu_id, unique_name in six.iteritems(self.old_actions_unique_map):
             #     if menu_id not in self.actions_unique_map:
             #         self.gui.keyboard.unregister_shortcut(unique_name)
             # self.old_actions_unique_map = self.actions_unique_map
@@ -803,7 +806,7 @@ class ReadingListAction(InterfaceAction):
                     return error_dialog(self.gui, 'Cannot create list',
                                         'A list already exists with this name', show=True)
                 elif DEBUG:
-                    print('Reading List: Cannot create list as list_name is duplicate:', list_name)
+                    print(('Reading List: Cannot create list as list_name is duplicate:', list_name))
                 return False
         cfg.create_list(self.gui.current_db, list_name, book_id_list)
         return True
@@ -968,7 +971,7 @@ class ReadingListAction(InterfaceAction):
                 if lists_map:
                     all_lists_map.update(lists_map)
             else:
-                for location_info in self.connected_device_info[4].itervalues():
+                for location_info in six.itervalues(self.connected_device_info[4]):
                     device_uuid = location_info['device_store_uuid']
                     lists_map = cfg.get_book_lists_for_device(db, device_uuid)
                     if lists_map:
@@ -986,7 +989,7 @@ class ReadingListAction(InterfaceAction):
                 uuid = self.connected_device_info[0]
                 self._add_device_to_list_if_should_sync(device_uuids, uuid)
             else:
-                for location_info in self.connected_device_info[4].itervalues():
+                for location_info in six.itervalues(self.connected_device_info[4]):
                     uuid = location_info['device_store_uuid']
                     self._add_device_to_list_if_should_sync(device_uuids, uuid)
         return device_uuids
@@ -1031,7 +1034,7 @@ class ReadingListAction(InterfaceAction):
             lists_map = cfg.get_book_lists_for_device(db, device_uuid, exclude_auto=False)
 
             # Refresh the contents of any lists auto-populated by a search
-            auto_pop_column_list_names = [k for k, v in lists_map.iteritems() if
+            auto_pop_column_list_names = [k for k, v in six.iteritems(lists_map) if
                                    v.get(cfg.KEY_POPULATE_TYPE, 'POPMANUAL') == 'POPSEARCH']
             if auto_pop_column_list_names:
                 if DEBUG:
@@ -1040,18 +1043,18 @@ class ReadingListAction(InterfaceAction):
                     self._rebuild_auto_search_list(db, list_name)
 
             # If a user has a list marked as a "Replace list" always process it first.
-            replace_list_names = [k for k, v in lists_map.iteritems() if
+            replace_list_names = [k for k, v in six.iteritems(lists_map) if
                                    v.get(cfg.KEY_LIST_TYPE, 'SYNCNEW') in ['SYNCREPNEW', 'SYNREPOVR']]
             # Lists that remove are processed next
-            remove_list_names = [k for k, v in lists_map.iteritems() if
+            remove_list_names = [k for k, v in six.iteritems(lists_map) if
                                    v.get(cfg.KEY_LIST_TYPE, 'SYNCNEW') == 'SYNCREM']
             # Other lists are processed last
-            other_list_names = [k for k, v in lists_map.iteritems() if
+            other_list_names = [k for k, v in six.iteritems(lists_map) if
                                    v.get(cfg.KEY_LIST_TYPE, 'SYNCNEW') not in ['SYNCREM', 'SYNCREPNEW', 'SYNREPOVR', 'SYNCAUTO']
                                    and v.get(cfg.KEY_POPULATE_TYPE, 'POPMANUAL') != 'POPDEVICE']
             combined_list_names = replace_list_names + remove_list_names + other_list_names
             # Automatic device lists built from device are built at end
-            auto_device_list_names = [k for k, v in lists_map.iteritems() if
+            auto_device_list_names = [k for k, v in six.iteritems(lists_map) if
                                    v.get(cfg.KEY_POPULATE_TYPE, 'POPMANUAL') == 'POPDEVICE']
 
             change_collections = False

@@ -8,6 +8,8 @@ __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
 import copy, traceback
+import six
+from six import text_type as unicode
 
 try:
     from PyQt5 import QtCore
@@ -158,7 +160,7 @@ def migrate_library_config_if_required(db, library_config):
     if schema_version < 1.6:
         # Change to the new populate type
         lists = library_config[KEY_LISTS]
-        for list_info in lists.itervalues():
+        for list_info in six.itervalues(lists):
             if list_info.get(KEY_LIST_TYPE, 'SYNCNEW') == 'SYNCAUTO':
                 list_info[KEY_POPULATE_TYPE] = 'POPDEVICE'
             else:
@@ -169,7 +171,7 @@ def migrate_library_config_if_required(db, library_config):
     if schema_version < 1.61:
         # Remove POPCOLUMN list type and replace it with POPSEARCH
         lists = library_config[KEY_LISTS]
-        for list_info in lists.itervalues():
+        for list_info in six.itervalues(lists):
             list_info[KEY_POPULATE_SEARCH] = ''
             if list_info.get(KEY_POPULATE_TYPE, 'POPMANUAL') == 'POPCOLUMN':
                 list_info[KEY_POPULATE_TYPE] = 'POPSEARCH'
@@ -246,7 +248,7 @@ def get_book_lists_for_device(db, device_uuid, exclude_auto=True):
     library_config = get_library_config(db)
     lists_map = library_config[KEY_LISTS]
     device_lists = {}
-    for list_name, list_info in lists_map.iteritems():
+    for list_name, list_info in six.iteritems(lists_map):
         if list_info[KEY_SYNC_DEVICE] in [device_uuid, TOKEN_ANY_DEVICE]:
             if not exclude_auto:
                 device_lists[list_name] = list_info
@@ -258,10 +260,10 @@ def get_list_names(db, exclude_auto=True):
     library_config = get_library_config(db)
     lists = library_config[KEY_LISTS]
     if not exclude_auto:
-        return sorted(list(lists.keys()))
+        return sorted(lists.keys())
 
     list_names = []
-    for list_name, list_info in lists.iteritems():
+    for list_name, list_info in six.iteritems(lists):
         if list_info.get(KEY_POPULATE_TYPE, DEFAULT_LIST_VALUES[KEY_POPULATE_TYPE]) == 'POPMANUAL':
             list_names.append(list_name)
     return sorted(list_names)
@@ -735,7 +737,7 @@ class ListsTab(QWidget):
     def _get_custom_columns(self, column_types):
         custom_columns = self.plugin_action.gui.library_view.model().custom_columns
         available_columns = {}
-        for key, column in custom_columns.iteritems():
+        for key, column in six.iteritems(custom_columns):
             typ = column['datatype']
             if typ in column_types:
                 available_columns[key] = column
@@ -836,7 +838,7 @@ class ListsTab(QWidget):
         self.plugin_action.update_series_custom_column(self.list_name, book_ids)
         del self.lists[self.list_name]
         if self.default_list == self.list_name:
-            self.default_list = self.lists.keys()[0]
+            self.default_list = list(self.lists.keys())[0]
         # Now update the lists combobox
         self.select_list_combo.populate_combo(self.lists)
         self.refresh_current_list_info()
@@ -1090,7 +1092,7 @@ class ConfigWidget(QWidget):
         return self.devices_tab.devices_table.get_data()
 
     def delete_device_from_lists(self, library_config, device_uuid):
-        for list_info in library_config[KEY_LISTS].itervalues():
+        for list_info in six.itervalues(library_config[KEY_LISTS]):
             if list_info[KEY_SYNC_DEVICE] == device_uuid:
                 list_info[KEY_SYNC_DEVICE] = DEFAULT_LIST_VALUES[KEY_SYNC_DEVICE]
                 list_info[KEY_SYNC_AUTO] = DEFAULT_LIST_VALUES[KEY_SYNC_AUTO]

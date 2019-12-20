@@ -10,6 +10,10 @@ __docformat__ = 'restructuredtext en'
 import re, copy, os, csv
 from functools import partial
 
+import six
+from six import text_type as unicode
+from six.moves import range
+
 try:
     from PyQt5.Qt import (QWizard, QWizardPage, QApplication, Qt, QTabWidget,
                           QWidget, QTextEdit, QGridLayout, QLabel, QGroupBox,
@@ -133,7 +137,7 @@ class CSVRowsTableWidget(QTableWidget):
     def populate_table(self, csv_rows):
         self.clear()
         self.setRowCount(len(csv_rows))
-        header_labels = [str(col) for col in xrange(1, len(csv_rows[0])+1)]
+        header_labels = [str(col) for col in range(1, len(csv_rows[0])+1)]
         self.setColumnCount(len(header_labels))
         self.setHorizontalHeaderLabels(header_labels)
         self.horizontalHeader().setStretchLastSection(True)
@@ -433,7 +437,7 @@ class ImportClipboardTab(QWidget):
 
     def save_settings(self, settings):
         clipboard_regexes = [unicode(self.pat_combo.itemText(i)).strip()
-                             for i in xrange(0, self.pat_combo.count())]
+                             for i in range(0, self.pat_combo.count())]
         settings['clipboard_regexes'] = clipboard_regexes
 
 
@@ -645,7 +649,7 @@ class ImportCSVTab(QWidget):
 
     def save_settings(self, settings):
         csv_files = [unicode(self.file_combo.itemText(i)).strip()
-                     for i in xrange(0, self.file_combo.count())]
+                     for i in range(0, self.file_combo.count())]
         settings['csv_files'] = csv_files
         if self.delimiter_tab_opt.isChecked():
             settings['csv_delimiter'] = '\t'
@@ -1094,7 +1098,7 @@ class ResolvePage(WizardPage):
         match_book = self.search_matches_table.books[row.row()]
         list_row = self.book_list_table.currentRow()
         book = self.book_list_table.books[list_row]
-        for k in match_book.iterkeys():
+        for k in six.iterkeys(match_book):
             book[k] = match_book[k]
         if book['status'] in ['unmatched', 'multiple']: 
             book['status'] = 'matched'
@@ -1109,9 +1113,9 @@ class ResolvePage(WizardPage):
             self._populate_calibre_info_for_book(match_book)
             match_books[book_id] = match_book
         # Sort by title and author
-        skeys = sorted(match_books.keys(),
-           key=lambda ckey: '%s%s' % (match_books[ckey]['calibre_title'],
-                                      match_books[ckey]['calibre_author_sort']))
+        skeys = sorted(list(match_books.keys(),
+                            key=lambda ckey: '%s%s' % (match_books[ckey]['calibre_title'],
+                                      match_books[ckey]['calibre_author_sort'])))
         sorted_books = [match_books[key] for key in skeys]
         self.search_matches_table.populate_table(sorted_books)
         if sorted_books:
@@ -1135,13 +1139,13 @@ class ResolvePage(WizardPage):
         if len(books) > 0:
             sel_idx = self.book_list_table.currentRow()
             if sel_idx > 0:
-                for i in reversed(xrange(0, sel_idx)):
+                for i in reversed(range(0, sel_idx)):
                     status = books[i]['status']
                     if status == 'unmatched' or status == 'multiple':
                         self.prev_idx = i
                         break
             if sel_idx < len(books) - 1:
-                for i in xrange(sel_idx + 1, len(books)):
+                for i in range(sel_idx + 1, len(books)):
                     status = books[i]['status']
                     if status == 'unmatched' or status == 'multiple':
                         self.next_idx = i
@@ -1306,7 +1310,7 @@ class ImportListWizard(QWizard):
         gprefs[self.unique_pref_name+':settings'] = self.info['settings']
 
     def _on_caches_loaded(self, hash_maps):
-        if isinstance(hash_maps, basestring):
+        if isinstance(hash_maps, six.string_types):
             error_dialog(self.gui, _('Data error'),
                     _('The hash map of books could not be built.'),
                     det_msg=hash_maps, show=True)

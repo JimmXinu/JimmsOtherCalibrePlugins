@@ -7,6 +7,10 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+import six
+from six import text_type as unicode
+from six.moves import range
+
 try:
     from PyQt5 import QtWidgets as QtGui
     from PyQt5.Qt import (QVBoxLayout, QTableWidget, QHBoxLayout, QDialogButtonBox,

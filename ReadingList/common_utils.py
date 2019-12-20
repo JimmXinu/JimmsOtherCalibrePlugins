@@ -8,6 +8,8 @@ __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
 import os
+import six
+from six import text_type as unicode
 
 try:
     from PyQt5 import QtWidgets as QtGui
@@ -27,7 +29,7 @@ except ImportError:
 from calibre.constants import iswindows
 from calibre.gui2 import gprefs, error_dialog, UNDEFINED_QDATETIME, info_dialog
 from calibre.gui2.actions import menu_action_unique_name
-from calibre.gui2.complete2 import EditWithComplete 
+from calibre.gui2.complete2 import EditWithComplete
 from calibre.gui2.keyboard import ShortcutConfig
 from calibre.gui2.widgets import EnLineEdit
 from calibre.utils.config import config_dir, tweaks
@@ -430,7 +432,7 @@ class KeyValueComboBox(QComboBox):
     def populate_combo(self, selected_key):
         self.clear()
         selected_idx = idx = -1
-        for key, value in self.values.iteritems():
+        for key, value in six.iteritems(self.values):
             idx = idx + 1
             self.addItem(value)
             if key == selected_key:
@@ -438,7 +440,7 @@ class KeyValueComboBox(QComboBox):
         self.setCurrentIndex(selected_idx)
 
     def selected_key(self):
-        for key, value in self.values.iteritems():
+        for key, value in six.iteritems(self.values):
             if value == unicode(self.currentText()).strip():
                 return key
 
@@ -675,7 +677,7 @@ class PrefsViewerDialog(SizePersistedDialog):
     def _populate_settings(self):
         self.keys_list.clear()
         ns_prefix = self._get_ns_prefix()
-        keys = sorted([k[len(ns_prefix):] for k in self.db.prefs.iterkeys()
+        keys = sorted([k[len(ns_prefix):] for k in six.iterkeys(self.db.prefs)
                        if k.startswith(ns_prefix)])
         for key in keys:
             self.keys_list.addItem(key)
@@ -723,7 +725,7 @@ class PrefsViewerDialog(SizePersistedDialog):
             return
 
         ns_prefix = self._get_ns_prefix()
-        keys = [k for k in self.db.prefs.iterkeys() if k.startswith(ns_prefix)]
+        keys = [k for k in six.iterkeys(self.db.prefs) if k.startswith(ns_prefix)]
         for k in keys:
             del self.db.prefs[k]
         self._populate_settings()
