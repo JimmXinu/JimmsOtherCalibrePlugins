@@ -9,6 +9,8 @@ __docformat__ = 'restructuredtext en'
 
 import os, re, traceback, copy, shutil
 from functools import partial
+import six
+from six import text_type as unicode
 
 try:
     from PyQt5 import QtWidgets as QtGui
@@ -93,7 +95,7 @@ class GenerateCoverProgressDialog(QProgressDialog):
         self.db.set_cover(mi.id, cover_data)
         if self.update_column and self.update_value:
             if self.update_column == 'tags':
-                print('Setting tags for book to:',self.update_value)
+                print(('Setting tags for book to:',self.update_value))
                 self.db.set_tags(mi.id, self.update_value.split(','), append=True)
             elif self.update_column_type == 'bool':
                 new_value = self.update_value.lower() == 'y'
@@ -623,7 +625,7 @@ class SavedSettingsTab(QWidget):
                     # Read the .JSON file to get the setting (migrating to latest schema if required)
                     archive_config = JSONConfig('resources/images/generate_cover/gc_setting')
                     setting_version = archive_config[cfg.STORE_SCHEMA_VERSION]
-                    setting = archive_config[cfg.STORE_SAVED_SETTINGS].itervalues().next()
+                    setting = six.itervalues(archive_config[cfg.STORE_SAVED_SETTINGS]).next()
                     setting_name = setting[cfg.KEY_NAME]
                     setting = cfg.migrate_config_setting(setting_version, setting_name, setting)
 
@@ -1693,7 +1695,7 @@ class CoverOptionsDialog(SizePersistedDialog):
             return False
         typ = type(item1).__name__
         if typ == 'dict':
-            diff = [key for key, val in item1.iteritems() if not self.compare_items(val, item2.get(key, None))]
+            diff = [key for key, val in six.iteritems(item1) if not self.compare_items(val, item2.get(key, None))]
             if len(diff) > 0:
                 return False
         elif typ in ['tuple', 'list']:

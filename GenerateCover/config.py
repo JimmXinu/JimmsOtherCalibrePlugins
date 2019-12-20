@@ -8,6 +8,8 @@ __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
 import copy, os
+import six
+from six import text_type as unicode
 
 try:
     from PyQt5.Qt import (QWidget, QVBoxLayout, QPushButton, QGridLayout,
@@ -139,7 +141,7 @@ def migrate_config_if_required():
         if DEBUG:
             prints('Generate Cover - Upgrading from schema:', schema_version)
         saved_settings = plugin_prefs[STORE_SAVED_SETTINGS]
-        for setting_name, saved_setting in saved_settings.iteritems():
+        for setting_name, saved_setting in six.iteritems(saved_settings):
             if saved_setting[KEY_NAME] == 'Current':
                 continue
             if setting_name != saved_setting[KEY_NAME]:
@@ -161,7 +163,7 @@ def migrate_config_if_required():
         plugin_prefs[STORE_CURRENT] = migrate_config_setting(schema_version, STORE_CURRENT, current, is_current=True)
 
         saved_settings = plugin_prefs[STORE_SAVED_SETTINGS]
-        for setting_name, saved_setting in saved_settings.iteritems():
+        for setting_name, saved_setting in six.iteritems(saved_settings):
             migrate_config_setting(schema_version, setting_name, saved_setting)
         plugin_prefs[STORE_SAVED_SETTINGS] = saved_settings
 
@@ -185,7 +187,7 @@ def migrate_config_setting(schema_version, setting_name, setting, is_current=Fal
             prints('Generate Cover - Upgrading to 1.50 schema for setting: ',setting_name)
         if 'right' not in setting[KEY_MARGINS]:
             setting[KEY_MARGINS]['right'] = setting[KEY_MARGINS]['left']
-        for value_map in setting[KEY_FONTS].itervalues():
+        for value_map in six.itervalues(setting[KEY_FONTS]):
             if 'align' not in value_map:
                 value_map['align'] = 'center'
 
@@ -286,7 +288,7 @@ class ConfigWidget(QWidget):
     def _get_custom_columns(self, column_types):
         custom_columns = self.plugin_action.gui.library_view.model().custom_columns
         available_columns = {}
-        for key, column in custom_columns.iteritems():
+        for key, column in six.iteritems(custom_columns):
             typ = column['datatype']
             if typ in column_types:
                 available_columns[key] = column

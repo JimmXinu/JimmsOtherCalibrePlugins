@@ -42,7 +42,7 @@ def get_font_or_default(font_name):
                 font_path = found_font['normal'][0]
             else:
                 # Couldn't find 'normal' so just use first value if it exists
-                font_path = found_font[found_font.keys()[0]][0]
+                font_path = found_font[list(found_font.keys())[0]][0]
     if not font_path or not os.access(font_path, os.R_OK):
         font_path = default_font
     return font_path

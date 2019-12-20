@@ -4,6 +4,7 @@ from __future__ import (unicode_literals, division, absolute_import,
                         print_function)
 
 import os
+import six
 from calibre import fit_image, force_unicode
 from calibre.ebooks import normalize
 from calibre.ebooks.metadata import authors_to_string
@@ -45,7 +46,7 @@ def get_textline(text, font_info, margin):
 class DrawingWand(object):
 
     def __init__(self, **kw):
-        for k, v in kw.iteritems():
+        for k, v in six.iteritems(kw):
             setattr(self, k, v)
 
 

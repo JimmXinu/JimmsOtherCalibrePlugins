@@ -7,6 +7,7 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+import six
 import os
 from calibre.constants import DEBUG
 from calibre.gui2 import error_dialog
@@ -78,7 +79,7 @@ class GenerateCoverAction(InterfaceAction):
     def _check_corrupted_config(self):
         failures = []
         saved_settings = cfg.plugin_prefs[cfg.STORE_SAVED_SETTINGS]
-        for setting_name, setting in saved_settings.iteritems():
+        for setting_name, setting in six.iteritems(saved_settings):
             if setting_name != setting[cfg.KEY_NAME]:
                 failures.append('Corrupted setting: "%s" has incorrect internal name of: "%s"'%(setting_name, setting[cfg.KEY_NAME]))
                 setting[cfg.KEY_NAME] = setting_name
