@@ -7,6 +7,8 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+import six
+
 from collections import OrderedDict
 from calibre.gui2 import error_dialog
 from calibre.gui2.actions import InterfaceAction
@@ -84,7 +86,7 @@ class ManageSeriesAction(InterfaceAction):
     def get_series_columns(self):
         custom_columns = self.gui.library_view.model().custom_columns
         series_columns = OrderedDict()
-        for key, column in custom_columns.iteritems():
+        for key, column in six.iteritems(custom_columns):
             typ = column['datatype']
             if typ == 'series':
                 series_columns[key] = column

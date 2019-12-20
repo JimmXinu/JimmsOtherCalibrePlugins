@@ -7,8 +7,12 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+import six
+from six import text_type as unicode
+from six.moves import range
+from six.moves.urllib.parse import quote_plus
+
 from functools import partial
-from urllib import quote_plus
 try:
     from PyQt5 import QtWidgets as QtGui
     from PyQt5.Qt import (Qt, QHBoxLayout, QVBoxLayout, QLabel, QApplication,
@@ -19,7 +23,7 @@ except ImportError as e:
                           QDialogButtonBox, QAbstractItemView, QTableWidget, QAction,
                           QTableWidgetItem, QComboBox, QUrl, QCheckBox, QDoubleSpinBox)
     from PyQt4 import QtGui
-    
+
 try:
     from calibre.gui2 import QVariant
     del QVariant
@@ -147,7 +151,7 @@ class SeriesColumnComboBox(QComboBox):
     def __init__(self, parent, series_columns):
         QComboBox.__init__(self, parent)
         self.series_columns = series_columns
-        for key, column in series_columns.iteritems():
+        for key, column in six.iteritems(series_columns):
             self.addItem('%s (%s)'% (key, column['name']))
         self.insertItem(0, 'Series')
 
@@ -163,7 +167,7 @@ class SeriesColumnComboBox(QComboBox):
     def selected_value(self):
         if self.currentIndex() == 0:
             return 'Series'
-        return self.series_columns.keys()[self.currentIndex() - 1]
+        return list(self.series_columns.keys())[self.currentIndex() - 1]
 
 
 class SeriesTableWidget(QTableWidget):
@@ -652,7 +656,7 @@ class SeriesDialog(SizePersistedDialog):
         if dlg.exec_() != dlg.Accepted:
             return
         num = dlg.qty_to_add
-        for _x in xrange(num):
+        for _x in range(num):
             idx += 1
             book = create_empty_book(dlg.selected_authors)
             self.books.insert(idx, book)
