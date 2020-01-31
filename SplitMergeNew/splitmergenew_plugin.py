@@ -171,10 +171,10 @@ class SplitMergeNewPlugin(InterfaceAction):
                 keep_lines.append(count)
                 
                 ## Also grab the previous chapter if new.
-                if ( new_chap and
-                     count-1 not in keep_lines and
-                     'file' in lines[count-1]['id'] ):
-                    keep_lines.append(count-1)
+                # if ( new_chap and
+                #      count-1 not in keep_lines and
+                #      'file' in lines[count-1]['id'] ):
+                #     keep_lines.append(count-1)
                 
                 # print("\nLine Number: %d"%count)
                 # for s in showlist:
