@@ -166,8 +166,7 @@ class SplitMergeNewPlugin(InterfaceAction):
                 book['good']=True
             if ( new_chap or
                 'cover' in line['id'] or
-                'title_page' in line['id'] or
-                'log_page' in line['id']):
+                'title_page' in line['id']): # or 'log_page' in line['id'])
                 keep_lines.append(count)
                 
                 ## Also grab the previous chapter if new.
