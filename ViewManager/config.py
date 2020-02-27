@@ -640,6 +640,7 @@ class ConfigWidget(QWidget):
         columns = []
         sort_columns = []
         all_columns = []
+        pin_columns = []
         apply_columns = True
         apply_pin_columns = False
         apply_sort = True
@@ -649,7 +650,7 @@ class ConfigWidget(QWidget):
         search_to_apply = ''
         apply_virtlib = False
         virtlib_to_apply = ''
-        if self.view_name:
+        if self.view_name != None:
             view_info = self.views[self.view_name]
             columns = copy.deepcopy(view_info[KEY_COLUMNS])
             pin_columns = copy.deepcopy(view_info.get(KEY_PIN_COLUMNS,{}))
@@ -692,7 +693,7 @@ class ConfigWidget(QWidget):
         self.persist_view_config()
         view_info = get_empty_view()
 
-        if self.view_name:
+        if self.view_name != None:
             # We will copy values from the currently selected view
             old_view_info = self.views[self.view_name]
             view_info[KEY_COLUMNS] = copy.deepcopy(old_view_info[KEY_COLUMNS])
@@ -717,7 +718,7 @@ class ConfigWidget(QWidget):
         self.auto_view_combo.populate_combo(self.views, unicode(self.auto_view_combo.currentText()))
 
     def rename_view(self):
-        if not self.view_name:
+        if not self.view_name != None:
             return
         # Display a prompt allowing user to specify a rename view
         old_view_name = self.view_name
@@ -751,7 +752,7 @@ class ConfigWidget(QWidget):
             self.auto_view_combo.populate_combo(self.views)
 
     def delete_view(self):
-        if not self.view_name:
+        if self.view_name == None:
             return
         if not question_dialog(self, _('Are you sure?'), '<p>'+
                 'Do you want to delete the view named \'%s\''%self.view_name,
