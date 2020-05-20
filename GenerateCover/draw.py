@@ -141,6 +141,14 @@ def create_cover_page(top_lines, bottom_lines, display_image, options,
     from calibre.gui2 import ensure_app
     ensure_app()
     (width, height) = options.get(cfg.KEY_SIZE, (590, 750))
+    def size_limit(i):
+        if i < 100:
+            return 100
+        if i > 5000:
+            return 5000
+        return i
+    width = size_limit(width)
+    height = size_limit(height)
     margins = options.get(cfg.KEY_MARGINS)
     (top_mgn, bottom_mgn, left_mgn, right_mgn, image_mgn) = (
         margins['top'], margins['bottom'], margins['left'],
