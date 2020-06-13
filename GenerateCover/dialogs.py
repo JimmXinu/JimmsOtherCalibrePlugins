@@ -1494,7 +1494,7 @@ class CoverOptionsDialog(SizePersistedDialog):
 
         self.contents_tab.field_order_list.populate(self.current[cfg.KEY_FIELD_ORDER])
         self.contents_tab.swap_author_checkbox.setChecked(self.current[cfg.KEY_SWAP_AUTHOR])
-        self.contents_tab.custom_text_ledit.setHtml(self.current[cfg.KEY_CUSTOM_TEXT].replace('\n','<br/>'))
+        self.contents_tab.custom_text_ledit.setText(self.current[cfg.KEY_CUSTOM_TEXT])
         self.contents_tab.series_text_ledit.setText(self.current.get(cfg.KEY_SERIES_TEXT, cfg.DEFAULT_SERIES_TEXT))
 
         self.contents_tab.metadata_title_label.setEnabled(not self.is_multiple_books)
