@@ -4,7 +4,7 @@ from __future__ import (unicode_literals, division, absolute_import,
                         print_function)
 
 __license__   = 'GPL v3'
-__copyright__ = '2011, Grant Drake <grant.drake@gmail.com>, 2019, Jim Miller'
+__copyright__ = '2011, Grant Drake <grant.drake@gmail.com>, 2020, Jim Miller'
 __docformat__ = 'restructuredtext en'
 
 # The class that all Interface Action plugin wrappers must inherit from
@@ -24,7 +24,7 @@ class ActionViewManager(InterfaceActionBase):
     description             = 'Define your own sets of column views with sort orders'
     supported_platforms     = ['windows', 'osx', 'linux']
     author                  = 'Grant Drake'
-    version                 = (1, 5, 5)
+    version                 = (1, 5, 6)
     minimum_calibre_version = (2, 85, 1)
 
     #: This field defines the GUI plugin class that contains all the code

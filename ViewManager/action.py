@@ -4,7 +4,7 @@ from __future__ import (unicode_literals, division, absolute_import,
                         print_function)
 
 __license__   = 'GPL v3'
-__copyright__ = '2011, Grant Drake <grant.drake@gmail.com>, 2019, Jim Miller'
+__copyright__ = '2011, Grant Drake <grant.drake@gmail.com>, 2020, Jim Miller'
 __docformat__ = 'restructuredtext en'
 
 import six
@@ -109,6 +109,9 @@ class ViewManagerAction(InterfaceAction):
 
         new_ac = create_menu_action_unique(self, m, '&Create new View', 'plus.png',
                                                   triggered=partial(self.save_view,create=True))
+        self.menu_actions.append(new_ac)
+        new_ac = create_menu_action_unique(self, m, 'Next View', 'next.png', shortcut_name='Next View',
+                                           triggered=self.next_view)
         self.menu_actions.append(new_ac)
         m.addSeparator()
 
@@ -233,7 +236,23 @@ class ViewManagerAction(InterfaceAction):
             self.rebuild_menus()
             self.switch_view(new_view_name)
 
+    def next_view(self):
+        library_config = cfg.get_library_config(self.gui.current_db)
+        views = library_config[cfg.KEY_VIEWS]
+        keys = sorted(views.keys())
+        if len(keys) == 0:
+            return
+        key = None
+        # print("self.current_view:%s"%self.current_view)
+        if self.current_view == None or self.current_view not in keys or self.current_view == keys[-1]:
+            key = keys[0]
+        else:
+            key = keys[keys.index(self.current_view)+1]
+        if key != None:
+            self.switch_view(key)
+
     def switch_view(self, key):
+        # print("switch_view(%s)"%key)
         library_config = cfg.get_library_config(self.gui.current_db)
         view_info = library_config[cfg.KEY_VIEWS][key]
         selected_ids = self.gui.library_view.get_selected_ids()
