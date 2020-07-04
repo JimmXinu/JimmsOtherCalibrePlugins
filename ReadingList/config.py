@@ -230,7 +230,7 @@ def get_book_list(db, list_name):
     book_ids = list_map[KEY_CONTENT]
     valid_book_ids = [book_id for book_id in book_ids if db.data.has_id(book_id)]
     if len(book_ids) != len(valid_book_ids):
-        set_book_list(db, list_name, book_ids)
+        set_book_list(db, list_name, valid_book_ids)
     return valid_book_ids
 
 def set_book_list(db, list_name, book_ids):
