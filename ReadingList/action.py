@@ -111,13 +111,17 @@ class ReadingListAction(InterfaceAction):
             default_list = library[cfg.KEY_LISTS][default_list_name]
             is_default_list_manual = default_list.get(cfg.KEY_POPULATE_TYPE, cfg.DEFAULT_LIST_VALUES[cfg.KEY_POPULATE_TYPE]) == 'POPMANUAL'
 
+            # used to be just len(manual lists) > 1, but now allowing
+            # auto lists to be default.
+            show_sub_menus = len(list_names) > 1 or (not is_default_list_manual and len(list_names) > 0)
+
             std_name = 'Add to default list'
             if is_default_list_manual:
                 self.add_action = self.create_menu_item_ex(m, 'Add to %s list' % default_list_name,
                                                       image='plus.png', unique_name=std_name,
                                                       shortcut_name=std_name, favourites_menu_unique_name=std_name,
                                                       triggered=partial(self._add_selected_to_list, default_list_name))
-            if len(list_names) > 1:
+            if show_sub_menus:
                 self.add_sub_menu = m.addMenu(get_icon('plus.png'), 'Add to list')
                 self.add_sub_menu.setStatusTip('Add to the specified list')
                 for list_name in list_names:
@@ -137,7 +141,7 @@ class ReadingListAction(InterfaceAction):
                                                       image='plusplus.png', unique_name=std_series_name,
                                                       shortcut_name=std_series_name, favourites_menu_unique_name=std_series_name,
                                                       triggered=partial(self._add_selected_series_to_list, default_list_name))
-            if len(list_names) > 1:
+            if show_sub_menus:
                 self.add_sub_menu = m.addMenu(get_icon('plusplus.png'), 'Add series to list')
                 self.add_sub_menu.setStatusTip('Add all books in series to the specified list')
                 for list_name in list_names:
@@ -163,7 +167,7 @@ class ReadingListAction(InterfaceAction):
                                                          image='minus.png', unique_name=std_name,
                                                          shortcut_name=std_name, favourites_menu_unique_name=std_name,
                                                          triggered=partial(self._remove_selected_from_list, default_list_name))
-            if len(list_names) > 1:
+            if show_sub_menus:
                 self.remove_sub_menu = m.addMenu(get_icon('minus.png'), 'Remove from list')
                 self.remove_sub_menu.setStatusTip('Remove from the specified list')
                 for list_name in list_names:
@@ -216,7 +220,7 @@ class ReadingListAction(InterfaceAction):
                                                         image='images/reading_list.png', unique_name=std_name,
                                                         shortcut_name=std_name, favourites_menu_unique_name=std_name,
                                                         triggered=partial(self.edit_list, default_list_name))
-            if len(list_names) > 1:
+            if show_sub_menus:
                 self.edit_sub_menu = m.addMenu(get_icon('images/reading_list.png'), 'Edit list')
                 self.edit_sub_menu.setStatusTip('Edit books on the specified list')
                 for list_name in list_names:
@@ -233,7 +237,7 @@ class ReadingListAction(InterfaceAction):
                                                      image='edit-clear.png', unique_name=std_name,
                                                      shortcut_name=std_name, favourites_menu_unique_name=std_name,
                                                      triggered=partial(self._clear_list, default_list_name))
-            if len(list_names) > 1:
+            if show_sub_menus:
                 self.clear_sub_menu = m.addMenu(get_icon('edit-clear.png'), 'Clear list')
                 self.clear_sub_menu.setStatusTip('Clear all from the specified list')
                 self.clear_sub_menu_action = self.clear_sub_menu.menuAction()
@@ -250,7 +254,7 @@ class ReadingListAction(InterfaceAction):
                 self.clear_sub_menu.setTitle('Clear list (%d)' % total_count)
 
             m.addSeparator()
-            if len(list_names) > 0:
+            if len(all_list_names) > 1:
                 self.default_sub_menu = m.addMenu(get_icon('chapters.png'), 'Set default list')
                 self.default_sub_menu.setStatusTip('Switch the list to use as the current default')
                 for list_name in list_names:
@@ -260,7 +264,15 @@ class ReadingListAction(InterfaceAction):
                                         tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
                                         favourites_menu_unique_name='Set default list: %s' % list_name,
                                         triggered=partial(self.switch_default_list, list_name))
-                m.addSeparator()
+                if auto_list_names:
+                    self.default_sub_menu.addSeparator()
+                    for list_name in auto_list_names:
+                        is_checked = list_name == default_list_name
+                        std_name = 'Set your default list to "%s"' % list_name
+                        self.create_menu_item_ex(self.default_sub_menu, list_name, is_checked=is_checked,
+                                                 tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
+                                                 favourites_menu_unique_name='Set default list: %s' % list_name,
+                                                 triggered=partial(self.switch_default_list, list_name))
             m.addSeparator()
             self.sync_now_action = self.create_menu_item_ex(m, 'Sync Now', 'images/book_sync.png',
                                         favourites_menu_unique_name='Sync Now',

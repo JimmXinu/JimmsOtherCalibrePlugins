@@ -838,7 +838,10 @@ class ListsTab(QWidget):
         self.plugin_action.update_series_custom_column(self.list_name, book_ids)
         del self.lists[self.list_name]
         if self.default_list == self.list_name:
-            self.default_list = list(self.lists.keys())[0]
+            # Set new default first by manual vs auto, then by name
+            # order instead of previous random.
+            lists = get_list_names(self.gui.current_db, exclude_auto=True) + get_list_names(self.gui.current_db, exclude_auto=False)
+            self.default_list = lists[0]
         # Now update the lists combobox
         self.select_list_combo.populate_combo(self.lists)
         self.refresh_current_list_info()
