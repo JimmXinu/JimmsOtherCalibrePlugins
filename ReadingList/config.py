@@ -566,6 +566,7 @@ class ListsTab(QWidget):
         self.sync_clear_checkbox.setToolTip('If unchecked, only items not on the device already will be synced.\n'
                                             'If no device is specified this checkbox has no effect.\n'
                                             'This option can only be used with manual type lists.')
+        self.sync_clear_checkbox.stateChanged.connect(self._able_series_settings)
         sync_lists_grid_layout.addWidget(self.sync_clear_checkbox, 3, 0, 1, 2)
 
         # -------- Column Update Options configuration ---------
@@ -617,7 +618,7 @@ class ListsTab(QWidget):
         series_column_label = QLabel('&Store in series column:', self)
         series_column_label.setToolTip('You can optionally display the current reading list order\n'
                                 'in a custom series column. You should not edit this column directly!\n'
-                                'Reading order is always maintained by this plugin.')
+                                'Only usable with Manually managed lists that are not Cleared on Sync.')
         self.series_column_combo = CustomColumnComboBox(self)
         series_column_label.setBuddy(self.series_column_combo)
         series_col_grid_layout.addWidget(series_column_label, 0, 0, 1, 1)
@@ -636,7 +637,19 @@ class ListsTab(QWidget):
         self.persist_list_config()
         self.refresh_current_list_info()
 
+    def _able_series_settings(self):
+        populate_type = self.populate_type_combo.get_selected_type()
+        if populate_type == 'POPMANUAL' and not self.sync_clear_checkbox.isChecked():
+            self.series_column_combo.setEnabled(True)
+            self.series_name_edit.setEnabled(True)
+        else:
+            self.series_column_combo.setEnabled(False)
+            self.series_column_combo.setCurrentIndex(0)
+            self.series_name_edit.setEnabled(False)
+            self.series_name_edit.setText('')
+
     def _populate_type_combo_changed(self):
+        self._able_series_settings()
         populate_type = self.populate_type_combo.get_selected_type()
         if populate_type == 'POPDEVICE':
             self.sync_type_combo.listKeyValues.insert(0, ('SYNCAUTO', SYNC_AUTO_DESC))
@@ -700,7 +713,6 @@ class ListsTab(QWidget):
         # Display list configuration in the controls
         self.populate_type_combo.populate_combo(populate_type)
         self.sync_type_combo.populate_combo(list_type)
-        self._populate_type_combo_changed()
         self.populate_search_ledit.setText(populate_search)
         self.device_combo.populate_combo(self.parent_dialog.get_devices_list(), sync_device_uuid)
         self.sync_auto_checkbox.setChecked(Qt.Checked if sync_automatically else Qt.Unchecked)
@@ -711,6 +723,7 @@ class ListsTab(QWidget):
         self.series_name_edit.setText(series_name)
         self.modify_type_combo.populate_combo(modify_type)
         self.tags_value_ledit.setText(tags_text)
+        self._populate_type_combo_changed()
 
     def persist_list_config(self):
         if not self.list_name:
