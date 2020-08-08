@@ -1028,7 +1028,7 @@ class ReadingListAction(InterfaceAction):
         db = self.gui.current_db
         # Get all the ids for books already on the device so we can be sure to sync
         # only books that are not already on the device
-        on_device_ids = set(db.search_getting_ids('ondevice:True', None))
+        on_device_ids = set(db.search_getting_ids('ondevice:True', None, use_virtual_library=False))
 
         c = cfg.plugin_prefs[cfg.STORE_DEVICES]
         ids_changed = set()
