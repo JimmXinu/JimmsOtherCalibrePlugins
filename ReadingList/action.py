@@ -659,10 +659,11 @@ class ReadingListAction(InterfaceAction):
         for dest_list_name in dest_list_names_list:
             list_initial_count = len(cfg.get_book_list(db, dest_list_name))
             for source_list_name in source_list_names_list:
-                (_removed_ids, tags_changed) = self.remove_books_from_list(source_list_name, book_id_list,
+                if not source_list_name in dest_list_names_list:
+                    (_removed_ids, tags_changed) = self.remove_books_from_list(source_list_name, book_id_list,
                                                                               refresh_screen=False, display_warnings=False)
-                if tags_changed:
-                    any_tags_changed = True
+                    if tags_changed:
+                        any_tags_changed = True
             self.add_books_to_list(dest_list_name, book_id_list, refresh_screen=False, display_warnings=display_warnings)
             books_moved_count += len(cfg.get_book_list(db, dest_list_name)) - list_initial_count
 
