@@ -274,6 +274,8 @@ class ViewManagerAction(InterfaceAction):
         self.apply_column_and_sort(view_info)
 
         self.gui.library_view.select_rows(selected_ids)
+        if view_info.get(cfg.KEY_JUMP_TO_TOP,False):
+            self.gui.library_view.scroll_to_row(0)
         self.current_view = key
         self.rebuild_menus()
 

@@ -83,6 +83,7 @@ KEY_SEARCH = 'searchToApply'
 KEY_APPLY_PIN_COLUMNS = 'applyPinColumns'
 KEY_PIN_COLUMNS = 'pin_columns'
 KEY_PIN_SPLITTER_STATE = 'pin_splitter_state' # splitter position
+KEY_JUMP_TO_TOP = 'jump_to_top'
 
 LAST_VIEW_ITEM = '*Last View Used'
 
@@ -108,6 +109,7 @@ def get_empty_view():
              KEY_APPLY_PIN_COLUMNS: False,
              KEY_PIN_COLUMNS: [],
              KEY_PIN_SPLITTER_STATE: None,
+             KEY_JUMP_TO_TOP: False,
              }
 
 # This is where preferences for this plugin used to be stored prior to 1.3
@@ -550,6 +552,10 @@ class ConfigWidget(QWidget):
         other_group_box_layout = QGridLayout()
         other_group_box.setLayout(other_group_box_layout)
 
+        self.jump_to_top_checkbox = QCheckBox('Jump to the top when applying this View', self)
+        jump_to_top = self.library.get(KEY_JUMP_TO_TOP, False)
+        self.jump_to_top_checkbox.setCheckState(Qt.Checked if jump_to_top else Qt.Unchecked)
+
         restart_label = QLabel('When restarting Calibre or switching to this library...')
         self.auto_apply_checkbox = QCheckBox('&Automatically apply view:', self)
         auto_apply = self.library.get(KEY_AUTO_APPLY_VIEW, False)
@@ -560,10 +566,11 @@ class ConfigWidget(QWidget):
         info_apply_label = QLabel('Enabling this option may override any startup search restriction or '
                                   'title sort set in Preferences -> Behaviour/Tweaks.')
         info_apply_label.setWordWrap(True)
-        other_group_box_layout.addWidget(restart_label, 0, 0, 1, 2)
-        other_group_box_layout.addWidget(self.auto_apply_checkbox, 1, 0, 1, 1)
-        other_group_box_layout.addWidget(self.auto_view_combo, 1, 1, 1, 1)
-        other_group_box_layout.addWidget(info_apply_label, 2, 0, 1, 2)
+        other_group_box_layout.addWidget(self.jump_to_top_checkbox, 0, 0, 1, 2)
+        other_group_box_layout.addWidget(restart_label, 1, 0, 1, 2)
+        other_group_box_layout.addWidget(self.auto_apply_checkbox, 2, 0, 1, 1)
+        other_group_box_layout.addWidget(self.auto_view_combo, 2, 1, 1, 1)
+        other_group_box_layout.addWidget(info_apply_label, 3, 0, 1, 2)
         #other_group_box.setMaximumHeight(other_group_box.sizeHint().height())
 
         keyboard_layout = QHBoxLayout()
@@ -625,6 +632,7 @@ class ConfigWidget(QWidget):
             view_info[KEY_VIRTLIB] = unicode(self.virtlib_combo.currentText()).strip()
         else:
             view_info[KEY_VIRTLIB] = ''
+        view_info[KEY_JUMP_TO_TOP] = self.jump_to_top_checkbox.checkState() == Qt.Checked
 
         self.views[self.view_name] = view_info
 
@@ -650,13 +658,13 @@ class ConfigWidget(QWidget):
         search_to_apply = ''
         apply_virtlib = False
         virtlib_to_apply = ''
+        jump_to_top = False
         if self.view_name != None:
             view_info = self.views[self.view_name]
             columns = copy.deepcopy(view_info[KEY_COLUMNS])
             pin_columns = copy.deepcopy(view_info.get(KEY_PIN_COLUMNS,{}))
             sort_columns = copy.deepcopy(view_info[KEY_SORT])
             all_columns = self.all_columns
-            apply_virtlib = view_info.get(KEY_APPLY_VIRTLIB,False)
             apply_pin_columns = view_info.get(KEY_APPLY_PIN_COLUMNS,False)
             apply_restriction = view_info[KEY_APPLY_RESTRICTION]
             restriction_to_apply = view_info[KEY_RESTRICTION]
@@ -664,6 +672,7 @@ class ConfigWidget(QWidget):
             search_to_apply = view_info[KEY_SEARCH]
             apply_virtlib = view_info.get(KEY_APPLY_VIRTLIB,False)
             virtlib_to_apply = view_info.get(KEY_VIRTLIB,'')
+            jump_to_top = view_info.get(KEY_JUMP_TO_TOP,False)
 
         self.columns_list.populate(columns, all_columns)
         self.sort_list.populate(sort_columns, all_columns)
@@ -676,6 +685,7 @@ class ConfigWidget(QWidget):
         self.saved_search_combo.select_value(search_to_apply)
         self.apply_virtlib_checkbox.setCheckState(Qt.Checked if apply_virtlib else Qt.Unchecked)
         self.virtlib_combo.select_value(virtlib_to_apply)
+        self.jump_to_top_checkbox.setCheckState(Qt.Checked if jump_to_top else Qt.Unchecked)
 
     def add_view(self):
         # Display a prompt allowing user to specify a new view
@@ -706,6 +716,7 @@ class ConfigWidget(QWidget):
             view_info[KEY_SEARCH] = copy.deepcopy(old_view_info[KEY_SEARCH])
             view_info[KEY_APPLY_VIRTLIB] = copy.deepcopy(old_view_info.get(KEY_APPLY_VIRTLIB,False))
             view_info[KEY_VIRTLIB] = copy.deepcopy(old_view_info.get(KEY_VIRTLIB,''))
+            view_info[KEY_JUMP_TO_TOP] = copy.deepcopy(old_view_info[KEY_JUMP_TO_TOP])
         else:
             # We will copy values from the current library view
             view_info[KEY_COLUMNS] = self.get_current_columns(visible_only=True)
