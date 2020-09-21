@@ -615,21 +615,21 @@ class ListsTab(QWidget):
         series_col_grid_layout = QGridLayout()
         series_col_group_box_layout.addLayout(series_col_grid_layout)
 
-        series_column_label = QLabel('&Store in series column:', self)
-        series_column_label.setToolTip('You can optionally display the current reading list order\n'
+        self.series_column_label = QLabel('&Store in series column:', self)
+        self.series_column_label.setToolTip('You can optionally display the current reading list order\n'
                                 'in a custom series column. You should not edit this column directly!\n'
                                 'Only usable with Manually managed lists that are not Cleared on Sync.')
         self.series_column_combo = CustomColumnComboBox(self)
-        series_column_label.setBuddy(self.series_column_combo)
-        series_col_grid_layout.addWidget(series_column_label, 0, 0, 1, 1)
+        self.series_column_label.setBuddy(self.series_column_combo)
+        series_col_grid_layout.addWidget(self.series_column_label, 0, 0, 1, 1)
         series_col_grid_layout.addWidget(self.series_column_combo, 0, 1, 1, 1)
 
-        series_name_label = QLabel('&Series name:', self)
-        series_name_label.setToolTip('Specify the name for this reading order series\n'
+        self.series_name_label = QLabel('&Series name:', self)
+        self.series_name_label.setToolTip('Specify the name for this reading order series\n'
                                      'If left blank, will use the name of the list this book is on.')
         self.series_name_edit = QLineEdit(self)
-        series_name_label.setBuddy(self.series_name_edit)
-        series_col_grid_layout.addWidget(series_name_label, 1, 0, 1, 1)
+        self.series_name_label.setBuddy(self.series_name_edit)
+        series_col_grid_layout.addWidget(self.series_name_label, 1, 0, 1, 1)
         series_col_grid_layout.addWidget(self.series_name_edit, 1, 1, 1, 1)
         layout.insertStretch(-1)
 
@@ -642,11 +642,15 @@ class ListsTab(QWidget):
         if populate_type == 'POPMANUAL' and not self.sync_clear_checkbox.isChecked():
             self.series_column_combo.setEnabled(True)
             self.series_name_edit.setEnabled(True)
+            self.series_column_label.setEnabled(True)
+            self.series_name_label.setEnabled(True)
         else:
             self.series_column_combo.setEnabled(False)
             self.series_column_combo.setCurrentIndex(0)
             self.series_name_edit.setEnabled(False)
             self.series_name_edit.setText('')
+            self.series_column_label.setEnabled(False)
+            self.series_name_label.setEnabled(False)
 
     def _populate_type_combo_changed(self):
         self._able_series_settings()
