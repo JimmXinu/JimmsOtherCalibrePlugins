@@ -1271,12 +1271,12 @@ class ReadingListAction(InterfaceAction):
         ids_to_add = list(on_device_ids - existing_book_ids)
         if DEBUG:
             prints('READING LIST: Removing %d ids from automatic list: %s' % (len(ids_to_remove), list_name))
-        self.apply_tags_to_list(list_name, ids_to_remove, add=False, modify_action='TAGADDREMOVE')
+        self.apply_tags_to_list(list_name, ids_to_remove, add=False)
         if DEBUG:
             prints('READING LIST: Adding %d ids to automatic list: %s' % (len(ids_to_add), list_name))
         # We will force the apply of tags to ALL items on the list, just in case the user
         # has only just specified a tag.
-        self.apply_tags_to_list(list_name, list(on_device_ids), add=True, modify_action='TAGADDREMOVE')
+        self.apply_tags_to_list(list_name, list(on_device_ids), add=True)
         cfg.set_book_list(db, list_name, list(on_device_ids))
         ids_to_remove.extend(ids_to_add)
         return ids_to_remove

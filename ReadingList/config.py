@@ -90,7 +90,7 @@ MODIFY_TYPES = [('TAGNONE',      'Do not update calibre column'),
                 ('TAGREMOVE',    'Update column for remove from list only')]
 
 KEY_SCHEMA_VERSION = STORE_SCHEMA_VERSION = 'SchemaVersion'
-DEFAULT_SCHEMA_VERSION = 1.61
+DEFAULT_SCHEMA_VERSION = 1.62
 
 STORE_OPTIONS = 'Options'
 KEY_REMOVE_DIALOG = 'removeDialog'
@@ -188,6 +188,15 @@ def migrate_library_config_if_required(db, library_config):
                         list_info[KEY_POPULATE_SEARCH] = col+':false'
                     else:
                         list_info[KEY_POPULATE_SEARCH] = col+':"='+val+'"'
+        library_config[KEY_LISTS] = lists
+
+    if schema_version < 1.62:
+        # Insure all pre-existing POPDEVICE lists have modify option
+        # set to TAGADDREMOVE so past behavior doesn't change.
+        lists = library_config[KEY_LISTS]
+        for list_info in six.itervalues(lists):
+            if list_info.get(KEY_POPULATE_TYPE, 'POPMANUAL') == 'POPDEVICE':
+                list_info[KEY_MODIFY_ACTION] = 'TAGADDREMOVE'
         library_config[KEY_LISTS] = lists
 
     set_library_config(db, library_config)
