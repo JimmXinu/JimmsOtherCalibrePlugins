@@ -134,8 +134,8 @@ class SeriesBook(object):
             col = self._mi.get_user_metadata(column, False)
             if col and col.get('#value#', None):
                 return col.get('#extra#',
-                               float('-inf')) # can't compare None in py3
-        return float('-inf')
+                               0) # can't compare None in py3
+        return 0
 
     def set_series_index(self, series_index):
         if self.series_column == 'Series':
