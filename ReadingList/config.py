@@ -413,15 +413,14 @@ class DevicesTableWidget(QTableWidget):
             device_icon = 'reader.png'
         is_connected = False
         if connected_device_info is not None:
-            if device_type == connected_device_info[0]:
-                drive_info = connected_device_info[4]
-                if not drive_info:
-                    is_connected = True
-                else:
-                    for connected_info in drive_info.values():
-                        if connected_info['device_store_uuid'] == device_uuid:
-                            is_connected = True
-                            break
+            drive_info = connected_device_info[4]
+            if not drive_info:
+                is_connected = True
+            else:
+                for connected_info in drive_info.values():
+                    if connected_info['device_store_uuid'] == device_uuid:
+                        is_connected = True
+                        break
         connected_icon = 'images/device_connected.png' if is_connected else None
 
         name_widget = ReadOnlyTextIconWidgetItem(device_config['name'], get_icon(device_icon))
