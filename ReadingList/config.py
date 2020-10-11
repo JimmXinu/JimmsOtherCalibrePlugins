@@ -69,6 +69,8 @@ KEY_SYNC_CLEAR = 'syncClear'
 KEY_LIST_TYPE = 'listType'
 KEY_POPULATE_TYPE = 'populateType'
 KEY_POPULATE_SEARCH = 'populateSearch'
+KEY_SORT_LIST = 'sortList'
+KEY_DISPLAY_TOP_MENU = 'displayTopMenu'
 
 TOKEN_ANY_DEVICE = '*Any Device'
 
@@ -90,7 +92,7 @@ MODIFY_TYPES = [('TAGNONE',      'Do not update calibre column'),
                 ('TAGREMOVE',    'Update column for remove from list only')]
 
 KEY_SCHEMA_VERSION = STORE_SCHEMA_VERSION = 'SchemaVersion'
-DEFAULT_SCHEMA_VERSION = 1.62
+DEFAULT_SCHEMA_VERSION = 1.64
 
 STORE_OPTIONS = 'Options'
 KEY_REMOVE_DIALOG = 'removeDialog'
@@ -116,7 +118,9 @@ DEFAULT_LIST_VALUES = {
                         KEY_SYNC_CLEAR: True,
                         KEY_LIST_TYPE: 'SYNCNEW',
                         KEY_POPULATE_TYPE: 'POPMANUAL',
-                        KEY_POPULATE_SEARCH: ''
+                        KEY_POPULATE_SEARCH: '',
+                        KEY_SORT_LIST: True,
+                        KEY_DISPLAY_TOP_MENU: False
                       }
 
 DEFAULT_LIBRARY_VALUES = {
@@ -199,6 +203,15 @@ def migrate_library_config_if_required(db, library_config):
                 list_info[KEY_MODIFY_ACTION] = 'TAGADDREMOVE'
         library_config[KEY_LISTS] = lists
 
+    if schema_version < 1.63:
+        # Ensure all lists have a sort property when viewing set to true to keep legacy behaviour.
+        # Ensure any auto populated lists are not displayed on the top level menu to keep legacy behaviour.
+        lists = library_config[KEY_LISTS]
+        for list_info in six.itervalues(lists):
+            list_info[KEY_SORT_LIST] = True
+            list_info[KEY_DISPLAY_TOP_MENU] = False
+        library_config[KEY_LISTS] = lists
+
     set_library_config(db, library_config)
 
 
@@ -274,6 +287,17 @@ def get_list_names(db, exclude_auto=True):
     list_names = []
     for list_name, list_info in six.iteritems(lists):
         if list_info.get(KEY_POPULATE_TYPE, DEFAULT_LIST_VALUES[KEY_POPULATE_TYPE]) == 'POPMANUAL':
+            list_names.append(list_name)
+    return sorted(list_names)
+
+def get_view_topmenu_list_names(db):
+    library_config = get_library_config(db)
+    lists = library_config[KEY_LISTS]
+    default_list_name = library_config[KEY_DEFAULT_LIST]
+
+    list_names = []
+    for list_name, list_info in six.iteritems(lists):
+        if (list_info.get(KEY_DISPLAY_TOP_MENU, DEFAULT_LIST_VALUES[KEY_DISPLAY_TOP_MENU]) and list_name != default_list_name):
             list_names.append(list_name)
     return sorted(list_names)
 
@@ -639,6 +663,28 @@ class ListsTab(QWidget):
         self.series_name_label.setBuddy(self.series_name_edit)
         series_col_grid_layout.addWidget(self.series_name_label, 1, 0, 1, 1)
         series_col_grid_layout.addWidget(self.series_name_edit, 1, 1, 1, 1)
+
+        # -------- Display Options configuration ---------
+        layout.addSpacing(5)
+        display_opt_group_box = QGroupBox('Display Options:', self)
+        layout.addWidget(display_opt_group_box)
+        display_opt_group_box_layout = QVBoxLayout()
+        display_opt_group_box.setLayout(display_opt_group_box_layout)
+
+        display_opt_grid_layout = QGridLayout()
+        display_opt_group_box_layout.addLayout(display_opt_grid_layout)
+
+        self.display_top_menu_checkbox = QCheckBox('Move "View list" to the top level of the plugin menu for this list', self)
+        self.display_top_menu_checkbox.setToolTip('By default Reading List creates a View List submenu for all your lists when you have multiple.\n'
+                                            'If checked, this list will be moved to the top level menu for ease of access.\n'
+                                            'NOTE: Your "default" list will always appear on the top menu, regardless of this checkbox')
+        display_opt_grid_layout.addWidget(self.display_top_menu_checkbox, 0, 0, 1, 1)
+
+        self.sort_list_checkbox = QCheckBox('Apply reading list order when viewing list', self)
+        self.sort_list_checkbox.setToolTip('If checked, viewing a reading list will also change your Calibre sort order.\n'
+                                           'Lists can be manually reordered using this plugin, defaulting to order added to list.\n'
+                                            'If unchecked, current calibre sort will be left unchanged when you view the list.')
+        display_opt_grid_layout.addWidget(self.sort_list_checkbox, 1, 0, 1, 1)
         layout.insertStretch(-1)
 
     def _select_list_combo_changed(self):
@@ -721,6 +767,8 @@ class ListsTab(QWidget):
         tags_text = list_map.get(KEY_TAGS_TEXT, DEFAULT_LIST_VALUES[KEY_TAGS_TEXT])
         series_column = list_map.get(KEY_SERIES_COLUMN, DEFAULT_LIST_VALUES[KEY_SERIES_COLUMN])
         series_name = list_map.get(KEY_SERIES_NAME, DEFAULT_LIST_VALUES[KEY_SERIES_NAME])
+        display_top_menu = list_map.get(KEY_DISPLAY_TOP_MENU, DEFAULT_LIST_VALUES[KEY_DISPLAY_TOP_MENU])
+        sort_list = list_map.get(KEY_SORT_LIST, DEFAULT_LIST_VALUES[KEY_SORT_LIST])
 
         # Display list configuration in the controls
         self.populate_type_combo.populate_combo(populate_type)
@@ -733,6 +781,8 @@ class ListsTab(QWidget):
         self._tags_column_combo_changed()
         self.series_column_combo.populate_combo(self.series_custom_columns, series_column, [''])
         self.series_name_edit.setText(series_name)
+        self.display_top_menu_checkbox.setChecked(Qt.Checked if display_top_menu else Qt.Unchecked)
+        self.sort_list_checkbox.setChecked(Qt.Checked if sort_list else Qt.Unchecked)
         self.modify_type_combo.populate_combo(modify_type)
         self.tags_value_ledit.setText(tags_text)
         self._populate_type_combo_changed()
@@ -757,6 +807,8 @@ class ListsTab(QWidget):
         list_info[KEY_TAGS_TEXT] = tags[0]
         list_info[KEY_SERIES_COLUMN] = self.series_column_combo.get_selected_column()
         list_info[KEY_SERIES_NAME] = unicode(self.series_name_edit.text())
+        list_info[KEY_DISPLAY_TOP_MENU] = self.display_top_menu_checkbox.checkState() == Qt.Checked
+        list_info[KEY_SORT_LIST] = self.sort_list_checkbox.checkState() == Qt.Checked
         self.lists[self.list_name] = list_info
 
     def _get_custom_columns(self, column_types):

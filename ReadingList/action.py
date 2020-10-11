@@ -107,9 +107,18 @@ class ReadingListAction(InterfaceAction):
             list_names = cfg.get_list_names(db, exclude_auto=True)
             all_list_names = cfg.get_list_names(db, exclude_auto=False)
             auto_list_names = list(set(all_list_names) - set(list_names))
+
             default_list_name = library[cfg.KEY_DEFAULT_LIST]
             default_list = library[cfg.KEY_LISTS][default_list_name]
             is_default_list_manual = default_list.get(cfg.KEY_POPULATE_TYPE, cfg.DEFAULT_LIST_VALUES[cfg.KEY_POPULATE_TYPE]) == 'POPMANUAL'
+
+           # The list view menu items by default appear in a View list submenu
+            # Now users can choose specific lists they want to appear at the top level rather than the submenu
+            view_topmenu_names = cfg.get_view_topmenu_list_names(db)
+            default_list_names_list = list([default_list_name])
+            view_submenu_names = list(set(all_list_names) - set(view_topmenu_names) - set(default_list_names_list))
+            view_submenu_list_names = list(set(list_names) - set(view_topmenu_names) - set(default_list_names_list))
+            view_submenu_auto_names = list(set(auto_list_names) - set(view_topmenu_names) - set(default_list_names_list))
 
             # used to be just len(manual lists) > 1, but now allowing
             # auto lists to be default.
@@ -187,30 +196,38 @@ class ReadingListAction(InterfaceAction):
                                                         image='search.png', unique_name=std_name,
                                                         shortcut_name=std_name, favourites_menu_unique_name=std_name,
                                                         triggered=partial(self.view_list, default_list_name))
-            if len(all_list_names) > 1:
+            if view_topmenu_names:
+                for list_name in view_topmenu_names:
+                    list_content = library[cfg.KEY_LISTS][list_name][cfg.KEY_CONTENT]
+                    std_name = 'View books on the "%s" list' % list_name
+                    self.create_menu_item_ex(m, 'View %s list (%d)' % (list_name, len(list_content)),
+                                        image='search.png',
+                                        tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
+                                        favourites_menu_unique_name='View list: %s' % list_name,
+                                        triggered=partial(self.view_list, list_name))
+            if view_submenu_names:
                 self.view_sub_menu = m.addMenu(get_icon('search.png'), 'View list')
                 self.view_sub_menu.setStatusTip('View books on the specified list')
                 self.view_sub_menu_action = self.view_sub_menu.menuAction()
                 self.view_sub_menu_action.favourites_menu_unique_name = 'View list'
-                total_count = 0
-                for list_name in list_names:
-                    list_content = library[cfg.KEY_LISTS][list_name][cfg.KEY_CONTENT]
-                    total_count += len(list_content)
-                    std_name = 'View books on the "%s" list' % list_name
-                    self.create_menu_item_ex(self.view_sub_menu, '%s (%d)' % (list_name, len(list_content)),
-                                        tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
-                                        favourites_menu_unique_name='View list: %s' % list_name,
-                                        triggered=partial(self.view_list, list_name))
-                if auto_list_names:
-                    self.view_sub_menu.addSeparator()
-                    for list_name in auto_list_names:
+                if view_submenu_list_names:
+                    for list_name in view_submenu_list_names:
                         list_content = library[cfg.KEY_LISTS][list_name][cfg.KEY_CONTENT]
                         std_name = 'View books on the "%s" list' % list_name
                         self.create_menu_item_ex(self.view_sub_menu, '%s (%d)' % (list_name, len(list_content)),
                                             tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
                                             favourites_menu_unique_name='View list: %s' % list_name,
                                             triggered=partial(self.view_list, list_name))
-                self.view_sub_menu.setTitle('View list (%d)' % total_count)
+                if view_submenu_auto_names:
+                    if view_submenu_list_names:
+                        self.view_sub_menu.addSeparator()
+                    for list_name in view_submenu_auto_names:
+                        list_content = library[cfg.KEY_LISTS][list_name][cfg.KEY_CONTENT]
+                        std_name = 'View books on the "%s" list' % list_name
+                        self.create_menu_item_ex(self.view_sub_menu, '%s (%d)' % (list_name, len(list_content)),
+                                            tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
+                                            favourites_menu_unique_name='View list: %s' % list_name,
+                                            triggered=partial(self.view_list, list_name))
 
             m.addSeparator()
 
@@ -794,7 +811,8 @@ class ReadingListAction(InterfaceAction):
         # Search to display the list contents
         self.gui.search.set_search_string('marked:' + marked_text)
         # Sort by our marked column to display the books in order
-        self.gui.library_view.sort_by_named_field('marked', True)
+        if list_info[cfg.KEY_SORT_LIST]:
+            self.gui.library_view.sort_by_named_field('marked', True)
         self.view_list_name = list_name
 
     def create_list(self, list_name, book_id_list, display_warnings=True):
