@@ -139,6 +139,14 @@ class EditListTableWidget(QTableWidget):
             scroll_to_row = scroll_to_row - 1
         self.scrollToItem(self.item(scroll_to_row, 0))
 
+    def move_10_rows_up(self):
+        for row in range(0, 10):
+            self.move_rows_up()
+
+    def move_to_top(self):
+        for row in range(0, self.rowCount()):
+            self.move_rows_up()
+
     def move_rows_down(self):
         self.setFocus()
         rows = self.selectionModel().selectedRows()
@@ -159,6 +167,14 @@ class EditListTableWidget(QTableWidget):
         if scroll_to_row < self.rowCount() - 1:
             scroll_to_row = scroll_to_row + 1
         self.scrollToItem(self.item(scroll_to_row, 0))
+
+    def move_10_rows_down(self):
+        for row in range(0, 10):
+            self.move_rows_down()
+
+    def move_to_bottom(self):
+        for row in range(0, self.rowCount()):
+            self.move_rows_down()
 
     def swap_row_widgets(self, src_row, dest_row):
         self.blockSignals(True)
@@ -186,25 +202,58 @@ class EditListDialog(SizePersistedDialog):
 
         button_layout = QVBoxLayout()
         books_layout.addLayout(button_layout)
+
+        # move to top button
+        self.move_top_button = QtGui.QToolButton(self)
+        self.move_top_button.setToolTip('Move selected books to the top of the list')
+        self.move_top_button.setIcon(get_icon('images/arrow_up_double_bar.png'))
+        self.move_top_button.clicked.connect(self.books_table.move_to_top)
+        button_layout.addWidget(self.move_top_button)
+        # move up 10 rows button
+        self.move_10_up_button = QtGui.QToolButton(self)
+        self.move_10_up_button.setToolTip('Move selected books 10 rows up the list')
+        self.move_10_up_button.setIcon(get_icon('images/arrow_up_double.png'))
+        self.move_10_up_button.clicked.connect(self.books_table.move_10_rows_up)
+        button_layout.addWidget(self.move_10_up_button)
+        # move up one row button
         self.move_up_button = QtGui.QToolButton(self)
         self.move_up_button.setToolTip('Move selected books up the list')
-        self.move_up_button.setIcon(QIcon(I('arrow-up.png')))
+        self.move_up_button.setIcon(get_icon('images/arrow_up_single.png'))
         self.move_up_button.clicked.connect(self.books_table.move_rows_up)
         button_layout.addWidget(self.move_up_button)
+
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         button_layout.addItem(spacerItem)
+
+	# remove from list button
         self.remove_button = QtGui.QToolButton(self)
         self.remove_button.setToolTip('Remove selected books from the list')
         self.remove_button.setIcon(get_icon('list_remove.png'))
         self.remove_button.clicked.connect(self.remove_from_list)
         button_layout.addWidget(self.remove_button)
         spacerItem1 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+
+        # move down one row button
         button_layout.addItem(spacerItem1)
         self.move_down_button = QtGui.QToolButton(self)
         self.move_down_button.setToolTip('Move selected books down the list')
-        self.move_down_button.setIcon(QIcon(I('arrow-down.png')))
+        self.move_down_button.setIcon(get_icon('images/arrow_down_single.png'))
         self.move_down_button.clicked.connect(self.books_table.move_rows_down)
         button_layout.addWidget(self.move_down_button)
+        # move down 10 rows button
+        self.move_10_down_button = QtGui.QToolButton(self)
+        self.move_10_down_button.setToolTip('Move selected books 10 rows down the list')
+        #self.move_10_down_button.setIcon(QIcon(I('arrow-down.png')))
+        self.move_10_down_button.setIcon(get_icon('images/arrow_down_double.png'))
+        self.move_10_down_button.clicked.connect(self.books_table.move_10_rows_down)
+        button_layout.addWidget(self.move_10_down_button)
+        # move to bottom button
+        self.move_bottom_button = QtGui.QToolButton(self)
+        self.move_bottom_button.setToolTip('Move selected books to the bottom of the list')
+        #self.move_bottom_button.setIcon(QIcon(I('arrow-down.png')))
+        self.move_bottom_button.setIcon(get_icon('images/arrow_down_double_bar.png'))
+        self.move_bottom_button.clicked.connect(self.books_table.move_to_bottom)
+        button_layout.addWidget(self.move_bottom_button)
 
         button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         button_box.accepted.connect(self.accept)

@@ -35,7 +35,10 @@ from calibre_plugins.reading_list.common_utils import (set_plugin_icon_resources
 from calibre_plugins.reading_list.dialogs import EditListDialog, MoveBooksDialog
 
 PLUGIN_ICONS = ['images/reading_list.png', 'images/device.png',
-                'images/device_connected.png', 'images/book_sync.png']
+                'images/device_connected.png', 'images/book_sync.png',
+                'images/arrow_down_double.png', 'images/arrow_down_double_bar.png',
+                'images/arrow_down_single.png', 'images/arrow_up_double.png',
+                'images/arrow_up_double_bar.png', 'images/arrow_up_single.png']
 
 class ReadingListAction(InterfaceAction):
 
