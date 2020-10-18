@@ -43,7 +43,6 @@ class ViewManagerAction(InterfaceAction):
         self.menu = QMenu(self.gui)
 
         self.menu_actions = []
-        #self.old_actions_unique_map = {}
 
         # Read the plugin icons and store for potential sharing with the config widget
         icon_resources = self.load_resources(PLUGIN_ICONS)
@@ -73,7 +72,6 @@ class ViewManagerAction(InterfaceAction):
         m = self.menu
         m.clear()
 
-        #self.actions_unique_map = {}
         for action in self.menu_actions:
             self.gui.keyboard.unregister_shortcut(action.calibre_shortcut_unique_name)
             # starting in calibre 2.10.0, actions are registers at
@@ -90,18 +88,15 @@ class ViewManagerAction(InterfaceAction):
                 ac = create_menu_action_unique(self, m, key, shortcut_name=shortcut_name,
                                                triggered=partial(self.switch_view, key),
                                                is_checked=is_checked)
-                #self.actions_unique_map[ac.calibre_shortcut_unique_name] = ac.calibre_shortcut_unique_name
                 self.menu_actions.append(ac)
                 if is_checked:
                     has_checked_view = True
             m.addSeparator()
             save_ac = create_menu_action_unique(self, m, '&Save View Columns', 'column.png',
                                                   triggered=self.save_view)
-            #self.actions_unique_map[save_ac.calibre_shortcut_unique_name] = save_ac.calibre_shortcut_unique_name
             self.menu_actions.append(save_ac)
             save_sort_ac = create_menu_action_unique(self, m, '&Save View Sort', 'sort.png',
                                                   triggered=partial(self.save_view,save_sort=True))
-            #self.actions_unique_map[save_sort_ac.calibre_shortcut_unique_name] = save_sort_ac.calibre_shortcut_unique_name
             self.menu_actions.append(save_sort_ac)
             if not has_checked_view:
                 save_ac.setEnabled(False)
@@ -118,10 +113,6 @@ class ViewManagerAction(InterfaceAction):
         cfg_ac = create_menu_action_unique(self, m, _('&Customize plugin')+'...', 'config.png',
                                            triggered=self.show_configuration)
         self.menu_actions.append(cfg_ac)
-        # for menu_id, unique_name in six.iteritems(self.old_actions_unique_map):
-        #     if menu_id not in self.actions_unique_map:
-        #         self.gui.keyboard.unregister_shortcut(unique_name)
-        # self.old_actions_unique_map = self.actions_unique_map
         self.gui.keyboard.finalize()
 
     def check_switch_to_last_view_for_library(self):
@@ -276,6 +267,7 @@ class ViewManagerAction(InterfaceAction):
         self.gui.library_view.select_rows(selected_ids)
         if view_info.get(cfg.KEY_JUMP_TO_TOP,False):
             self.gui.library_view.scroll_to_row(0)
+            self.gui.library_view.set_current_row(0)
         self.current_view = key
         self.rebuild_menus()
 
