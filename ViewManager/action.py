@@ -98,13 +98,19 @@ class ViewManagerAction(InterfaceAction):
             save_sort_ac = create_menu_action_unique(self, m, '&Save View Sort', 'sort.png',
                                                   triggered=partial(self.save_view,save_sort=True))
             self.menu_actions.append(save_sort_ac)
+
+            reapply_ac = create_menu_action_unique(self, m, 'Re-Apply Current View', 'edit-redo.png', shortcut_name='Re-Apply Current View',
+                                                   triggered=partial(self.switch_view, self.current_view))
+            self.menu_actions.append(reapply_ac)
             if not has_checked_view:
                 save_ac.setEnabled(False)
                 save_sort_ac.setEnabled(False)
+                reapply_ac.setEnabled(False)
 
         new_ac = create_menu_action_unique(self, m, '&Create new View', 'plus.png',
                                                   triggered=partial(self.save_view,create=True))
         self.menu_actions.append(new_ac)
+
         new_ac = create_menu_action_unique(self, m, 'Next View', 'next.png', shortcut_name='Next View',
                                            triggered=self.next_view)
         self.menu_actions.append(new_ac)
