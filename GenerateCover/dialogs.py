@@ -7,6 +7,11 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+try:
+    load_translations()
+except NameError:
+    pass # load_translations() added in calibre 1.9
+
 import os, re, traceback, copy, shutil
 from functools import partial
 import six
@@ -90,7 +95,7 @@ class GenerateCoverProgressDialog(QProgressDialog):
             return self.do_close()
         mi = self.books[self.i]
 
-        self.setLabelText('Generating: '+mi.title)
+        self.setLabelText(_('Generating: ')+mi.title)
         cover_data = generate_cover_for_book(mi, db=self.db.new_api)
         self.db.set_cover(mi.id, cover_data)
         if self.update_column and self.update_value:
@@ -417,7 +422,7 @@ class SavedSettingsTab(QWidget):
         self.setLayout(main_layout)
         self.is_saved = True
 
-        self.saved_setting_groupbox = QGroupBox('Saved Settings:')
+        self.saved_setting_groupbox = QGroupBox(_('Saved Settings:'))
         main_layout.addWidget(self.saved_setting_groupbox)
         saved_setting_layout = QHBoxLayout()
         self.saved_setting_groupbox.setLayout(saved_setting_layout)
@@ -427,37 +432,37 @@ class SavedSettingsTab(QWidget):
         self.saved_setting_list.currentRowChanged.connect(self.saved_setting_changed)
         saved_setting_inner_layout.addWidget(self.saved_setting_list)
 
-        self.autosave_checkbox = QCheckBox('Autosave settings', self)
+        self.autosave_checkbox = QCheckBox(_('Autosave settings'), self)
         self.autosave_checkbox.setToolTip('Do not prompt to save changes to a setting. Always save when\n'+
-                                          'switching to another setting, clicking OK or using Import/Export.\n')
+                                          'switching to another setting, clicking OK or using Import/Export.')
         saved_setting_inner_layout.addWidget(self.autosave_checkbox)
 
         saved_setting_button_layout = QVBoxLayout()
         saved_setting_layout.addLayout(saved_setting_button_layout)
         add_image_button = QtGui.QToolButton()
-        add_image_button.setToolTip('Add setting')
+        add_image_button.setToolTip(_('Add setting'))
         add_image_button.setIcon(get_icon('plus.png'))
         add_image_button.clicked.connect(self.add_setting)
         saved_setting_button_layout.addWidget(add_image_button)
         rename_setting_button = QtGui.QToolButton()
-        rename_setting_button.setToolTip('Rename setting')
+        rename_setting_button.setToolTip(_('Rename setting'))
         rename_setting_button.setIcon(get_icon('images/rename.png'))
         rename_setting_button.clicked.connect(self.rename_setting)
         saved_setting_button_layout.addWidget(rename_setting_button)
 
         import_setting_button = QtGui.QToolButton()
-        import_setting_button.setToolTip('Import setting')
+        import_setting_button.setToolTip(_('Import setting'))
         import_setting_button.setIcon(get_icon('images/import.png'))
         import_setting_button.clicked.connect(self.import_setting)
         saved_setting_button_layout.addWidget(import_setting_button)
         export_setting_button = QtGui.QToolButton()
-        export_setting_button.setToolTip('Export setting')
+        export_setting_button.setToolTip(_('Export setting'))
         export_setting_button.setIcon(get_icon('images/export.png'))
         export_setting_button.clicked.connect(self.export_setting)
         saved_setting_button_layout.addWidget(export_setting_button)
 
         remove_image_button = QtGui.QToolButton(self)
-        remove_image_button.setToolTip('Delete setting from this list')
+        remove_image_button.setToolTip(_('Delete setting from this list'))
         remove_image_button.setIcon(get_icon('list_remove.png'))
         remove_image_button.clicked.connect(self.remove_setting)
         saved_setting_button_layout.addWidget(remove_image_button)
@@ -465,7 +470,7 @@ class SavedSettingsTab(QWidget):
         saved_setting_button_layout.addItem(spacerItem1)
 
         main_layout.addSpacing(10)
-        pick_image_groupbox = QGroupBox('Select Image:')
+        pick_image_groupbox = QGroupBox(_('Select Image:'))
         main_layout.addWidget(pick_image_groupbox)
         pick_image_layout = QHBoxLayout()
         pick_image_groupbox.setLayout(pick_image_layout)
@@ -476,17 +481,17 @@ class SavedSettingsTab(QWidget):
         pick_image_button_layout = QVBoxLayout()
         pick_image_layout.addLayout(pick_image_button_layout)
         add_image_button = QtGui.QToolButton()
-        add_image_button.setToolTip('Add image to this list')
+        add_image_button.setToolTip(_('Add image to this list'))
         add_image_button.setIcon(get_icon('plus.png'))
         add_image_button.clicked.connect(self.add_image)
         pick_image_button_layout.addWidget(add_image_button)
         rename_image_button = QtGui.QToolButton()
-        rename_image_button.setToolTip('Rename image')
+        rename_image_button.setToolTip(_('Rename image'))
         rename_image_button.setIcon(get_icon('images/rename.png'))
         rename_image_button.clicked.connect(self.rename_image)
         pick_image_button_layout.addWidget(rename_image_button)
         remove_image_button = QtGui.QToolButton(self)
-        remove_image_button.setToolTip('Remove image from this list')
+        remove_image_button.setToolTip(_('Remove image from this list'))
         remove_image_button.setIcon(get_icon('list_remove.png'))
         remove_image_button.clicked.connect(self.remove_image)
         pick_image_button_layout.addWidget(remove_image_button)
@@ -495,9 +500,9 @@ class SavedSettingsTab(QWidget):
 
     def update_saved_status(self, is_saved):
         if is_saved:
-            self.saved_setting_groupbox.setTitle('Saved Settings:')
+            self.saved_setting_groupbox.setTitle(_('Saved Settings:'))
         else:
-            self.saved_setting_groupbox.setTitle('Saved Settings: (*unsaved changes)')
+            self.saved_setting_groupbox.setTitle(_('Saved Settings: (*unsaved changes)'))
         self.is_saved = is_saved
 
     def populate_settings_list(self, selected_setting):
@@ -528,7 +533,7 @@ class SavedSettingsTab(QWidget):
                 cfg.plugin_prefs[cfg.STORE_SAVED_SETTINGS] = saved_settings
 
     def add_setting(self):
-        new_setting_name = self.get_new_setting_name('Add new setting')
+        new_setting_name = self.get_new_setting_name(_('Add new setting'))
         if not new_setting_name:
             return
         current_options = self.parent_dialog.current
@@ -909,6 +914,20 @@ class SavedSettingsTab(QWidget):
             self.update_files(first_dropped_name)
 
 
+
+DIC_name_font = [
+    ('Title', _('Title')),
+    ('Author', _('Author')),
+    ('Series', _('Series')),
+    ('Custom', _('Custom')),
+]
+DIC_name_color = [
+    ('Background', _('Background')),
+    ('Border', _('Border')),
+    ('Fill', _('Fill')),
+    ('Stroke', _('Stroke')),
+]
+
 class FontsTab(QWidget):
 
     changed = pyqtSignal()
@@ -919,76 +938,79 @@ class FontsTab(QWidget):
         main_layout = QVBoxLayout()
         self.setLayout(main_layout)
 
-        fonts_groupbox = QGroupBox('Fonts:')
+        fonts_groupbox = QGroupBox(_('Fonts:'))
         main_layout.addWidget(fonts_groupbox)
         fonts_layout = QVBoxLayout()
         fonts_groupbox.setLayout(fonts_layout)
         fonts_grid_layout = QGridLayout()
         fonts_layout.addLayout(fonts_grid_layout)
         row = 0
-        for display_name in ['Title', 'Author', 'Series', 'Custom']:
+        for name, display_name in DIC_name_font:
             font_label = QLabel(display_name+':', self)
-            font_label.setToolTip('Select a font and specify a size in pixels.\n'+
-                                  'If font set to \'Default\', uses the tweak value from\n'+
-                                  '\'generate_cover_title_font\' if present')
+            font_label.setToolTip(_('Select a font and specify a size in pixels.\n'+
+                                    'If font set to \'Default\', uses the tweak value from\n'+
+                                    '\'generate_cover_title_font\' if present.'))
             fonts_grid_layout.addWidget(font_label, row, 0, 1, 1)
             font_combo = FontComboBox(self)
-            setattr(self, '_font' + display_name, font_combo)
+            setattr(self, '_font' + name, font_combo)
             fonts_grid_layout.addWidget(font_combo, row, 1, 1, 2)
             size_spin = QSpinBox(self)
             size_spin.setRange(10, 1000)
             size_spin.setSingleStep(2)
-            setattr(self, '_fontSize' + display_name, size_spin)
+            setattr(self, '_fontSize' + name, size_spin)
             size_spin.valueChanged[int].connect(self.changed)
             fonts_grid_layout.addWidget(size_spin, row, 3, 1, 1)
             # Create the toolbutton menu for alignment
-            align_btn = self._create_align_button(display_name)
+            align_btn = self._create_align_button(name)
             fonts_grid_layout.addWidget(align_btn, row, 4, 1, 1)
             row += 1
-        self.fonts_linked_checkbox = QCheckBox('Use the same font family for all text')
-        self.fonts_linked_checkbox.setToolTip('When checked, the same font family is used for all text content on the cover')
+        
+        self.fonts_linked_checkbox = QCheckBox(_('Use the same font family for all text'))
+        self.fonts_linked_checkbox.setToolTip(_('When checked, the same font family is used for all text content on the cover'))
         self.fonts_linked_checkbox.stateChanged[int].connect(self.fonts_linked_changed)
         getattr(self, '_fontTitle').currentIndexChanged.connect(self.title_font_changed)
         getattr(self, '_fontAuthor').currentIndexChanged.connect(self.changed)
         getattr(self, '_fontSeries').currentIndexChanged.connect(self.changed)
         getattr(self, '_fontCustom').currentIndexChanged.connect(self.changed)
         fonts_layout.addWidget(self.fonts_linked_checkbox)
-        self.fonts_reduced_checkbox = QCheckBox('Auto-reduce font size to fit on one line')
-        self.fonts_reduced_checkbox.setToolTip('When checked, the font size will be used as a maximum size\n.' +
-                                              'A reduced size will be used where needed to fit text on one line.')
+        self.fonts_reduced_checkbox = QCheckBox(_('Auto-reduce font size to fit on one line'))
+        self.fonts_reduced_checkbox.setToolTip(_('When checked, the font size will be used as a maximum size.\n'+
+                                                 'A reduced size will be used where needed to fit text on one line.'))
         self.fonts_reduced_checkbox.stateChanged[int].connect(self.changed)
         fonts_layout.addWidget(self.fonts_reduced_checkbox)
 
         main_layout.addSpacing(10)
-        colors_groupbox = QGroupBox('Colors:')
+        colors_groupbox = QGroupBox(_('Colors:'))
         main_layout.addWidget(colors_groupbox)
         colors_layout = QVBoxLayout()
         colors_groupbox.setLayout(colors_layout)
         colors_grid_layout = QGridLayout()
         colors_layout.addLayout(colors_grid_layout)
         row = 0
-        for display_name in ['Background', 'Border', 'Fill', 'Stroke']:
-            setattr(self, '_tclabel' + display_name, QLabel(display_name+':', self))
-            colors_grid_layout.addWidget(getattr(self, '_tclabel' + display_name), row, 0, 1, 1)
+        
+        for name, display_name in DIC_name_color:
+            setattr(self, '_tclabel' + name, QLabel(display_name+':', self))
+            colors_grid_layout.addWidget(getattr(self, '_tclabel' + name), row, 0, 1, 1)
             color_ledit = ReadOnlyLineEdit('', self)
-            setattr(self, '_color' + display_name, color_ledit)
+            setattr(self, '_color' + name, color_ledit)
             colors_grid_layout.addWidget(color_ledit, row, 1, 1, 1)
             clear_color_button = QtGui.QToolButton(self)
             clear_color_button.setIcon(QIcon(I('trash.png')))
-            clear_color_button.setToolTip('Reset %s color' % display_name.lower())
-            clear_color_button.clicked.connect(partial(self.reset_color, color_ledit, display_name))
-            setattr(self, '_clearColor' + display_name, clear_color_button)
+            clear_color_button.setToolTip(_('Reset %s color') % display_name.lower())
+            clear_color_button.clicked.connect(partial(self.reset_color, color_ledit, name))
+            setattr(self, '_clearColor' + name, clear_color_button)
             colors_grid_layout.addWidget(clear_color_button, row, 2, 1, 1)
             select_button = QPushButton('...', self)
-            select_button.setToolTip('Select a %s color' % display_name.lower())
+            select_button.setToolTip(_('Select a %s color') % display_name.lower())
             select_button.clicked.connect(partial(self.pick_color, color_ledit))
-            setattr(self, '_selectColor' + display_name, select_button)
+            setattr(self, '_selectColor' + name, select_button)
             fm = select_button.fontMetrics()
             select_button.setFixedWidth(fm.width('...') + 10)
             colors_grid_layout.addWidget(select_button, row, 3, 1, 1)
             row += 1
-        self.apply_stroke_checkbox = QCheckBox('Apply')
-        self.apply_stroke_checkbox.setToolTip('When checked, stroke color is drawn around text')
+        
+        self.apply_stroke_checkbox = QCheckBox(_('Apply'))
+        self.apply_stroke_checkbox.setToolTip(_('When checked, stroke color is drawn around text'))
         self.apply_stroke_checkbox.stateChanged[int].connect(self.changed)
         self.apply_stroke_checkbox.setVisible(False)
         for x in '_color _clearColor _selectColor _tclabel'.split():
@@ -1000,11 +1022,11 @@ class FontsTab(QWidget):
         button = QToolButton()
         button.setIcon(QIcon(I('format-justify-center.png')))
         menu = QMenu(button)
-        ac = menu.addAction(QIcon(I('format-justify-left.png')), 'Left aligned')
+        ac = menu.addAction(QIcon(I('format-justify-left.png')), _('Left aligned'))
         ac.triggered.connect(partial(self.change_alignment, button, display_name, 'left'))
-        ac = menu.addAction(QIcon(I('format-justify-center.png')), 'Centered')
+        ac = menu.addAction(QIcon(I('format-justify-center.png')), _('Centered'))
         ac.triggered.connect(partial(self.change_alignment, button, display_name, 'center'))
-        ac = menu.addAction(QIcon(I('format-justify-right.png')), 'Right aligned')
+        ac = menu.addAction(QIcon(I('format-justify-right.png')), _('Right aligned'))
         ac.triggered.connect(partial(self.change_alignment, button, display_name, 'right'))
         button.setMenu(menu)
         button.setPopupMode(QToolButton.InstantPopup)
@@ -1075,93 +1097,93 @@ class DimensionsTab(QWidget):
         main_layout = QVBoxLayout()
         self.setLayout(main_layout)
 
-        size_groupbox = QGroupBox('Size:', self)
+        size_groupbox = QGroupBox(_('Size:'), self)
         main_layout.addWidget(size_groupbox)
         size_layout = QGridLayout()
         size_groupbox.setLayout(size_layout)
-        cover_width_label = QLabel('Cover width:', self)
-        cover_width_label.setToolTip('The width in pixels of the output .jpg file')
+        cover_width_label = QLabel(_('Cover width:'), self)
+        cover_width_label.setToolTip(_('The width in pixels of the output .jpg file'))
         size_layout.addWidget(cover_width_label, 0, 0, 1, 1)
         self.width_spin = QSpinBox(self)
         self.width_spin.setRange(100, 5000)
         self.width_spin.valueChanged[int].connect(self.changed)
         size_layout.addWidget(self.width_spin, 0, 1, 1, 1)
-        cover_height_label = QLabel('Cover height:', self)
-        cover_height_label.setToolTip('The height in pixels of the output .jpg file')
+        cover_height_label = QLabel(_('Cover height:'), self)
+        cover_height_label.setToolTip(_('The height in pixels of the output .jpg file'))
         size_layout.addWidget(cover_height_label, 0, 2, 1, 1)
         self.height_spin = QSpinBox(self)
         self.height_spin.setRange(100, 5000)
         self.height_spin.valueChanged[int].connect(self.changed)
         size_layout.addWidget(self.height_spin, 0, 3, 1, 1)
-        self.background_image_checkbox = QCheckBox('Stretch image to use as cover background', self)
-        self.background_image_checkbox.setToolTip('Check this to overlay text on the image background.\n'+
-                                             'Uncheck this to place text around the image')
+        self.background_image_checkbox = QCheckBox(_('Stretch image to use as cover background'), self)
+        self.background_image_checkbox.setToolTip(_('Check this to overlay text on the image background.\n'+
+                                                    'Uncheck this to place text around the image.'))
         self.background_image_checkbox.stateChanged.connect(self.image_resize_changed)
         size_layout.addWidget(self.background_image_checkbox, 1, 0, 1, 4)
-        self.resize_to_image_checkbox = QCheckBox('Resize cover dimensions to match background image', self)
-        self.resize_to_image_checkbox.setToolTip('Check this to automatically resize the cover based on\n'+
-                                             'the dimensions of the currently chosen background image')
+        self.resize_to_image_checkbox = QCheckBox(_('Resize cover dimensions to match background image'), self)
+        self.resize_to_image_checkbox.setToolTip(_('Check this to automatically resize the cover based on\n'+
+                                                   'the dimensions of the currently chosen background image'))
         self.resize_to_image_checkbox.stateChanged.connect(self.resize_dimensions_changed)
         size_layout.addWidget(self.resize_to_image_checkbox, 2, 0, 1, 4)
-        self.resize_image_to_fit_checkbox = QCheckBox('Resize image to scale up if smaller than available area', self)
-        self.resize_image_to_fit_checkbox.setToolTip('Check this to automatically resize the cover image to fit the\n'+
-                                             'the maximum area available if it is too small.')
+        self.resize_image_to_fit_checkbox = QCheckBox(_('Resize image to scale up if smaller than available area'), self)
+        self.resize_image_to_fit_checkbox.setToolTip(_('Check this to automatically resize the cover image to fit the\n'+
+                                                       'the maximum area available if it is too small'))
         self.resize_image_to_fit_checkbox.stateChanged.connect(self.image_resize_changed)
         size_layout.addWidget(self.resize_image_to_fit_checkbox, 3, 0, 1, 4)
 
         main_layout.addSpacing(10)
-        margins_groupbox = QGroupBox('Margins:', self)
+        margins_groupbox = QGroupBox(_('Margins:'), self)
         main_layout.addWidget(margins_groupbox)
         margins_layout = QGridLayout()
         margins_groupbox.setLayout(margins_layout)
 
-        top_margin_label = QLabel('Top margin:', self)
-        top_margin_label.setToolTip('The margin in pixels from the top of the cover\n'+
-                                    'to the first content')
+        top_margin_label = QLabel(_('Top margin:'), self)
+        top_margin_label.setToolTip(_('The margin in pixels from the top of the cover\n'+
+                                      'to the first content'))
         margins_layout.addWidget(top_margin_label, 1, 0, 1, 1)
         self.top_margin_spin = QSpinBox(self)
         self.top_margin_spin.setRange(0, 5000)
         self.top_margin_spin.valueChanged[int].connect(self.changed)
         margins_layout.addWidget(self.top_margin_spin, 1, 1, 1, 1)
 
-        bottom_margin_label = QLabel('Bottom margin:', self)
-        bottom_margin_label.setToolTip('The margin in pixels from the bottom of the cover\n'+
-                                       'to the last content')
+        bottom_margin_label = QLabel(_('Bottom margin:'), self)
+        bottom_margin_label.setToolTip(_('The margin in pixels from the bottom of the cover\n'+
+                                         'to the last content'))
         margins_layout.addWidget(bottom_margin_label, 1, 2, 1, 1)
         self.bottom_margin_spin = QSpinBox(self)
         self.bottom_margin_spin.setRange(0, 5000)
         self.bottom_margin_spin.valueChanged[int].connect(self.changed)
         margins_layout.addWidget(self.bottom_margin_spin, 1, 3, 1, 1)
 
-        left_margin_label = QLabel('Left margin:', self)
-        left_margin_label.setToolTip('The minimum margin in pixels from the left of the cover\n'+
-                                     'to the text content')
+        left_margin_label = QLabel(_('Left margin:'), self)
+        left_margin_label.setToolTip(_('The minimum margin in pixels from the left of the cover\n'+
+                                       'to the text content'))
         margins_layout.addWidget(left_margin_label, 2, 0, 1, 1)
         self.left_margin_spin = QSpinBox(self)
         self.left_margin_spin.setRange(0, 5000)
         self.left_margin_spin.valueChanged[int].connect(self.changed)
         margins_layout.addWidget(self.left_margin_spin, 2, 1, 1, 1)
 
-        right_margin_label = QLabel('Right margin:', self)
-        right_margin_label.setToolTip('The minimum margin in pixels from the right of the cover\n'+
-                                     'to the text content')
+        right_margin_label = QLabel(_('Right margin:'), self)
+        right_margin_label.setToolTip(_('The minimum margin in pixels from the right of the cover\n'+
+                                        'to the text content'))
         margins_layout.addWidget(right_margin_label, 2, 2, 1, 1)
         self.right_margin_spin = QSpinBox(self)
         self.right_margin_spin.setRange(0, 5000)
         self.right_margin_spin.valueChanged[int].connect(self.changed)
         margins_layout.addWidget(self.right_margin_spin, 2, 3, 1, 1)
 
-        text_padding_label = QLabel('Text padding:', self)
-        text_padding_label.setToolTip('The spacing in pixels between successive lines of text')
+        text_padding_label = QLabel(_('Text padding:'), self)
+        text_padding_label.setToolTip(_('The spacing in pixels between successive lines of text'))
         margins_layout.addWidget(text_padding_label, 3, 0, 1, 1)
         self.text_margin_spin = QSpinBox(self)
         self.text_margin_spin.setRange(0, 5000)
         self.text_margin_spin.valueChanged[int].connect(self.changed)
         margins_layout.addWidget(self.text_margin_spin, 3, 1, 1, 1)
 
-        image_padding_label = QLabel('Image padding:', self)
-        image_padding_label.setToolTip('The spacing in pixels between the image and text\n'
-                                       +'placed above and below it')
+        image_padding_label = QLabel(_('Image padding:'), self)
+        image_padding_label.setToolTip(_('The spacing in pixels between the image and text\n'+
+                                         'placed above and below it'))
         margins_layout.addWidget(image_padding_label, 3, 2, 1, 1)
 
         self.image_margin_spin = QSpinBox(self)
@@ -1170,21 +1192,21 @@ class DimensionsTab(QWidget):
         margins_layout.addWidget(self.image_margin_spin, 3, 3, 1, 1)
 
         main_layout.addSpacing(10)
-        borders_groupbox = QGroupBox('Border Widths:', self)
+        borders_groupbox = QGroupBox(_('Border Widths:'), self)
         main_layout.addWidget(borders_groupbox)
         borders_layout = QGridLayout()
         borders_groupbox.setLayout(borders_layout)
-        cover_border_label = QLabel('Cover border:', self)
-        cover_border_label.setToolTip('The width in pixels of a border around the edge\n'
-                                       +'of the cover. Specify 0 for no border')
+        cover_border_label = QLabel(_('Cover border:'), self)
+        cover_border_label.setToolTip(_('The width in pixels of a border around the edge\n'+
+                                        'of the cover. Specify 0 for no border'))
         borders_layout.addWidget(cover_border_label, 4, 0, 1, 1)
         self.cover_border_width_spin = QSpinBox(self)
         self.cover_border_width_spin.setRange(0, 99)
         self.cover_border_width_spin.valueChanged[int].connect(self.changed)
         borders_layout.addWidget(self.cover_border_width_spin, 4, 1, 1, 1)
-        image_border_label = QLabel('Image border:', self)
-        image_border_label.setToolTip('The width in pixels of a border around the edge\n'
-                                       +'of the image. Specify 0 for no border')
+        image_border_label = QLabel(_('Image border:'), self)
+        image_border_label.setToolTip(_('The width in pixels of a border around the edge\n'+
+                                        'of the image. Specify 0 for no border'))
         borders_layout.addWidget(image_border_label, 4, 2, 1, 1)
         self.image_border_width_spin = QSpinBox(self)
         self.image_border_width_spin.setRange(0, 99)
@@ -1222,9 +1244,9 @@ class ContentsTab(QWidget):
         main_layout = QVBoxLayout()
         self.setLayout(main_layout)
 
-        content_groupbox = QGroupBox('Field Order:', self)
-        content_groupbox.setToolTip('Alter the order of items on the cover and\n'+
-                                    'whether they are displayed using the checkbox')
+        content_groupbox = QGroupBox(_('Field Order:'), self)
+        content_groupbox.setToolTip(_('Alter the order of items on the cover and\n'+
+                                      'whether they are displayed using the checkbox'))
         main_layout.addWidget(content_groupbox)
         field_layout = QHBoxLayout()
         content_groupbox.setLayout(field_layout)
@@ -1237,20 +1259,20 @@ class ContentsTab(QWidget):
         field_button_layout = QVBoxLayout()
         field_layout.addLayout(field_button_layout)
         move_up_button = QtGui.QToolButton(self)
-        move_up_button.setToolTip('Move field up')
+        move_up_button.setToolTip(_('Move field up'))
         move_up_button.setIcon(get_icon('arrow-up.png'))
         move_up_button.clicked.connect(self.field_order_list.move_field_up)
         field_button_layout.addWidget(move_up_button)
         spacerItem1 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         field_button_layout.addItem(spacerItem1)
         move_down_button = QtGui.QToolButton(self)
-        move_down_button.setToolTip('Move field down')
+        move_down_button.setToolTip(_('Move field down'))
         move_down_button.setIcon(get_icon('arrow-down.png'))
         move_down_button.clicked.connect(self.field_order_list.move_field_down)
         field_button_layout.addWidget(move_down_button)
 
         main_layout.addSpacing(5)
-        custom_groupbox = QGroupBox('Custom Text:', self)
+        custom_groupbox = QGroupBox(_('Custom Text:'), self)
         main_layout.addWidget(custom_groupbox)
         custom_layout = QVBoxLayout()
         custom_groupbox.setLayout(custom_layout)
@@ -1259,38 +1281,38 @@ class ContentsTab(QWidget):
         custom_layout.addWidget(self.custom_text_ledit)
 
         main_layout.addSpacing(5)
-        options_groupbox = QGroupBox('Other Options:', self)
+        options_groupbox = QGroupBox(_('Other Options:'), self)
         main_layout.addWidget(options_groupbox)
         options_layout = QGridLayout()
         options_groupbox.setLayout(options_layout)
-        self.swap_author_checkbox = QCheckBox('Swap author LN,FN to FN LN', self)
-        self.swap_author_checkbox.setToolTip('Use this option if your authors are stored as LN, FN\n'+
-                                             'but you prefer to see FN LN on the book cover')
+        self.swap_author_checkbox = QCheckBox(_('Swap author LN,FN to FN LN'), self)
+        self.swap_author_checkbox.setToolTip(_('Use this option if your authors are stored as LN, FN\n'+
+                                               'but you prefer to see FN LN on the book cover'))
         self.swap_author_checkbox.stateChanged.connect(self.changed)
         options_layout.addWidget(self.swap_author_checkbox, 0, 0, 1, 2)
-        self.series_label = QLabel('Series text:', self)
-        self.series_label.setToolTip('Change the way series information is displayed.\n'+
-                                             'Useful for non-English languages!')
+        self.series_label = QLabel(_('Series text:'), self)
+        self.series_label.setToolTip(_('Change the way series information is displayed.\n'+
+                                       'Useful for non-English languages!'))
         options_layout.addWidget(self.series_label, 1, 0, 1, 1)
         self.series_text_ledit = QLineEdit(self)
         self.series_text_ledit.textChanged.connect(self.changed)
         options_layout.addWidget(self.series_text_ledit, 1, 1, 1, 1)
 
         main_layout.addSpacing(5)
-        metadata_groupbox = QGroupBox('Metadata: (*not saved)', self)
-        metadata_groupbox.setToolTip('Optionally override the text in these fields for this book.\n'
-                                     'These are not saved as part of the settings profile.\n'
-                                     'This functionality is disabled if multiple books are selected.')
+        metadata_groupbox = QGroupBox(_('Metadata: (*not saved)'), self)
+        metadata_groupbox.setToolTip(_('Optionally override the text in these fields for this book.\n'+
+                                       'These are not saved as part of the settings profile.\n'+
+                                       'This functionality is disabled if multiple books are selected.'))
         main_layout.addWidget(metadata_groupbox)
         metadata_layout = QGridLayout()
         metadata_groupbox.setLayout(metadata_layout)
-        self.metadata_title_label = QLabel('Title:', self)
+        self.metadata_title_label = QLabel(_('Title:'), self)
         self.metadata_title_ledit = QLineEdit(self)
         self.metadata_title_ledit.textChanged.connect(self.changed)
-        self.metadata_author_label = QLabel('Author:', self)
+        self.metadata_author_label = QLabel(_('Author:'), self)
         self.metadata_author_ledit = QLineEdit(self)
         self.metadata_author_ledit.textChanged.connect(self.changed)
-        self.metadata_series_label = QLabel('Series:', self)
+        self.metadata_series_label = QLabel(_('Series:'), self)
         self.metadata_series_ledit = QLineEdit(self)
         self.metadata_series_ledit.textChanged.connect(self.changed)
         metadata_layout.addWidget(self.metadata_title_label, 0, 0, 1, 1)
@@ -1319,10 +1341,10 @@ class CoverOptionsDialog(SizePersistedDialog):
         self._preview_timer.setInterval(500)
         self._preview_timer.timeout.connect(self.display_preview)
 
-        self.setWindowTitle('Cover Options')
+        self.setWindowTitle(_('Cover Options'))
         layout = QVBoxLayout(self)
         self.setLayout(layout)
-        title_layout = ImageTitleLayout(self, 'images/generate_cover.png', 'Generate Custom Cover')
+        title_layout = ImageTitleLayout(self, 'images/generate_cover.png', _('Generate Custom Cover'))
         layout.addLayout(title_layout)
 
         # Main content layout
@@ -1343,10 +1365,10 @@ class CoverOptionsDialog(SizePersistedDialog):
         self.dimensions_tab.changed.connect(self.options_changed)
         self.contents_tab = ContentsTab(self)
         self.contents_tab.changed.connect(self.options_changed)
-        tab_widget.addTab(self.saved_settings_tab, 'Settings')
-        tab_widget.addTab(self.fonts_tab, 'Fonts')
-        tab_widget.addTab(self.dimensions_tab, 'Dimensions')
-        tab_widget.addTab(self.contents_tab, 'Contents')
+        tab_widget.addTab(self.saved_settings_tab, _('Settings'))
+        tab_widget.addTab(self.fonts_tab, _('Fonts'))
+        tab_widget.addTab(self.dimensions_tab, _('Dimensions'))
+        tab_widget.addTab(self.contents_tab, _('Contents'))
 
         config_layout.addSpacing(5)
         self.preview_cover = ImageView(self)
@@ -1356,14 +1378,14 @@ class CoverOptionsDialog(SizePersistedDialog):
         button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         button_box.accepted.connect(self.accept_clicked)
         button_box.rejected.connect(self.reject_clicked)
-        self.reset_button = button_box.addButton(' Revert ', QDialogButtonBox.ResetRole)
-        self.reset_button.setToolTip('Revert to your previous saved setting values')
+        self.reset_button = button_box.addButton(_(' Revert '), QDialogButtonBox.ResetRole)
+        self.reset_button.setToolTip(_('Revert to your previous saved setting values'))
         self.reset_button.clicked.connect(self.revert_to_saved)
-        self.save_setting_button = button_box.addButton(' Save ', QDialogButtonBox.ResetRole)
-        self.save_setting_button.setToolTip('Overwrite your current saved setting')
+        self.save_setting_button = button_box.addButton(_(' Save '), QDialogButtonBox.ResetRole)
+        self.save_setting_button.setToolTip(_('Overwrite your current saved setting'))
         self.save_setting_button.clicked.connect(self.persist_saved_setting)
-        self.options_button = button_box.addButton(' Customize... ', QDialogButtonBox.ResetRole)
-        self.options_button.setToolTip('Set general options for this plugin')
+        self.options_button = button_box.addButton(_(' Customize... '), QDialogButtonBox.ResetRole)
+        self.options_button.setToolTip(_('Set general options for this plugin'))
         self.options_button.clicked.connect(self.show_configuration)
         layout.addWidget(button_box)
 
@@ -1435,7 +1457,7 @@ class CoverOptionsDialog(SizePersistedDialog):
         setting_name = self.current[cfg.KEY_NAME]
         if prompt:
             if not question_dialog(self, _('Are you sure?'), '<p>'+
-                    'Revert to your previously saved values for \'%s\'?'%setting_name,
+                    _('Revert to your previously saved values for \'%s\'?')%setting_name,
                     show_copy_button=False):
                 return
         self.block_updates = True
@@ -1454,7 +1476,7 @@ class CoverOptionsDialog(SizePersistedDialog):
         setting_name = self.current[cfg.KEY_NAME]
         if prompt:
             if not question_dialog(self, _('Are you sure?'), '<p>'+
-                    'Overwrite the \'%s\' setting with the current values?'%setting_name,
+                    _('Overwrite the \'%s\' setting with the current values?')%setting_name,
                     show_copy_button=False):
                 return
         saved_settings = cfg.plugin_prefs[cfg.STORE_SAVED_SETTINGS]
@@ -1543,7 +1565,7 @@ class CoverOptionsDialog(SizePersistedDialog):
         fonts = self.current[cfg.KEY_FONTS]
         getattr(self.fonts_tab, '_fontAuthor').setEnabled(True)
         getattr(self.fonts_tab, '_fontSeries').setEnabled(True)
-        for name in ['Title', 'Author', 'Series', 'Custom']:
+        for name, display_name in DIC_name_font:
             getattr(self.fonts_tab, '_font'+name).select_value(fonts[name.lower()]['name'])
             getattr(self.fonts_tab, '_fontSize'+name).setValue(fonts[name.lower()]['size'])
             button = getattr(self.fonts_tab, '_fontAlign'+name)
@@ -1556,7 +1578,7 @@ class CoverOptionsDialog(SizePersistedDialog):
         self.fonts_tab.fonts_reduced_checkbox.setChecked(self.current.get(cfg.KEY_FONTS_AUTOREDUCED, False))
 
         colors = self.current[cfg.KEY_COLORS]
-        for name in ['Border', 'Background', 'Fill', 'Stroke']:
+        for name, display_name in DIC_name_color:
             getattr(self.fonts_tab, '_color'+name).setText(colors[name.lower()])
 
         is_stroke_applied = self.current.get(cfg.KEY_COLOR_APPLY_STROKE, False)

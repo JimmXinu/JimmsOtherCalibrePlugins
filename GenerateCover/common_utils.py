@@ -7,6 +7,11 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+try:
+    load_translations()
+except NameError:
+    pass # load_translations() added in calibre 1.9
+
 import os
 import six
 from six import text_type as unicode

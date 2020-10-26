@@ -7,6 +7,11 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+try:
+    load_translations()
+except NameError:
+    pass # load_translations() added in calibre 1.9
+
 # The class that all Interface Action plugin wrappers must inherit from
 from calibre.customize import InterfaceActionBase
 
@@ -21,7 +26,7 @@ class ActionGenerateCover(InterfaceActionBase):
     calibre utilities to run without needing to load the GUI libraries.
     '''
     name                    = 'Generate Cover'
-    description             = 'Generate covers in Calibre with appearance options'
+    description             = _('Generate covers in Calibre with appearance options')
     supported_platforms     = ['windows', 'osx', 'linux']
     author                  = 'Grant Drake'
     version                 = (1, 5, 25)

@@ -1,0 +1,442 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-25 22:45-0300\n"
+"PO-Revision-Date: 2020-10-25 22:45-0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Eazy Po 0.9.5.3\n"
+
+#: action.py:36
+msgid "Generate a customised cover"
+msgstr ""
+
+#: action.py:67
+msgid "No books selected"
+msgstr ""
+
+#: common_utils.py:259
+msgid "Restart required"
+msgstr ""
+
+#: common_utils.py:260
+msgid ""
+"Title image not found - you must restart Calibre before using this plugin!"
+msgstr ""
+
+#: common_utils.py:540
+msgid "Undefined"
+msgstr ""
+
+#: common_utils.py:626
+msgid "Restart calibre now"
+msgstr ""
+
+#: config.py:283
+msgid "Edit the keyboard shortcuts associated with this plugin"
+msgstr ""
+
+#: config.py:289
+msgid "View data stored in the library database for this plugin"
+msgstr ""
+
+#: dialogs.py:68
+msgid "Cancel"
+msgstr ""
+
+#: dialogs.py:98
+msgid "Generating: "
+msgstr ""
+
+#: dialogs.py:425 dialogs.py:503
+msgid "Saved Settings:"
+msgstr ""
+
+#: dialogs.py:435
+msgid "Autosave settings"
+msgstr ""
+
+#: dialogs.py:443
+msgid "Add setting"
+msgstr ""
+
+#: dialogs.py:448
+msgid "Rename setting"
+msgstr ""
+
+#: dialogs.py:454
+msgid "Import setting"
+msgstr ""
+
+#: dialogs.py:459
+msgid "Export setting"
+msgstr ""
+
+#: dialogs.py:465
+msgid "Delete setting from this list"
+msgstr ""
+
+#: dialogs.py:473
+msgid "Select Image:"
+msgstr ""
+
+#: dialogs.py:484
+msgid "Add image to this list"
+msgstr ""
+
+#: dialogs.py:489
+msgid "Rename image"
+msgstr ""
+
+#: dialogs.py:494
+msgid "Remove image from this list"
+msgstr ""
+
+#: dialogs.py:505
+msgid "Saved Settings: (*unsaved changes)"
+msgstr ""
+
+#: dialogs.py:536
+msgid "Add new setting"
+msgstr ""
+
+#: dialogs.py:570 dialogs.py:812 dialogs.py:1459 dialogs.py:1478
+msgid "Are you sure?"
+msgstr ""
+
+#: dialogs.py:919
+msgid "Title"
+msgstr ""
+
+#: dialogs.py:920
+msgid "Author"
+msgstr ""
+
+#: dialogs.py:921
+msgid "Series"
+msgstr ""
+
+#: dialogs.py:922
+msgid "Custom"
+msgstr ""
+
+#: dialogs.py:925
+msgid "Background"
+msgstr ""
+
+#: dialogs.py:926
+msgid "Border"
+msgstr ""
+
+#: dialogs.py:927
+msgid "Fill"
+msgstr ""
+
+#: dialogs.py:928
+msgid "Stroke"
+msgstr ""
+
+#: dialogs.py:941
+msgid "Fonts:"
+msgstr ""
+
+#: dialogs.py:950
+msgid "Select a font and specify a size in pixels.\n"
+msgstr ""
+
+#: dialogs.py:968
+msgid "Use the same font family for all text"
+msgstr ""
+
+#: dialogs.py:969
+msgid ""
+"When checked, the same font family is used for all text content on the cover"
+msgstr ""
+
+#: dialogs.py:976
+msgid "Auto-reduce font size to fit on one line"
+msgstr ""
+
+#: dialogs.py:977
+msgid "When checked, the font size will be used as a maximum size.\n"
+msgstr ""
+
+#: dialogs.py:983
+msgid "Colors:"
+msgstr ""
+
+#: dialogs.py:999
+#, python-format
+msgid "Reset %s color"
+msgstr ""
+
+#: dialogs.py:1004
+#, python-format
+msgid "Select a %s color"
+msgstr ""
+
+#: dialogs.py:1012
+msgid "Apply"
+msgstr ""
+
+#: dialogs.py:1013
+msgid "When checked, stroke color is drawn around text"
+msgstr ""
+
+#: dialogs.py:1025
+msgid "Left aligned"
+msgstr ""
+
+#: dialogs.py:1027
+msgid "Centered"
+msgstr ""
+
+#: dialogs.py:1029
+msgid "Right aligned"
+msgstr ""
+
+#: dialogs.py:1100
+msgid "Size:"
+msgstr ""
+
+#: dialogs.py:1104
+msgid "Cover width:"
+msgstr ""
+
+#: dialogs.py:1105
+msgid "The width in pixels of the output .jpg file"
+msgstr ""
+
+#: dialogs.py:1111
+msgid "Cover height:"
+msgstr ""
+
+#: dialogs.py:1112
+msgid "The height in pixels of the output .jpg file"
+msgstr ""
+
+#: dialogs.py:1118
+msgid "Stretch image to use as cover background"
+msgstr ""
+
+#: dialogs.py:1119
+msgid "Check this to overlay text on the image background.\n"
+msgstr ""
+
+#: dialogs.py:1123
+msgid "Resize cover dimensions to match background image"
+msgstr ""
+
+#: dialogs.py:1124
+msgid "Check this to automatically resize the cover based on\n"
+msgstr ""
+
+#: dialogs.py:1128
+msgid "Resize image to scale up if smaller than available area"
+msgstr ""
+
+#: dialogs.py:1129
+msgid "Check this to automatically resize the cover image to fit the\n"
+msgstr ""
+
+#: dialogs.py:1135
+msgid "Margins:"
+msgstr ""
+
+#: dialogs.py:1140
+msgid "Top margin:"
+msgstr ""
+
+#: dialogs.py:1141
+msgid "The margin in pixels from the top of the cover\n"
+msgstr ""
+
+#: dialogs.py:1149
+msgid "Bottom margin:"
+msgstr ""
+
+#: dialogs.py:1150
+msgid "The margin in pixels from the bottom of the cover\n"
+msgstr ""
+
+#: dialogs.py:1158
+msgid "Left margin:"
+msgstr ""
+
+#: dialogs.py:1159
+msgid "The minimum margin in pixels from the left of the cover\n"
+msgstr ""
+
+#: dialogs.py:1167
+msgid "Right margin:"
+msgstr ""
+
+#: dialogs.py:1168
+msgid "The minimum margin in pixels from the right of the cover\n"
+msgstr ""
+
+#: dialogs.py:1176
+msgid "Text padding:"
+msgstr ""
+
+#: dialogs.py:1177
+msgid "The spacing in pixels between successive lines of text"
+msgstr ""
+
+#: dialogs.py:1184
+msgid "Image padding:"
+msgstr ""
+
+#: dialogs.py:1185
+msgid "The spacing in pixels between the image and text\n"
+msgstr ""
+
+#: dialogs.py:1195
+msgid "Border Widths:"
+msgstr ""
+
+#: dialogs.py:1199
+msgid "Cover border:"
+msgstr ""
+
+#: dialogs.py:1200 dialogs.py:1208
+msgid "The width in pixels of a border around the edge\n"
+msgstr ""
+
+#: dialogs.py:1207
+msgid "Image border:"
+msgstr ""
+
+#: dialogs.py:1247
+msgid "Field Order:"
+msgstr ""
+
+#: dialogs.py:1248
+msgid "Alter the order of items on the cover and\n"
+msgstr ""
+
+#: dialogs.py:1262
+msgid "Move field up"
+msgstr ""
+
+#: dialogs.py:1269
+msgid "Move field down"
+msgstr ""
+
+#: dialogs.py:1275
+msgid "Custom Text:"
+msgstr ""
+
+#: dialogs.py:1284
+msgid "Other Options:"
+msgstr ""
+
+#: dialogs.py:1288
+msgid "Swap author LN,FN to FN LN"
+msgstr ""
+
+#: dialogs.py:1289
+msgid "Use this option if your authors are stored as LN, FN\n"
+msgstr ""
+
+#: dialogs.py:1293
+msgid "Series text:"
+msgstr ""
+
+#: dialogs.py:1294
+msgid "Change the way series information is displayed.\n"
+msgstr ""
+
+#: dialogs.py:1302
+msgid "Metadata: (*not saved)"
+msgstr ""
+
+#: dialogs.py:1303
+msgid "Optionally override the text in these fields for this book.\n"
+msgstr ""
+
+#: dialogs.py:1309
+msgid "Title:"
+msgstr ""
+
+#: dialogs.py:1312
+msgid "Author:"
+msgstr ""
+
+#: dialogs.py:1315
+msgid "Series:"
+msgstr ""
+
+#: dialogs.py:1344
+msgid "Cover Options"
+msgstr ""
+
+#: dialogs.py:1347
+msgid "Generate Custom Cover"
+msgstr ""
+
+#: dialogs.py:1368
+msgid "Settings"
+msgstr ""
+
+#: dialogs.py:1369
+msgid "Fonts"
+msgstr ""
+
+#: dialogs.py:1370
+msgid "Dimensions"
+msgstr ""
+
+#: dialogs.py:1371
+msgid "Contents"
+msgstr ""
+
+#: dialogs.py:1381
+msgid " Revert "
+msgstr ""
+
+#: dialogs.py:1382
+msgid "Revert to your previous saved setting values"
+msgstr ""
+
+#: dialogs.py:1384
+msgid " Save "
+msgstr ""
+
+#: dialogs.py:1385
+msgid "Overwrite your current saved setting"
+msgstr ""
+
+#: dialogs.py:1387
+msgid " Customize... "
+msgstr ""
+
+#: dialogs.py:1388
+msgid "Set general options for this plugin"
+msgstr ""
+
+#: dialogs.py:1460
+#, python-format
+msgid "Revert to your previously saved values for '%s'?"
+msgstr ""
+
+#: dialogs.py:1479
+#, python-format
+msgid "Overwrite the '%s' setting with the current values?"
+msgstr ""
+
+#: __init__.py:29
+msgid "Generate covers in Calibre with appearance options"
+msgstr ""

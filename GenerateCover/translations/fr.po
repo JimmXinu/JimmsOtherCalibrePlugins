@@ -1,0 +1,426 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2020-10-25 23:14-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Eazy Po 0.9.5.3\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: common_utils.py\n"
+"X-Poedit-SearchPath-1: action.py\n"
+"X-Poedit-SearchPath-2: dialogs.py\n"
+"X-Poedit-SearchPath-3: __init__.py\n"
+"X-Poedit-SearchPath-4: config.py\n"
+
+msgid " Customize... "
+msgstr " Personnaliser... "
+
+msgid " Revert "
+msgstr " Réinitialiser "
+
+msgid " Save "
+msgstr " Sauvegarder "
+
+msgid "Add image to this list"
+msgstr "Ajouter une image a cette liste"
+
+msgid "Add new setting"
+msgstr "Ajouter une nouvelle configuration"
+
+msgid "Add setting"
+msgstr "Ajouter une configuration"
+
+msgid ""
+"Alter the order of items on the cover and\n"
+"whether they are displayed using the checkbox"
+msgstr ""
+"Modifier l'ordre des éléments sur la couverture et\n"
+"si elles sont affichées en utilisant la case à cocher"
+
+msgid "Apply"
+msgstr "Appliquer"
+
+msgid "Are you sure?"
+msgstr "Êtes-vous sûr ?"
+
+msgid "Author"
+msgstr "Auteur"
+
+msgid "Author:"
+msgstr "Auteur :"
+
+msgid "Auto-reduce font size to fit on one line"
+msgstr ""
+"Réduire automatiquement la taille de la Police pour qu'elle tienne sur une "
+"ligne"
+
+msgid "Autosave settings"
+msgstr "Sauvegarde automatique des configurations"
+
+msgid "Background"
+msgstr "Fond"
+
+msgid "Border"
+msgstr "Bordure"
+
+msgid "Border Widths:"
+msgstr "Largeurs des bordures :"
+
+msgid "Bottom margin:"
+msgstr "Marge du bas :"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "Centered"
+msgstr "Centrée"
+
+msgid ""
+"Change the way series information is displayed.\n"
+"Useful for non-English languages!"
+msgstr ""
+"Modifier le mode d'affichage des informations pour les séries.\n"
+"Utile pour les langues autres que l'anglais !"
+
+msgid ""
+"Check this to automatically resize the cover based on\n"
+"the dimensions of the currently chosen background image"
+msgstr ""
+"Cocher cette case pour redimensionner automatiquement la couverture\n"
+"en fonction des dimensions de l'image de fond actuellement choisie"
+
+msgid ""
+"Check this to automatically resize the cover image to fit the\n"
+"the maximum area available if it is too small"
+msgstr ""
+"Cocher cette case pour redimensionner automatiquement l'image de la "
+"couverture\n"
+"afin qu'elle corresponde à la superficie maximale disponible si elle est "
+"trop petite"
+
+msgid ""
+"Check this to overlay text on the image background.\n"
+"Uncheck this to place text around the image."
+msgstr ""
+"Cocher cette case pour superposer le texte sur le fond de l'image.\n"
+"Décocher cette case pour placer le texte autour de l'image."
+
+msgid "Colors:"
+msgstr "Couleurs :"
+
+msgid "Contents"
+msgstr "Contenues"
+
+msgid "Cover Options"
+msgstr "Option de couverture"
+
+msgid "Cover border:"
+msgstr "Bordure de la couverture :"
+
+msgid "Cover height:"
+msgstr "Hauteur de la couverture :"
+
+msgid "Cover width:"
+msgstr "Largeur de la couverture :"
+
+msgid "Custom"
+msgstr "Personnaliser"
+
+msgid "Custom Text:"
+msgstr "Texte personnalisé :"
+
+msgid "Delete setting from this list"
+msgstr "Supprimer la configuration de cette liste"
+
+msgid "Dimensions"
+msgstr "Dimensions"
+
+msgid "Edit the keyboard shortcuts associated with this plugin"
+msgstr "Modifier les raccourcis clavier associés à cette extension"
+
+msgid "Export setting"
+msgstr "Exporter une configuration"
+
+msgid "Field Order:"
+msgstr "Ordre des champs :"
+
+msgid "Fill"
+msgstr "Remplisage"
+
+msgid "Fonts"
+msgstr "Polices"
+
+msgid "Fonts:"
+msgstr "Polices :"
+
+msgid "Generate Custom Cover"
+msgstr "Générer une couverture personnalisée"
+
+msgid "Generate a customised cover"
+msgstr "Générer une couverture personnalisée"
+
+msgid "Generate covers in Calibre with appearance options"
+msgstr "Générer des couvertures en Calibre avec des options d'apparence"
+
+msgid "Generating: "
+msgstr "Génération : "
+
+msgid "Image border:"
+msgstr "Bordure de l'image :"
+
+msgid "Image padding:"
+msgstr "Remplissage de l'image :"
+
+msgid "Import setting"
+msgstr "Importer une configuration"
+
+msgid "Left aligned"
+msgstr "Aligné à gauche"
+
+msgid "Left margin:"
+msgstr "Marge a gauche :"
+
+msgid "Margins:"
+msgstr "Marges :"
+
+msgid "Metadata: (*not saved)"
+msgstr "Métadonnées : (*non sauvegardées)"
+
+msgid "Move field down"
+msgstr "Déplacer le champ vers le bas"
+
+msgid "Move field up"
+msgstr "Déplacer le champ vers le haut"
+
+msgid "No books selected"
+msgstr "Aucun livre sélectionné"
+
+msgid ""
+"Optionally override the text in these fields for this book.\n"
+"These are not saved as part of the settings profile.\n"
+"This functionality is disabled if multiple books are selected."
+msgstr ""
+"Vous pouvez, si vous le souhaitez, remplacer le texte de ces champs pour ce "
+"livre.\n"
+"Ils ne sont pas enregistrés dans le profil des paramètres.\n"
+"Cette fonctionnalité est désactivée si plusieurs livres sont sélectionnés."
+
+msgid "Other Options:"
+msgstr "Autre options :"
+
+msgid "Overwrite the '%s' setting with the current values?"
+msgstr "Remplacer le paramètre \"%s\" par les valeurs actuelles ?"
+
+msgid "Overwrite your current saved setting"
+msgstr "Écraser les réglages actuelement sauvegardé"
+
+msgid "Remove image from this list"
+msgstr "Enlever une image"
+
+msgid "Rename image"
+msgstr "Renommer une image"
+
+msgid "Rename setting"
+msgstr "Renommer une configuration"
+
+msgid "Reset %s color"
+msgstr "Réinitialiser couleur pour le %s"
+
+msgid "Resize cover dimensions to match background image"
+msgstr ""
+"Redimensionner la taille de la couverture pour qu'elle corresponde à l'image "
+"de fond"
+
+msgid "Resize image to scale up if smaller than available area"
+msgstr ""
+"Redimensionner l'image à l'échelle si elle est plus petite que la zone "
+"disponible"
+
+msgid "Restart calibre now"
+msgstr "Redémarrer Calibre maintenant"
+
+msgid "Restart required"
+msgstr "Redémarrage nécessaire"
+
+msgid "Revert to your previous saved setting values"
+msgstr "Réinitialiser les valeurs a celle précédemment sauvegardées"
+
+msgid "Revert to your previously saved values for '%s'?"
+msgstr "Réinitialiser les valeurs pour le paramètre \"%s\" ?"
+
+msgid "Right aligned"
+msgstr "Aligné à droite"
+
+msgid "Right margin:"
+msgstr "Marge a droite :"
+
+msgid "Saved Settings:"
+msgstr "Configurations sauvegardés :"
+
+msgid "Saved Settings: (*unsaved changes)"
+msgstr "Configurations sauvegardés : (*modification non sauvegardés)"
+
+msgid "Select Image:"
+msgstr "Sélectionner l'image :"
+
+msgid "Select a %s color"
+msgstr "Sélectionner une couleur pour le %s"
+
+msgid ""
+"Select a font and specify a size in pixels.\n"
+"If font set to 'Default', uses the tweak value from\n"
+"'generate_cover_title_font' if present."
+msgstr ""
+"Sélectionner une Police et spécifier une taille en pixels.\n"
+"Si la Police est définie sur \"Par Défaut\", utilise la valeur paramétrée "
+"de\n"
+"\"generate_cover_title_font\" si présent."
+
+msgid "Series"
+msgstr "Series"
+
+msgid "Series text:"
+msgstr "Texte pour la série :"
+
+msgid "Series:"
+msgstr "Series :"
+
+msgid "Set general options for this plugin"
+msgstr "Définir les options générales pour ce plugin"
+
+msgid "Settings"
+msgstr "Configurations"
+
+msgid "Size:"
+msgstr "Taille :"
+
+msgid "Stretch image to use as cover background"
+msgstr "Étirer l'image pour l'utiliser comme fond de couverture"
+
+msgid "Stroke"
+msgstr "Trait"
+
+msgid "Swap author LN,FN to FN LN"
+msgstr "Échanger l'auteur 'Nom, Prénom' pour 'Prénom Nom'"
+
+msgid "Text padding:"
+msgstr "Remplissage du texte :"
+
+msgid "The height in pixels of the output .jpg file"
+msgstr "La hauteur en pixels du fichier .jpg en sortie"
+
+msgid ""
+"The margin in pixels from the bottom of the cover\n"
+"to the last content"
+msgstr ""
+"La marge en pixels entre le bas de la couverture\n"
+"et le dernier élement de texte"
+
+msgid ""
+"The margin in pixels from the top of the cover\n"
+"to the first content"
+msgstr ""
+"La marge en pixels entre le haut de la couverture\n"
+"et le premier élement de texte"
+
+msgid ""
+"The minimum margin in pixels from the left of the cover\n"
+"to the text content"
+msgstr ""
+"La marge minimale en pixels à partir de la gauche de la couverture\n"
+"pour le texte"
+
+msgid ""
+"The minimum margin in pixels from the right of the cover\n"
+"to the text content"
+msgstr ""
+"La marge minimale en pixels à partir de la droite de la couverture\n"
+"pour le texte"
+
+msgid "The spacing in pixels between successive lines of text"
+msgstr "L'espacement en pixels entre les lignes de texte successives"
+
+msgid ""
+"The spacing in pixels between the image and text\n"
+"placed above and below it"
+msgstr ""
+"L'espacement en pixels entre l'image et le texte\n"
+"placé au-dessus et en dessous"
+
+msgid ""
+"The width in pixels of a border around the edge\n"
+"of the cover. Specify 0 for no border"
+msgstr ""
+"La largeur en pixels d'une bordure autour du bord\n"
+"de la couverture. Précisez 0 pour aucune bordure"
+
+msgid ""
+"The width in pixels of a border around the edge\n"
+"of the image. Specify 0 for no border"
+msgstr ""
+"La largeur en pixels d'une bordure autour du bord\n"
+"de l'image. Précisez 0 pour aucune bordure"
+
+msgid "The width in pixels of the output .jpg file"
+msgstr "La largeur en pixels du fichier .jpg en sortie"
+
+msgid "Title"
+msgstr "Titre"
+
+msgid ""
+"Title image not found - you must restart Calibre before using this plugin!"
+msgstr ""
+"L'image d'icone n'a pas était trouvée - vous devez redémarrer Calibre avant "
+"d'utiliser ce plugin !"
+
+msgid "Title:"
+msgstr "Titre :"
+
+msgid "Top margin:"
+msgstr "Marge du haut :"
+
+msgid "Undefined"
+msgstr "Non-définie"
+
+msgid "Use the same font family for all text"
+msgstr "Utiliser la même famille de Police pour tous les textes"
+
+msgid ""
+"Use this option if your authors are stored as LN, FN\n"
+"but you prefer to see FN LN on the book cover"
+msgstr ""
+"Utiliser cette option si vos auteurs sont stockés sous 'Nom, Prénom'\n"
+"mais vous préférez voir 'Prénom Nom' sur la couverture du livre"
+
+msgid "View data stored in the library database for this plugin"
+msgstr ""
+"Voir les données stockées dans la base de données de la bibliothèque pour "
+"cette extension"
+
+msgid "When checked, stroke color is drawn around text"
+msgstr "Si cochée, la couleur des traits est dessinée autour du texte"
+
+msgid ""
+"When checked, the font size will be used as a maximum size.\n"
+"A reduced size will be used where needed to fit text on one line."
+msgstr ""
+"Si cochée, la taille de la police sera utilisée comme taille maximale.\n"
+"Une taille réduite sera utilisée si nécessaire pour faire tenir le texte sur "
+"une ligne."
+
+msgid ""
+"When checked, the same font family is used for all text content on the cover"
+msgstr ""
+"Si cochée, la même famille de Polices est utilisée pour tous les textes de "
+"la couverture"

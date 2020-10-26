@@ -7,6 +7,11 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+try:
+    load_translations()
+except NameError:
+    pass # load_translations() added in calibre 1.9
+	
 import six
 import os
 from calibre.constants import DEBUG
@@ -28,7 +33,7 @@ class GenerateCoverAction(InterfaceAction):
 
     name = 'Generate Cover'
     # Create our top-level menu/toolbar action (text, icon_path, tooltip, keyboard shortcut)
-    action_spec = ('Generate Cover', None, 'Generate a customised cover', ())
+    action_spec = ('Generate Cover', None, _('Generate a customised cover'), ())
     action_type = 'current'
     dont_add_to = frozenset(['context-menu-device'])
 
