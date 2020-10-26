@@ -264,7 +264,7 @@ class ConfigWidget(QWidget):
         cust_col = self.library_config.get(PREFS_KEY_UPDATE_COLUMN, '')
         cust_val = self.library_config.get(PREFS_KEY_UPDATE_VALUE, '')
 
-        content_groupbox = QGroupBox('After generating cover:', self)
+        content_groupbox = QGroupBox(_('After generating cover:'), self)
         layout.addWidget(content_groupbox)
 
         col_layout = QGridLayout()
@@ -273,20 +273,18 @@ class ConfigWidget(QWidget):
         self.update_column_combo = CustomColumnComboBox(self, update_custom_columns, cust_col, ['', 'tags'])
         self.update_column_combo.setMinimumWidth(120)
         self.update_value_ledit = QLineEdit(cust_val, self)
-        col_layout.addWidget(QLabel('Update column:', self), 0, 0, 1, 1)
-        col_layout.addWidget(QLabel('Update value:', self), 1, 0, 1, 1)
+        col_layout.addWidget(QLabel(_('Update column:'), self), 0, 0, 1, 1)
+        col_layout.addWidget(QLabel(_('Update value:'), self), 1, 0, 1, 1)
         col_layout.addWidget(self.update_column_combo, 0, 1, 1, 1)
         col_layout.addWidget(self.update_value_ledit, 1, 1, 1, 1)
 
-        keyboard_shortcuts_button = QPushButton('Keyboard shortcuts...', self)
-        keyboard_shortcuts_button.setToolTip(_(
-                    'Edit the keyboard shortcuts associated with this plugin'))
+        keyboard_shortcuts_button = QPushButton(_('Keyboard shortcuts...'), self)
+        keyboard_shortcuts_button.setToolTip(_('Edit the keyboard shortcuts associated with this plugin'))
         keyboard_shortcuts_button.clicked.connect(self._edit_shortcuts)
         layout.addWidget(keyboard_shortcuts_button)
 
-        view_prefs_button = QPushButton('&View library preferences...', self)
-        view_prefs_button.setToolTip(_(
-                    'View data stored in the library database for this plugin'))
+        view_prefs_button = QPushButton(_('View library preferences...'), self)
+        view_prefs_button.setToolTip(_('View data stored in the library database for this plugin'))
         view_prefs_button.clicked.connect(self._view_prefs)
         layout.addWidget(view_prefs_button)
 

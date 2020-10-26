@@ -11,7 +11,7 @@ try:
     load_translations()
 except NameError:
     pass # load_translations() added in calibre 1.9
-	
+
 import six
 import os
 from calibre.constants import DEBUG
@@ -33,7 +33,7 @@ class GenerateCoverAction(InterfaceAction):
 
     name = 'Generate Cover'
     # Create our top-level menu/toolbar action (text, icon_path, tooltip, keyboard shortcut)
-    action_spec = ('Generate Cover', None, _('Generate a customised cover'), ())
+    action_spec = (_('Generate Cover'), None, _('Generate a customised cover'), ())
     action_type = 'current'
     dont_add_to = frozenset(['context-menu-device'])
 
@@ -63,8 +63,8 @@ class GenerateCoverAction(InterfaceAction):
 
         rows = self.gui.library_view.selectionModel().selectedRows()
         if not rows or len(rows) == 0:
-            return error_dialog(self.gui, 'Cannot generate covers',
-                             _('No books selected'), show=True)
+            return error_dialog(self.gui, _('Cannot generate covers'),
+                                _('No books selected'), show=True)
 
         books = self._get_selected_books(rows)
         is_multiple_books = len(books) > 1
@@ -86,16 +86,16 @@ class GenerateCoverAction(InterfaceAction):
         saved_settings = cfg.plugin_prefs[cfg.STORE_SAVED_SETTINGS]
         for setting_name, setting in six.iteritems(saved_settings):
             if setting_name != setting[cfg.KEY_NAME]:
-                failures.append('Corrupted setting: "%s" has incorrect internal name of: "%s"'%(setting_name, setting[cfg.KEY_NAME]))
+                failures.append(_('Corrupted setting: "%s" has incorrect internal name of: "%s")')%(setting_name, setting[cfg.KEY_NAME]))
                 setting[cfg.KEY_NAME] = setting_name
         if len(failures):
             cfg.plugin_prefs[cfg.STORE_SAVED_SETTINGS] = saved_settings
-            return error_dialog(self.gui, 'Corrupted Configuration File',
-                             '<p>Your configuration file was corrupted (see Details).</p>'
-                             '<p>Please report your exact recent actions which led to this '
-                             'on the MobileRead forum thread for this plugin so it can be fixed.</p>'
-                             '<p>The configuration has been fixed automatically.</p>',
-                             det_msg='\n'.join(failures), show=True)
+            return error_dialog(self.gui, _('Corrupted Configuration File'),
+                                _('<p>Your configuration file was corrupted (see Details).</p>)'
+                                  '<p>Please report your exact recent actions which led to this '
+                                  'on the MobileRead forum thread for this plugin so it can be fixed.</p>'
+                                  '<p>The configuration has been fixed automatically.</p>'),
+                                det_msg='\n'.join(failures), show=True)
 
     def _get_selected_books(self, rows):
         db = self.gui.library_view.model().db
@@ -137,8 +137,8 @@ class GenerateCoverAction(InterfaceAction):
             if DEBUG:
                 print('Generate Cover Error: Missing mi parameter in call to generate_cover_for_book')
             if getattr(self, 'gui', None):
-                return error_dialog(self.gui, 'Cannot generate cover',
-                                    'Missing metadata passed for book to generate cover', show=True)
+                return error_dialog(self.gui, _('Cannot generate cover'),
+                                    _('Missing metadata passed for book to generate cover'), show=True)
             return None
 
         options = cfg.plugin_prefs[cfg.STORE_CURRENT]
@@ -147,8 +147,8 @@ class GenerateCoverAction(InterfaceAction):
                 if DEBUG:
                     print('Generate Cover Error: Saved setting %s not found in generate_cover_for_book'%saved_setting_name)
                 if getattr(self, 'gui', None):
-                    return error_dialog(self.gui, 'Cannot generate cover',
-                                        'No cover settings exist named: "%s"'%saved_setting_name, show=True)
+                    return error_dialog(self.gui, _('Cannot generate cover'),
+                                        _('No cover settings exist named: "%s"')%saved_setting_name, show=True)
                 return None
             options = cfg.plugin_prefs[cfg.STORE_SAVED_SETTINGS][saved_setting_name]
 

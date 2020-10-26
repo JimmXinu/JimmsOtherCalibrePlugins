@@ -3,751 +3,829 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+msgstr "zz"
+"Project-Id-Version: \n"
 "POT-Creation-Date: 2020-10-26 13:47-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2020-10-26 13:48-0500\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=cp1252\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-
+"X-Generator: Poedit 2.3.1\n"
+"Last-Translator: \n"
+"Language: zz\n"
 
 #: __init__.py:29
 msgid "Generate covers in Calibre with appearance options"
-msgstr ""
+msgstr "zzGenerate covers in Calibre with appearance options"
 
 #: action.py:36
 msgid "Generate Cover"
-msgstr ""
+msgstr "zzGenerate Cover"
 
 #: action.py:36
 msgid "Generate a customised cover"
-msgstr ""
+msgstr "zzGenerate a customised cover"
 
 #: action.py:66
 msgid "Cannot generate covers"
-msgstr ""
+msgstr "zzCannot generate covers"
 
 #: action.py:67
 msgid "No books selected"
-msgstr ""
+msgstr "zzNo books selected"
 
 #: action.py:89
 msgid "Corrupted setting: \"%s\" has incorrect internal name of: \"%s\")"
-msgstr ""
+msgstr "zzCorrupted setting: \"%s\" has incorrect internal name of: \"%s\")"
 
 #: action.py:93
 msgid "Corrupted Configuration File"
-msgstr ""
+msgstr "zzCorrupted Configuration File"
 
 #: action.py:94
-msgid "<p>Your configuration file was corrupted (see Details).</p>)<p>Please report your exact recent actions which led to this on the MobileRead forum thread for this plugin so it can be fixed.</p><p>The configuration has been fixed automatically.</p>"
-msgstr ""
+msgid ""
+"<p>Your configuration file was corrupted (see Details).</p>)<p>Please report "
+"your exact recent actions which led to this on the MobileRead forum thread "
+"for this plugin so it can be fixed.</p><p>The configuration has been fixed "
+"automatically.</p>"
+msgstr "zz"
+"<p>Your configuration file was corrupted (see Details).</p>)<p>Please report "
+"your exact recent actions which led to this on the MobileRead forum thread "
+"for this plugin so it can be fixed.</p><p>The configuration has been fixed "
+"automatically.</p>"
 
 #: action.py:140 action.py:150
 msgid "Cannot generate cover"
-msgstr ""
+msgstr "zzCannot generate cover"
 
 #: action.py:141
 msgid "Missing metadata passed for book to generate cover"
-msgstr ""
+msgstr "zzMissing metadata passed for book to generate cover"
 
 #: action.py:151
 msgid "No cover settings exist named: \"%s\""
-msgstr ""
+msgstr "zzNo cover settings exist named: \"%s\""
 
 #: common_utils.py:259
 msgid "Restart required"
-msgstr ""
+msgstr "zzRestart required"
 
 #: common_utils.py:260
-msgid "Title image not found - you must restart Calibre before using this plugin!"
-msgstr ""
+msgid ""
+"Title image not found - you must restart Calibre before using this plugin!"
+msgstr "zz"
+"Title image not found - you must restart Calibre before using this plugin!"
 
 #: common_utils.py:493
 msgid "Keyboard shortcuts"
-msgstr ""
+msgstr "zzKeyboard shortcuts"
 
 #: common_utils.py:540
 msgid "Undefined"
-msgstr ""
+msgstr "zzUndefined"
 
 #: common_utils.py:626
 msgid "Restart calibre now"
-msgstr ""
+msgstr "zzRestart calibre now"
 
 #: common_utils.py:641
 msgid "Preferences for: %s"
-msgstr ""
+msgstr "zzPreferences for: %s"
 
 #: common_utils.py:674
 msgid "Clear"
-msgstr ""
+msgstr "zzClear"
 
 #: common_utils.py:676
 msgid "Clear all settings for this plugin"
-msgstr ""
+msgstr "zzClear all settings for this plugin"
 
 #: common_utils.py:703
-msgid "<p>Are you sure you want to change your settings in this library for this plugin?</p><p>Any settings in other libraries or stored in a JSON file in your calibre plugins folder will not be touched.</p><p>You must restart calibre afterwards.</p>"
-msgstr ""
+msgid ""
+"<p>Are you sure you want to change your settings in this library for this "
+"plugin?</p><p>Any settings in other libraries or stored in a JSON file in "
+"your calibre plugins folder will not be touched.</p><p>You must restart "
+"calibre afterwards.</p>"
+msgstr "zz"
+"<p>Are you sure you want to change your settings in this library for this "
+"plugin?</p><p>Any settings in other libraries or stored in a JSON file in "
+"your calibre plugins folder will not be touched.</p><p>You must restart "
+"calibre afterwards.</p>"
 
 #: common_utils.py:714
 msgid "Settings changed"
-msgstr ""
+msgstr "zzSettings changed"
 
 #: common_utils.py:715
-msgid "<p>Settings for this plugin in this library have been changed.</p><p>Please restart calibre now.</p>"
-msgstr ""
+msgid ""
+"<p>Settings for this plugin in this library have been changed.</p><p>Please "
+"restart calibre now.</p>"
+msgstr "zz"
+"<p>Settings for this plugin in this library have been changed.</p><p>Please "
+"restart calibre now.</p>"
 
 #: common_utils.py:723
-msgid "<p>Are you sure you want to clear your settings in this library for this plugin?</p><p>Any settings in other libraries or stored in a JSON file in your calibre plugins folder will not be touched.</p><p>You must restart calibre afterwards.</p>"
-msgstr ""
+msgid ""
+"<p>Are you sure you want to clear your settings in this library for this "
+"plugin?</p><p>Any settings in other libraries or stored in a JSON file in "
+"your calibre plugins folder will not be touched.</p><p>You must restart "
+"calibre afterwards.</p>"
+msgstr "zz"
+"<p>Are you sure you want to clear your settings in this library for this "
+"plugin?</p><p>Any settings in other libraries or stored in a JSON file in "
+"your calibre plugins folder will not be touched.</p><p>You must restart "
+"calibre afterwards.</p>"
 
 #: common_utils.py:735
 msgid "Settings deleted"
-msgstr ""
+msgstr "zzSettings deleted"
 
 #: common_utils.py:736
-msgid "<p>All settings for this plugin in this library have been cleared.</p><p>Please restart calibre now.</p>"
-msgstr ""
+msgid ""
+"<p>All settings for this plugin in this library have been cleared.</"
+"p><p>Please restart calibre now.</p>"
+msgstr "zz"
+"<p>All settings for this plugin in this library have been cleared.</"
+"p><p>Please restart calibre now.</p>"
 
 #: config.py:267
 msgid "After generating cover:"
-msgstr ""
+msgstr "zzAfter generating cover:"
 
 #: config.py:276
 msgid "Update column:"
-msgstr ""
+msgstr "zzUpdate column:"
 
 #: config.py:277
 msgid "Update value:"
-msgstr ""
+msgstr "zzUpdate value:"
 
 #: config.py:281
 msgid "Keyboard shortcuts..."
-msgstr ""
+msgstr "zzKeyboard shortcuts..."
 
 #: config.py:282
 msgid "Edit the keyboard shortcuts associated with this plugin"
-msgstr ""
+msgstr "zzEdit the keyboard shortcuts associated with this plugin"
 
 #: config.py:286
 msgid "View library preferences..."
-msgstr ""
+msgstr "zzView library preferences..."
 
 #: config.py:287
 msgid "View data stored in the library database for this plugin"
-msgstr ""
+msgstr "zzView data stored in the library database for this plugin"
 
 #: dialogs.py:68
 msgid "Cancel"
-msgstr ""
+msgstr "zzCancel"
 
 #: dialogs.py:69
 msgid "Generating %d covers..."
-msgstr ""
+msgstr "zzGenerating %d covers..."
 
 #: dialogs.py:98
 msgid "Generating: "
-msgstr ""
+msgstr "zzGenerating: "
 
 #: dialogs.py:127
 msgid "Unsaved Changes"
-msgstr ""
+msgstr "zzUnsaved Changes"
 
 #: dialogs.py:131
 msgid "You have unsaved changes to the <b>%s</b> setting.<br>"
-msgstr ""
+msgstr "zzYou have unsaved changes to the <b>%s</b> setting.<br>"
 
 #: dialogs.py:132
 msgid "What do you want to do?"
-msgstr ""
+msgstr "zzWhat do you want to do?"
 
 #: dialogs.py:135
 msgid " Discard Changes "
-msgstr ""
+msgstr "zz Discard Changes "
 
 #: dialogs.py:141
 msgid " Don't Save Yet "
-msgstr ""
+msgstr "zz Don't Save Yet "
 
 #: dialogs.py:142
-msgid "Generate cover using these settings.<br/>You can revert or save the changes when you next enter dialog."
-msgstr ""
+msgid ""
+"Generate cover using these settings.<br/>You can revert or save the changes "
+"when you next enter dialog."
+msgstr "zz"
+"Generate cover using these settings.<br/>You can revert or save the changes "
+"when you next enter dialog."
 
 #: dialogs.py:145
 msgid " Save Changes "
-msgstr ""
+msgstr "zz Save Changes "
 
 #: dialogs.py:146
 msgid "Generate cover using these settings and save for future usage"
-msgstr ""
+msgstr "zzGenerate cover using these settings and save for future usage"
 
 #: dialogs.py:425 dialogs.py:503
 msgid "Saved Settings:"
-msgstr ""
+msgstr "zzSaved Settings:"
 
 #: dialogs.py:435
 msgid "Autosave settings"
-msgstr ""
+msgstr "zzAutosave settings"
 
 #: dialogs.py:436
 msgid ""
 "Do not prompt to save changes to a setting. Always save when\n"
 "switching to another setting, clicking OK or using Import/Export."
-msgstr ""
+msgstr "zz"
+"Do not prompt to save changes to a setting. Always save when\n"
+"switching to another setting, clicking OK or using Import/Export."
 
 #: dialogs.py:443
 msgid "Add setting"
-msgstr ""
+msgstr "zzAdd setting"
 
 #: dialogs.py:448
 msgid "Rename setting"
-msgstr ""
+msgstr "zzRename setting"
 
 #: dialogs.py:454 dialogs.py:638
 msgid "Import setting"
-msgstr ""
+msgstr "zzImport setting"
 
 #: dialogs.py:459
 msgid "Export setting"
-msgstr ""
+msgstr "zzExport setting"
 
 #: dialogs.py:465
 msgid "Delete setting from this list"
-msgstr ""
+msgstr "zzDelete setting from this list"
 
 #: dialogs.py:473
 msgid "Select Image:"
-msgstr ""
+msgstr "zzSelect Image:"
 
 #: dialogs.py:484
 msgid "Add image to this list"
-msgstr ""
+msgstr "zzAdd image to this list"
 
 #: dialogs.py:489
 msgid "Rename image"
-msgstr ""
+msgstr "zzRename image"
 
 #: dialogs.py:494
 msgid "Remove image from this list"
-msgstr ""
+msgstr "zzRemove image from this list"
 
 #: dialogs.py:505
 msgid "Saved Settings: (*unsaved changes)"
-msgstr ""
+msgstr "zzSaved Settings: (*unsaved changes)"
 
 #: dialogs.py:536
 msgid "Add new setting"
-msgstr ""
+msgstr "zzAdd new setting"
 
 #: dialogs.py:558
 msgid "Cannot add"
-msgstr ""
+msgstr "zzCannot add"
 
 #: dialogs.py:559
 msgid "The name you specified is not unique"
-msgstr ""
+msgstr "zzThe name you specified is not unique"
 
 #: dialogs.py:568 dialogs.py:809
 msgid "Cannot remove"
-msgstr ""
+msgstr "zzCannot remove"
 
 #: dialogs.py:569
 msgid "You cannot remove the default setting"
-msgstr ""
+msgstr "zzYou cannot remove the default setting"
 
 #: dialogs.py:570 dialogs.py:812 dialogs.py:1459 dialogs.py:1478
 msgid "Are you sure?"
-msgstr ""
+msgstr "zzAre you sure?"
 
 #: dialogs.py:571
 msgid "Are you sure you want to remove the '%s' setting?"
-msgstr ""
+msgstr "zzAre you sure you want to remove the '%s' setting?"
 
 #: dialogs.py:584 dialogs.py:759 dialogs.py:785
 msgid "Cannot rename"
-msgstr ""
+msgstr "zzCannot rename"
 
 #: dialogs.py:585
 msgid "You cannot rename the default setting"
-msgstr ""
+msgstr "zzYou cannot rename the default setting"
 
 #: dialogs.py:586 dialogs.py:587
 msgid "New setting name:"
-msgstr ""
+msgstr "zzNew setting name:"
 
 #: dialogs.py:595
 msgid "Setting exists"
-msgstr ""
+msgstr "zzSetting exists"
 
 #: dialogs.py:596
 msgid "A saved setting already exists with this name."
-msgstr ""
+msgstr "zzA saved setting already exists with this name."
 
 #: dialogs.py:621
 msgid "Import Failed"
-msgstr ""
+msgstr "zzImport Failed"
 
 #: dialogs.py:622
 msgid "This is not a valid Generate Cover export archive"
-msgstr ""
+msgstr "zzThis is not a valid Generate Cover export archive"
 
 #: dialogs.py:657
 msgid "Cannot import"
-msgstr ""
+msgstr "zzCannot import"
 
 #: dialogs.py:658 dialogs.py:851
 msgid "Failed to copy image"
-msgstr ""
+msgstr "zzFailed to copy image"
 
 #: dialogs.py:717
 msgid "Export completed"
-msgstr ""
+msgstr "zzExport completed"
 
 #: dialogs.py:718
 msgid "Cover setting exported to<br>%s"
-msgstr ""
+msgstr "zzCover setting exported to<br>%s"
 
 #: dialogs.py:726
 msgid "Select setting file(s) to import"
-msgstr ""
+msgstr "zzSelect setting file(s) to import"
 
 #: dialogs.py:727 dialogs.py:733
 msgid "GC Files"
-msgstr ""
+msgstr "zzGC Files"
 
 #: dialogs.py:733
 msgid "Save setting as"
-msgstr ""
+msgstr "zzSave setting as"
 
 #: dialogs.py:760
 msgid "You cannot rename this image"
-msgstr ""
+msgstr "zzYou cannot rename this image"
 
 #: dialogs.py:762 dialogs.py:763
 msgid "New image name:"
-msgstr ""
+msgstr "zzNew image name:"
 
 #: dialogs.py:780
 msgid "File exists"
-msgstr ""
+msgstr "zzFile exists"
 
 #: dialogs.py:781
 msgid "An image already exists with this name."
-msgstr ""
+msgstr "zzAn image already exists with this name."
 
 #: dialogs.py:786
 msgid "Failed to rename image"
-msgstr ""
+msgstr "zzFailed to rename image"
 
 #: dialogs.py:795
 msgid "Add cover images"
-msgstr ""
+msgstr "zzAdd cover images"
 
 #: dialogs.py:810
 msgid "You cannot remove this image"
-msgstr ""
+msgstr "zzYou cannot remove this image"
 
 #: dialogs.py:813
 msgid "Are you sure you want to delete the image: %s"
-msgstr ""
+msgstr "zzAre you sure you want to delete the image: %s"
 
 #: dialogs.py:824 dialogs.py:882
 msgid "Cannot write"
-msgstr ""
+msgstr "zzCannot write"
 
 #: dialogs.py:825
 msgid "You do not have permission to delete the file"
-msgstr ""
+msgstr "zzYou do not have permission to delete the file"
 
 #: dialogs.py:838
 msgid "Cannot read"
-msgstr ""
+msgstr "zzCannot read"
 
 #: dialogs.py:839
 msgid "You do not have permission to read the file."
-msgstr ""
+msgstr "zzYou do not have permission to read the file."
 
 #: dialogs.py:850
 msgid "Cannot copy"
-msgstr ""
+msgstr "zzCannot copy"
 
 #: dialogs.py:864
 msgid "Overwrite existing"
-msgstr ""
+msgstr "zzOverwrite existing"
 
 #: dialogs.py:865
-msgid "An image file already exists with this name. Do you want to overwrite it?"
-msgstr ""
+msgid ""
+"An image file already exists with this name. Do you want to overwrite it?"
+msgstr "zz"
+"An image file already exists with this name. Do you want to overwrite it?"
 
 #: dialogs.py:868
 msgid "Enter image name"
-msgstr ""
+msgstr "zzEnter image name"
 
 #: dialogs.py:869
 msgid "Enter a unique name for this image:"
-msgstr ""
+msgstr "zzEnter a unique name for this image:"
 
 #: dialogs.py:883
 msgid "You do not have permission to overwrite the file"
-msgstr ""
+msgstr "zzYou do not have permission to overwrite the file"
 
 #: dialogs.py:919
 msgid "Title"
-msgstr ""
+msgstr "zzTitle"
 
 #: dialogs.py:920
 msgid "Author"
-msgstr ""
+msgstr "zzAuthor"
 
 #: dialogs.py:921
 msgid "Series"
-msgstr ""
+msgstr "zzSeries"
 
 #: dialogs.py:922
 msgid "Custom"
-msgstr ""
+msgstr "zzCustom"
 
 #: dialogs.py:925
 msgid "Background"
-msgstr ""
+msgstr "zzBackground"
 
 #: dialogs.py:926
 msgid "Border"
-msgstr ""
+msgstr "zzBorder"
 
 #: dialogs.py:927
 msgid "Fill"
-msgstr ""
+msgstr "zzFill"
 
 #: dialogs.py:928
 msgid "Stroke"
-msgstr ""
+msgstr "zzStroke"
 
 #: dialogs.py:941
 msgid "Fonts:"
-msgstr ""
+msgstr "zzFonts:"
 
 #: dialogs.py:950
 msgid ""
 "Select a font and specify a size in pixels.\n"
 "If font set to 'Default', uses the tweak value from\n"
 "'generate_cover_title_font' if present."
-msgstr ""
+msgstr "zz"
+"Select a font and specify a size in pixels.\n"
+"If font set to 'Default', uses the tweak value from\n"
+"'generate_cover_title_font' if present."
 
 #: dialogs.py:968
 msgid "Use the same font family for all text"
-msgstr ""
+msgstr "zzUse the same font family for all text"
 
 #: dialogs.py:969
-msgid "When checked, the same font family is used for all text content on the cover"
-msgstr ""
+msgid ""
+"When checked, the same font family is used for all text content on the cover"
+msgstr "zz"
+"When checked, the same font family is used for all text content on the cover"
 
 #: dialogs.py:976
 msgid "Auto-reduce font size to fit on one line"
-msgstr ""
+msgstr "zzAuto-reduce font size to fit on one line"
 
 #: dialogs.py:977
 msgid ""
 "When checked, the font size will be used as a maximum size.\n"
 "A reduced size will be used where needed to fit text on one line."
-msgstr ""
+msgstr "zz"
+"When checked, the font size will be used as a maximum size.\n"
+"A reduced size will be used where needed to fit text on one line."
 
 #: dialogs.py:983
 msgid "Colors:"
-msgstr ""
+msgstr "zzColors:"
 
 #: dialogs.py:999
 msgid "Reset %s color"
-msgstr ""
+msgstr "zzReset %s color"
 
 #: dialogs.py:1004
 msgid "Select a %s color"
-msgstr ""
+msgstr "zzSelect a %s color"
 
 #: dialogs.py:1012
 msgid "Apply"
-msgstr ""
+msgstr "zzApply"
 
 #: dialogs.py:1013
 msgid "When checked, stroke color is drawn around text"
-msgstr ""
+msgstr "zzWhen checked, stroke color is drawn around text"
 
 #: dialogs.py:1025
 msgid "Left aligned"
-msgstr ""
+msgstr "zzLeft aligned"
 
 #: dialogs.py:1027
 msgid "Centered"
-msgstr ""
+msgstr "zzCentered"
 
 #: dialogs.py:1029
 msgid "Right aligned"
-msgstr ""
+msgstr "zzRight aligned"
 
 #: dialogs.py:1100
 msgid "Size:"
-msgstr ""
+msgstr "zzSize:"
 
 #: dialogs.py:1104
 msgid "Cover width:"
-msgstr ""
+msgstr "zzCover width:"
 
 #: dialogs.py:1105
 msgid "The width in pixels of the output .jpg file"
-msgstr ""
+msgstr "zzThe width in pixels of the output .jpg file"
 
 #: dialogs.py:1111
 msgid "Cover height:"
-msgstr ""
+msgstr "zzCover height:"
 
 #: dialogs.py:1112
 msgid "The height in pixels of the output .jpg file"
-msgstr ""
+msgstr "zzThe height in pixels of the output .jpg file"
 
 #: dialogs.py:1118
 msgid "Stretch image to use as cover background"
-msgstr ""
+msgstr "zzStretch image to use as cover background"
 
 #: dialogs.py:1119
 msgid ""
 "Check this to overlay text on the image background.\n"
 "Uncheck this to place text around the image."
-msgstr ""
+msgstr "zz"
+"Check this to overlay text on the image background.\n"
+"Uncheck this to place text around the image."
 
 #: dialogs.py:1123
 msgid "Resize cover dimensions to match background image"
-msgstr ""
+msgstr "zzResize cover dimensions to match background image"
 
 #: dialogs.py:1124
 msgid ""
 "Check this to automatically resize the cover based on\n"
 "the dimensions of the currently chosen background image"
-msgstr ""
+msgstr "zz"
+"Check this to automatically resize the cover based on\n"
+"the dimensions of the currently chosen background image"
 
 #: dialogs.py:1128
 msgid "Resize image to scale up if smaller than available area"
-msgstr ""
+msgstr "zzResize image to scale up if smaller than available area"
 
 #: dialogs.py:1129
 msgid ""
 "Check this to automatically resize the cover image to fit the\n"
 "the maximum area available if it is too small"
-msgstr ""
+msgstr "zz"
+"Check this to automatically resize the cover image to fit the\n"
+"the maximum area available if it is too small"
 
 #: dialogs.py:1135
 msgid "Margins:"
-msgstr ""
+msgstr "zzMargins:"
 
 #: dialogs.py:1140
 msgid "Top margin:"
-msgstr ""
+msgstr "zzTop margin:"
 
 #: dialogs.py:1141
 msgid ""
 "The margin in pixels from the top of the cover\n"
 "to the first content"
-msgstr ""
+msgstr "zz"
+"The margin in pixels from the top of the cover\n"
+"to the first content"
 
 #: dialogs.py:1149
 msgid "Bottom margin:"
-msgstr ""
+msgstr "zzBottom margin:"
 
 #: dialogs.py:1150
 msgid ""
 "The margin in pixels from the bottom of the cover\n"
 "to the last content"
-msgstr ""
+msgstr "zz"
+"The margin in pixels from the bottom of the cover\n"
+"to the last content"
 
 #: dialogs.py:1158
 msgid "Left margin:"
-msgstr ""
+msgstr "zzLeft margin:"
 
 #: dialogs.py:1159
 msgid ""
 "The minimum margin in pixels from the left of the cover\n"
 "to the text content"
-msgstr ""
+msgstr "zz"
+"The minimum margin in pixels from the left of the cover\n"
+"to the text content"
 
 #: dialogs.py:1167
 msgid "Right margin:"
-msgstr ""
+msgstr "zzRight margin:"
 
 #: dialogs.py:1168
 msgid ""
 "The minimum margin in pixels from the right of the cover\n"
 "to the text content"
-msgstr ""
+msgstr "zz"
+"The minimum margin in pixels from the right of the cover\n"
+"to the text content"
 
 #: dialogs.py:1176
 msgid "Text padding:"
-msgstr ""
+msgstr "zzText padding:"
 
 #: dialogs.py:1177
 msgid "The spacing in pixels between successive lines of text"
-msgstr ""
+msgstr "zzThe spacing in pixels between successive lines of text"
 
 #: dialogs.py:1184
 msgid "Image padding:"
-msgstr ""
+msgstr "zzImage padding:"
 
 #: dialogs.py:1185
 msgid ""
 "The spacing in pixels between the image and text\n"
 "placed above and below it"
-msgstr ""
+msgstr "zz"
+"The spacing in pixels between the image and text\n"
+"placed above and below it"
 
 #: dialogs.py:1195
 msgid "Border Widths:"
-msgstr ""
+msgstr "zzBorder Widths:"
 
 #: dialogs.py:1199
 msgid "Cover border:"
-msgstr ""
+msgstr "zzCover border:"
 
 #: dialogs.py:1200
 msgid ""
 "The width in pixels of a border around the edge\n"
 "of the cover. Specify 0 for no border"
-msgstr ""
+msgstr "zz"
+"The width in pixels of a border around the edge\n"
+"of the cover. Specify 0 for no border"
 
 #: dialogs.py:1207
 msgid "Image border:"
-msgstr ""
+msgstr "zzImage border:"
 
 #: dialogs.py:1208
 msgid ""
 "The width in pixels of a border around the edge\n"
 "of the image. Specify 0 for no border"
-msgstr ""
+msgstr "zz"
+"The width in pixels of a border around the edge\n"
+"of the image. Specify 0 for no border"
 
 #: dialogs.py:1247
 msgid "Field Order:"
-msgstr ""
+msgstr "zzField Order:"
 
 #: dialogs.py:1248
 msgid ""
 "Alter the order of items on the cover and\n"
 "whether they are displayed using the checkbox"
-msgstr ""
+msgstr "zz"
+"Alter the order of items on the cover and\n"
+"whether they are displayed using the checkbox"
 
 #: dialogs.py:1262
 msgid "Move field up"
-msgstr ""
+msgstr "zzMove field up"
 
 #: dialogs.py:1269
 msgid "Move field down"
-msgstr ""
+msgstr "zzMove field down"
 
 #: dialogs.py:1275
 msgid "Custom Text:"
-msgstr ""
+msgstr "zzCustom Text:"
 
 #: dialogs.py:1284
 msgid "Other Options:"
-msgstr ""
+msgstr "zzOther Options:"
 
 #: dialogs.py:1288
 msgid "Swap author LN,FN to FN LN"
-msgstr ""
+msgstr "zzSwap author LN,FN to FN LN"
 
 #: dialogs.py:1289
 msgid ""
 "Use this option if your authors are stored as LN, FN\n"
 "but you prefer to see FN LN on the book cover"
-msgstr ""
+msgstr "zz"
+"Use this option if your authors are stored as LN, FN\n"
+"but you prefer to see FN LN on the book cover"
 
 #: dialogs.py:1293
 msgid "Series text:"
-msgstr ""
+msgstr "zzSeries text:"
 
 #: dialogs.py:1294
 msgid ""
 "Change the way series information is displayed.\n"
 "Useful for non-English languages!"
-msgstr ""
+msgstr "zz"
+"Change the way series information is displayed.\n"
+"Useful for non-English languages!"
 
 #: dialogs.py:1302
 msgid "Metadata: (*not saved)"
-msgstr ""
+msgstr "zzMetadata: (*not saved)"
 
 #: dialogs.py:1303
 msgid ""
 "Optionally override the text in these fields for this book.\n"
 "These are not saved as part of the settings profile.\n"
 "This functionality is disabled if multiple books are selected."
-msgstr ""
+msgstr "zz"
+"Optionally override the text in these fields for this book.\n"
+"These are not saved as part of the settings profile.\n"
+"This functionality is disabled if multiple books are selected."
 
 #: dialogs.py:1309
 msgid "Title:"
-msgstr ""
+msgstr "zzTitle:"
 
 #: dialogs.py:1312
 msgid "Author:"
-msgstr ""
+msgstr "zzAuthor:"
 
 #: dialogs.py:1315
 msgid "Series:"
-msgstr ""
+msgstr "zzSeries:"
 
 #: dialogs.py:1344
 msgid "Cover Options"
-msgstr ""
+msgstr "zzCover Options"
 
 #: dialogs.py:1347
 msgid "Generate Custom Cover"
-msgstr ""
+msgstr "zzGenerate Custom Cover"
 
 #: dialogs.py:1368
 msgid "Settings"
-msgstr ""
+msgstr "zzSettings"
 
 #: dialogs.py:1369
 msgid "Fonts"
-msgstr ""
+msgstr "zzFonts"
 
 #: dialogs.py:1370
 msgid "Dimensions"
-msgstr ""
+msgstr "zzDimensions"
 
 #: dialogs.py:1371
 msgid "Contents"
-msgstr ""
+msgstr "zzContents"
 
 #: dialogs.py:1381
 msgid " Revert "
-msgstr ""
+msgstr "zz Revert "
 
 #: dialogs.py:1382
 msgid "Revert to your previous saved setting values"
-msgstr ""
+msgstr "zzRevert to your previous saved setting values"
 
 #: dialogs.py:1384
 msgid " Save "
-msgstr ""
+msgstr "zz Save "
 
 #: dialogs.py:1385
 msgid "Overwrite your current saved setting"
-msgstr ""
+msgstr "zzOverwrite your current saved setting"
 
 #: dialogs.py:1387
 msgid " Customize... "
-msgstr ""
+msgstr "zz Customize... "
 
 #: dialogs.py:1388
 msgid "Set general options for this plugin"
-msgstr ""
+msgstr "zzSet general options for this plugin"
 
 #: dialogs.py:1460
 msgid "Revert to your previously saved values for '%s'?"
-msgstr ""
+msgstr "zzRevert to your previously saved values for '%s'?"
 
 #: dialogs.py:1479
 msgid "Overwrite the '%s' setting with the current values?"
-msgstr ""
-
+msgstr "zzOverwrite the '%s' setting with the current values?"

@@ -66,7 +66,7 @@ class GenerateCoverProgressDialog(QProgressDialog):
     def __init__(self, gui, books, db):
         self.total_count = len(books)
         QProgressDialog.__init__(self, '', _('Cancel'), 0, self.total_count, gui)
-        self.setWindowTitle('Generating %d covers...'%self.total_count)
+        self.setWindowTitle(_('Generating %d covers...')%self.total_count)
         self.setMinimumWidth(500)
         self.books, self.db = books, db
         self.gui = gui
@@ -124,26 +124,26 @@ class UnsavedSettingsDialog(QDialog):
 
     def __init__(self, parent, setting_name, allow_dont_save=False):
         QDialog.__init__(self, parent)
-        self.setWindowTitle('Unsaved Changes')
+        self.setWindowTitle(_('Unsaved Changes'))
         layout = QVBoxLayout(self)
         self.setLayout(layout)
 
-        layout.addWidget(QLabel('You have unsaved changes to the <b>%s</b> setting.<br>' % setting_name +
-                                'What do you want to do?', self))
+        layout.addWidget(QLabel(_('You have unsaved changes to the <b>%s</b> setting.<br>') % setting_name +
+                                _('What do you want to do?'), self))
         # Dialog buttons
         button_box = QDialogButtonBox()
-        self.discard_changes_button = button_box.addButton( ' Discard Changes ', QDialogButtonBox.RejectRole)
-        self.discard_changes_button.setToolTip('Revert unsaved changes and generate cover using the original<br/>' +
-                                               'setting values (not as shown)')
+        self.discard_changes_button = button_box.addButton( _(' Discard Changes '), QDialogButtonBox.RejectRole)
+        self.discard_changes_button.setToolTip(('Revert unsaved changes and generate cover using the original<br/>' +
+                                                'setting values (not as shown)'))
         self.discard_changes_button.clicked.connect(self.reject)
         self.is_deferred_save = False
         if allow_dont_save:
-            self.dont_save_setting_button = button_box.addButton( ' Don\'t Save Yet ', QDialogButtonBox.ApplyRole)
-            self.dont_save_setting_button.setToolTip('Generate cover using these settings.<br/>' +
-                                                'You can revert or save the changes when you next enter dialog.')
+            self.dont_save_setting_button = button_box.addButton( _(' Don\'t Save Yet '), QDialogButtonBox.ApplyRole)
+            self.dont_save_setting_button.setToolTip(_('Generate cover using these settings.<br/>'
+                                                       'You can revert or save the changes when you next enter dialog.'))
             self.dont_save_setting_button.clicked.connect(self.on_dont_save_clicked)
-        self.save_setting_button = button_box.addButton( ' Save Changes ', QDialogButtonBox.AcceptRole)
-        self.save_setting_button.setToolTip('Generate cover using these settings and save for future usage')
+        self.save_setting_button = button_box.addButton( _(' Save Changes '), QDialogButtonBox.AcceptRole)
+        self.save_setting_button.setToolTip(_('Generate cover using these settings and save for future usage'))
         self.save_setting_button.clicked.connect(self.accept)
         layout.addWidget(button_box)
 
@@ -433,8 +433,8 @@ class SavedSettingsTab(QWidget):
         saved_setting_inner_layout.addWidget(self.saved_setting_list)
 
         self.autosave_checkbox = QCheckBox(_('Autosave settings'), self)
-        self.autosave_checkbox.setToolTip('Do not prompt to save changes to a setting. Always save when\n'+
-                                          'switching to another setting, clicking OK or using Import/Export.')
+        self.autosave_checkbox.setToolTip(_('Do not prompt to save changes to a setting. Always save when\n'
+                                            'switching to another setting, clicking OK or using Import/Export.'))
         saved_setting_inner_layout.addWidget(self.autosave_checkbox)
 
         saved_setting_button_layout = QVBoxLayout()
@@ -555,8 +555,8 @@ class SavedSettingsTab(QWidget):
         settings = cfg.plugin_prefs[cfg.STORE_SAVED_SETTINGS]
         safe_setting_names = [name.lower() for name in settings.keys()]
         if new_setting_name.lower() in safe_setting_names:
-            error_dialog(self.parent_dialog, 'Cannot add',
-                                'The name you specified is not unique', show=True)
+            error_dialog(self.parent_dialog, _('Cannot add'),
+                         _('The name you specified is not unique'), show=True)
             return None
         return new_setting_name
 
@@ -565,10 +565,10 @@ class SavedSettingsTab(QWidget):
         setting_name = selected_setting[cfg.KEY_NAME]
         if setting_name == cfg.KEY_DEFAULT:
             # Cannot delete the default setting
-            return error_dialog(self.parent_dialog, 'Cannot remove',
-                                'You cannot remove the default setting', show=True)
+            return error_dialog(self.parent_dialog, _('Cannot remove'),
+                                _('You cannot remove the default setting'), show=True)
         if not question_dialog(self.parent_dialog, _('Are you sure?'), '<p>'+
-                'Are you sure you want to remove the \'%s\' setting?'%setting_name,
+                _('Are you sure you want to remove the \'%s\' setting?')%setting_name,
                 show_copy_button=False):
             return
         settings = cfg.plugin_prefs[cfg.STORE_SAVED_SETTINGS]
@@ -581,10 +581,10 @@ class SavedSettingsTab(QWidget):
         setting_name = selected_setting[cfg.KEY_NAME]
         if setting_name == cfg.KEY_DEFAULT:
             # Cannot delete the default setting
-            return error_dialog(self.parent_dialog, 'Cannot rename',
-                                'You cannot rename the default setting', show=True)
-        new_setting_name, ok = QInputDialog.getText(self.parent_dialog, 'New setting name:',
-                                            'New setting name:', text=setting_name)
+            return error_dialog(self.parent_dialog, _('Cannot rename'),
+                                _('You cannot rename the default setting'), show=True)
+        new_setting_name, ok = QInputDialog.getText(self.parent_dialog, _('New setting name:'),
+                                            _('New setting name:'), text=setting_name)
         new_setting_name = unicode(new_setting_name).strip()
         if not ok or new_setting_name.lower() == setting_name.lower():
             # Operation cancelled or user did not actually choose a new name
@@ -592,8 +592,8 @@ class SavedSettingsTab(QWidget):
         settings = cfg.plugin_prefs[cfg.STORE_SAVED_SETTINGS]
         for setting in settings.keys():
             if setting.lower() == new_setting_name.lower():
-                return error_dialog(self.parent_dialog, 'Setting exists',
-                        'A saved setting already exists with this name.', show=True)
+                return error_dialog(self.parent_dialog, _('Setting exists'),
+                        _('A saved setting already exists with this name.'), show=True)
         del settings[setting_name]
         selected_setting[cfg.KEY_NAME] = new_setting_name
         settings[new_setting_name] = selected_setting
@@ -618,8 +618,8 @@ class SavedSettingsTab(QWidget):
             with ZipFile(archive_path, 'r') as zf:
                 contents = zf.namelist()
                 if 'gc_setting.json' not in contents:
-                    return error_dialog(self.parent_dialog, 'Import Failed',
-                                        'This is not a valid Generate Cover export archive', show=True)
+                    return error_dialog(self.parent_dialog, _('Import Failed'),
+                                        _('This is not a valid Generate Cover export archive'), show=True)
                 json_path = os.path.join(images_dir,'gc_setting.json')
                 try:
                     # Write the json file out first so we can check the saved image settings
@@ -635,7 +635,7 @@ class SavedSettingsTab(QWidget):
                     setting = cfg.migrate_config_setting(setting_version, setting_name, setting)
 
                     # Ask the user for a unique setting name
-                    new_setting_name = self.get_new_setting_name('Import setting', setting_name)
+                    new_setting_name = self.get_new_setting_name(_('Import setting'), setting_name)
                     if not new_setting_name:
                         return
                     setting[cfg.KEY_NAME] = new_setting_name
@@ -654,8 +654,8 @@ class SavedSettingsTab(QWidget):
                             with open(dest_file_path,'wb') as f:
                                 f.write(zf.read(image_name))
                         except:
-                            return error_dialog(self.parent_dialog, 'Cannot import',
-                                    'Failed to copy image', det_msg=traceback.format_exc(), show=True)
+                            return error_dialog(self.parent_dialog, _('Cannot import'),
+                                    _('Failed to copy image'), det_msg=traceback.format_exc(), show=True)
 
                     # No more user intervention required, go ahead with rest of the operation
                     settings = cfg.plugin_prefs[cfg.STORE_SAVED_SETTINGS]
@@ -714,8 +714,8 @@ class SavedSettingsTab(QWidget):
                 archive_zip.write(json_path, os.path.basename(json_path))
                 if image_path is not None:
                     archive_zip.write(image_path, image_name)
-            info_dialog(self.parent_dialog, 'Export completed',
-                        'Cover setting exported to<br>%s' % archive_path,
+            info_dialog(self.parent_dialog, _('Export completed'),
+                        _('Cover setting exported to<br>%s') % archive_path,
                         show=True, show_copy_button=False)
         finally:
             if os.path.exists(json_path):
@@ -723,14 +723,14 @@ class SavedSettingsTab(QWidget):
 
     def pick_archive_names_to_import(self):
         archives = choose_files(self.parent_dialog, 'Generate Cover plugin:pick archive dialog',
-                                'Select setting file(s) to import',
-                             filters=[('GC Files', ['zip'])], all_files=False, select_only_single_file=False)
+                                _('Select setting file(s) to import'),
+                             filters=[(_('GC Files'), ['zip'])], all_files=False, select_only_single_file=False)
         if not archives:
             return
         return archives
 
     def pick_archive_name_to_export(self):
-        fd = FileDialog(name='gc archive dialog', title='Save setting as', filters=[('GC Files', ['zip'])],
+        fd = FileDialog(name='gc archive dialog', title=_('Save setting as'), filters=[(_('GC Files'), ['zip'])],
                         parent=self, add_all_files_filter=False, mode=QFileDialog.AnyFile)
         fd.setParent(None)
         if not fd.accepted:
@@ -756,11 +756,11 @@ class SavedSettingsTab(QWidget):
     def rename_image(self):
         selected_name = self.pick_image_list.selected_image_name()
         if selected_name in cfg.TOKEN_COVERS:
-            return error_dialog(self.parent_dialog, 'Cannot rename',
-                'You cannot rename this image', show=True)
+            return error_dialog(self.parent_dialog, _('Cannot rename'),
+                _('You cannot rename this image'), show=True)
         current_path = os.path.join(self.parent_dialog.images_dir, selected_name)
-        new_name, ok = QInputDialog.getText(self.parent_dialog, 'New image name:',
-                                            'New image name:', text=selected_name)
+        new_name, ok = QInputDialog.getText(self.parent_dialog, _('New image name:'),
+                                            _('New image name:'), text=selected_name)
         new_name = unicode(new_name).strip()
         # Add back the extension if the user omitted it
         ext = os.path.splitext(selected_name)[1]
@@ -777,13 +777,13 @@ class SavedSettingsTab(QWidget):
                 # On windows we will get a false positive if only changing case
                 pass
             else:
-                return error_dialog(self.parent_dialog, 'File exists',
-                        'An image already exists with this name.', det_msg=dest_path, show=True)
+                return error_dialog(self.parent_dialog, _('File exists'),
+                        _('An image already exists with this name.'), det_msg=dest_path, show=True)
         try:
             os.rename(current_path, dest_path)
         except:
-            return error_dialog(self.parent_dialog, 'Cannot rename',
-                    'Failed to rename image', det_msg=traceback.format_exc(), show=True)
+            return error_dialog(self.parent_dialog, _('Cannot rename'),
+                    _('Failed to rename image'), det_msg=traceback.format_exc(), show=True)
 
         self.remove_file_from_saved_settings(selected_name, new_name)
         self.files.remove(selected_name)
@@ -792,7 +792,7 @@ class SavedSettingsTab(QWidget):
 
     def add_image(self):
         files = choose_images(self.parent_dialog, 'Generate Cover plugin:choose image dialog',
-                              'Add cover images', select_only_single_file=False)
+                              _('Add cover images'), select_only_single_file=False)
         if not files or not files[0]:
             return
         dest_names = []
@@ -806,11 +806,11 @@ class SavedSettingsTab(QWidget):
     def remove_image(self):
         selected_name = self.pick_image_list.selected_image_name()
         if selected_name in cfg.TOKEN_COVERS:
-            return error_dialog(self.parent_dialog, 'Cannot remove',
-                'You cannot remove this image', show=True)
+            return error_dialog(self.parent_dialog, _('Cannot remove'),
+                _('You cannot remove this image'), show=True)
 
         if not question_dialog(self.parent_dialog, _('Are you sure?'), '<p>'+
-                'Are you sure you want to delete the image: '+selected_name,
+                _('Are you sure you want to delete the image: %s')%selected_name,
                 show_copy_button=False):
             return
 
@@ -821,8 +821,8 @@ class SavedSettingsTab(QWidget):
         if iswindows:
             image_path = os.path.normpath(image_path)
         if not os.access(image_path, os.W_OK):
-            error_dialog(self.parent_dialog, 'Cannot write',
-                   'You do not have permission to delete the file', det_msg=image_path, show=True)
+            error_dialog(self.parent_dialog, _('Cannot write'),
+                   _('You do not have permission to delete the file'), det_msg=image_path, show=True)
         else:
             try:
                 os.remove(image_path)
@@ -835,8 +835,8 @@ class SavedSettingsTab(QWidget):
         if iswindows:
             file_path = os.path.normpath(file_path)
         if not os.access(file_path, os.R_OK):
-            error_dialog(self.parent_dialog, 'Cannot read',
-                   'You do not have permission to read the file.', det_msg=file_path, show=True)
+            error_dialog(self.parent_dialog, _('Cannot read'),
+                   _('You do not have permission to read the file.'), det_msg=file_path, show=True)
             return None
 
         image_name = os.path.basename(file_path)
@@ -847,8 +847,8 @@ class SavedSettingsTab(QWidget):
         try:
             shutil.copyfile(file_path, dest_file_path)
         except:
-            return error_dialog(self.parent_dialog, 'Cannot copy',
-                    'Failed to copy image', det_msg=traceback.format_exc(), show=True)
+            return error_dialog(self.parent_dialog, _('Cannot copy'),
+                    _('Failed to copy image'), det_msg=traceback.format_exc(), show=True)
 
         image_name = os.path.basename(dest_file_path)
         if image_name not in self.files:
@@ -861,12 +861,12 @@ class SavedSettingsTab(QWidget):
             dest_file_path = os.path.normpath(dest_file_path)
         while True:
             if os.path.exists(dest_file_path):
-                if not question_dialog(self.parent_dialog, 'Overwrite existing', '<p>'+
-                        'An image file already exists with this name. Do you want to overwrite it?',
+                if not question_dialog(self.parent_dialog, _('Overwrite existing'), '<p>'+
+                        _('An image file already exists with this name. Do you want to overwrite it?'),
                         show_copy_button=False):
                     # Since user is not overwriting, offer chance for a new name for the image
-                    new_image_name, ok = QInputDialog.getText(self.parent_dialog, 'Enter image name',
-                                        'Enter a unique name for this image:', text=image_name)
+                    new_image_name, ok = QInputDialog.getText(self.parent_dialog, _('Enter image name'),
+                                        _('Enter a unique name for this image:'), text=image_name)
                     if not ok:
                         # Operation cancelled
                         return None
@@ -879,8 +879,8 @@ class SavedSettingsTab(QWidget):
                     continue
 
                 if not os.access(dest_file_path, os.W_OK):
-                    error_dialog(self.parent_dialog, 'Cannot write',
-                           'You do not have permission to overwrite the file', det_msg=dest_file_path, show=True)
+                    error_dialog(self.parent_dialog, _('Cannot write'),
+                           _('You do not have permission to overwrite the file'), det_msg=dest_file_path, show=True)
                     return None
             # If we got to here we are good to go
             return dest_file_path
@@ -947,8 +947,8 @@ class FontsTab(QWidget):
         row = 0
         for name, display_name in DIC_name_font:
             font_label = QLabel(display_name+':', self)
-            font_label.setToolTip(_('Select a font and specify a size in pixels.\n'+
-                                    'If font set to \'Default\', uses the tweak value from\n'+
+            font_label.setToolTip(_('Select a font and specify a size in pixels.\n'
+                                    'If font set to \'Default\', uses the tweak value from\n'
                                     '\'generate_cover_title_font\' if present.'))
             fonts_grid_layout.addWidget(font_label, row, 0, 1, 1)
             font_combo = FontComboBox(self)
@@ -964,7 +964,7 @@ class FontsTab(QWidget):
             align_btn = self._create_align_button(name)
             fonts_grid_layout.addWidget(align_btn, row, 4, 1, 1)
             row += 1
-        
+
         self.fonts_linked_checkbox = QCheckBox(_('Use the same font family for all text'))
         self.fonts_linked_checkbox.setToolTip(_('When checked, the same font family is used for all text content on the cover'))
         self.fonts_linked_checkbox.stateChanged[int].connect(self.fonts_linked_changed)
@@ -974,7 +974,7 @@ class FontsTab(QWidget):
         getattr(self, '_fontCustom').currentIndexChanged.connect(self.changed)
         fonts_layout.addWidget(self.fonts_linked_checkbox)
         self.fonts_reduced_checkbox = QCheckBox(_('Auto-reduce font size to fit on one line'))
-        self.fonts_reduced_checkbox.setToolTip(_('When checked, the font size will be used as a maximum size.\n'+
+        self.fonts_reduced_checkbox.setToolTip(_('When checked, the font size will be used as a maximum size.\n'
                                                  'A reduced size will be used where needed to fit text on one line.'))
         self.fonts_reduced_checkbox.stateChanged[int].connect(self.changed)
         fonts_layout.addWidget(self.fonts_reduced_checkbox)
@@ -987,7 +987,7 @@ class FontsTab(QWidget):
         colors_grid_layout = QGridLayout()
         colors_layout.addLayout(colors_grid_layout)
         row = 0
-        
+
         for name, display_name in DIC_name_color:
             setattr(self, '_tclabel' + name, QLabel(display_name+':', self))
             colors_grid_layout.addWidget(getattr(self, '_tclabel' + name), row, 0, 1, 1)
@@ -1008,7 +1008,7 @@ class FontsTab(QWidget):
             select_button.setFixedWidth(fm.width('...') + 10)
             colors_grid_layout.addWidget(select_button, row, 3, 1, 1)
             row += 1
-        
+
         self.apply_stroke_checkbox = QCheckBox(_('Apply'))
         self.apply_stroke_checkbox.setToolTip(_('When checked, stroke color is drawn around text'))
         self.apply_stroke_checkbox.stateChanged[int].connect(self.changed)
@@ -1116,17 +1116,17 @@ class DimensionsTab(QWidget):
         self.height_spin.valueChanged[int].connect(self.changed)
         size_layout.addWidget(self.height_spin, 0, 3, 1, 1)
         self.background_image_checkbox = QCheckBox(_('Stretch image to use as cover background'), self)
-        self.background_image_checkbox.setToolTip(_('Check this to overlay text on the image background.\n'+
+        self.background_image_checkbox.setToolTip(_('Check this to overlay text on the image background.\n'
                                                     'Uncheck this to place text around the image.'))
         self.background_image_checkbox.stateChanged.connect(self.image_resize_changed)
         size_layout.addWidget(self.background_image_checkbox, 1, 0, 1, 4)
         self.resize_to_image_checkbox = QCheckBox(_('Resize cover dimensions to match background image'), self)
-        self.resize_to_image_checkbox.setToolTip(_('Check this to automatically resize the cover based on\n'+
+        self.resize_to_image_checkbox.setToolTip(_('Check this to automatically resize the cover based on\n'
                                                    'the dimensions of the currently chosen background image'))
         self.resize_to_image_checkbox.stateChanged.connect(self.resize_dimensions_changed)
         size_layout.addWidget(self.resize_to_image_checkbox, 2, 0, 1, 4)
         self.resize_image_to_fit_checkbox = QCheckBox(_('Resize image to scale up if smaller than available area'), self)
-        self.resize_image_to_fit_checkbox.setToolTip(_('Check this to automatically resize the cover image to fit the\n'+
+        self.resize_image_to_fit_checkbox.setToolTip(_('Check this to automatically resize the cover image to fit the\n'
                                                        'the maximum area available if it is too small'))
         self.resize_image_to_fit_checkbox.stateChanged.connect(self.image_resize_changed)
         size_layout.addWidget(self.resize_image_to_fit_checkbox, 3, 0, 1, 4)
@@ -1138,7 +1138,7 @@ class DimensionsTab(QWidget):
         margins_groupbox.setLayout(margins_layout)
 
         top_margin_label = QLabel(_('Top margin:'), self)
-        top_margin_label.setToolTip(_('The margin in pixels from the top of the cover\n'+
+        top_margin_label.setToolTip(_('The margin in pixels from the top of the cover\n'
                                       'to the first content'))
         margins_layout.addWidget(top_margin_label, 1, 0, 1, 1)
         self.top_margin_spin = QSpinBox(self)
@@ -1147,7 +1147,7 @@ class DimensionsTab(QWidget):
         margins_layout.addWidget(self.top_margin_spin, 1, 1, 1, 1)
 
         bottom_margin_label = QLabel(_('Bottom margin:'), self)
-        bottom_margin_label.setToolTip(_('The margin in pixels from the bottom of the cover\n'+
+        bottom_margin_label.setToolTip(_('The margin in pixels from the bottom of the cover\n'
                                          'to the last content'))
         margins_layout.addWidget(bottom_margin_label, 1, 2, 1, 1)
         self.bottom_margin_spin = QSpinBox(self)
@@ -1156,7 +1156,7 @@ class DimensionsTab(QWidget):
         margins_layout.addWidget(self.bottom_margin_spin, 1, 3, 1, 1)
 
         left_margin_label = QLabel(_('Left margin:'), self)
-        left_margin_label.setToolTip(_('The minimum margin in pixels from the left of the cover\n'+
+        left_margin_label.setToolTip(_('The minimum margin in pixels from the left of the cover\n'
                                        'to the text content'))
         margins_layout.addWidget(left_margin_label, 2, 0, 1, 1)
         self.left_margin_spin = QSpinBox(self)
@@ -1165,7 +1165,7 @@ class DimensionsTab(QWidget):
         margins_layout.addWidget(self.left_margin_spin, 2, 1, 1, 1)
 
         right_margin_label = QLabel(_('Right margin:'), self)
-        right_margin_label.setToolTip(_('The minimum margin in pixels from the right of the cover\n'+
+        right_margin_label.setToolTip(_('The minimum margin in pixels from the right of the cover\n'
                                         'to the text content'))
         margins_layout.addWidget(right_margin_label, 2, 2, 1, 1)
         self.right_margin_spin = QSpinBox(self)
@@ -1182,7 +1182,7 @@ class DimensionsTab(QWidget):
         margins_layout.addWidget(self.text_margin_spin, 3, 1, 1, 1)
 
         image_padding_label = QLabel(_('Image padding:'), self)
-        image_padding_label.setToolTip(_('The spacing in pixels between the image and text\n'+
+        image_padding_label.setToolTip(_('The spacing in pixels between the image and text\n'
                                          'placed above and below it'))
         margins_layout.addWidget(image_padding_label, 3, 2, 1, 1)
 
@@ -1197,7 +1197,7 @@ class DimensionsTab(QWidget):
         borders_layout = QGridLayout()
         borders_groupbox.setLayout(borders_layout)
         cover_border_label = QLabel(_('Cover border:'), self)
-        cover_border_label.setToolTip(_('The width in pixels of a border around the edge\n'+
+        cover_border_label.setToolTip(_('The width in pixels of a border around the edge\n'
                                         'of the cover. Specify 0 for no border'))
         borders_layout.addWidget(cover_border_label, 4, 0, 1, 1)
         self.cover_border_width_spin = QSpinBox(self)
@@ -1205,7 +1205,7 @@ class DimensionsTab(QWidget):
         self.cover_border_width_spin.valueChanged[int].connect(self.changed)
         borders_layout.addWidget(self.cover_border_width_spin, 4, 1, 1, 1)
         image_border_label = QLabel(_('Image border:'), self)
-        image_border_label.setToolTip(_('The width in pixels of a border around the edge\n'+
+        image_border_label.setToolTip(_('The width in pixels of a border around the edge\n'
                                         'of the image. Specify 0 for no border'))
         borders_layout.addWidget(image_border_label, 4, 2, 1, 1)
         self.image_border_width_spin = QSpinBox(self)
@@ -1245,7 +1245,7 @@ class ContentsTab(QWidget):
         self.setLayout(main_layout)
 
         content_groupbox = QGroupBox(_('Field Order:'), self)
-        content_groupbox.setToolTip(_('Alter the order of items on the cover and\n'+
+        content_groupbox.setToolTip(_('Alter the order of items on the cover and\n'
                                       'whether they are displayed using the checkbox'))
         main_layout.addWidget(content_groupbox)
         field_layout = QHBoxLayout()
@@ -1286,12 +1286,12 @@ class ContentsTab(QWidget):
         options_layout = QGridLayout()
         options_groupbox.setLayout(options_layout)
         self.swap_author_checkbox = QCheckBox(_('Swap author LN,FN to FN LN'), self)
-        self.swap_author_checkbox.setToolTip(_('Use this option if your authors are stored as LN, FN\n'+
+        self.swap_author_checkbox.setToolTip(_('Use this option if your authors are stored as LN, FN\n'
                                                'but you prefer to see FN LN on the book cover'))
         self.swap_author_checkbox.stateChanged.connect(self.changed)
         options_layout.addWidget(self.swap_author_checkbox, 0, 0, 1, 2)
         self.series_label = QLabel(_('Series text:'), self)
-        self.series_label.setToolTip(_('Change the way series information is displayed.\n'+
+        self.series_label.setToolTip(_('Change the way series information is displayed.\n'
                                        'Useful for non-English languages!'))
         options_layout.addWidget(self.series_label, 1, 0, 1, 1)
         self.series_text_ledit = QLineEdit(self)
@@ -1300,8 +1300,8 @@ class ContentsTab(QWidget):
 
         main_layout.addSpacing(5)
         metadata_groupbox = QGroupBox(_('Metadata: (*not saved)'), self)
-        metadata_groupbox.setToolTip(_('Optionally override the text in these fields for this book.\n'+
-                                       'These are not saved as part of the settings profile.\n'+
+        metadata_groupbox.setToolTip(_('Optionally override the text in these fields for this book.\n'
+                                       'These are not saved as part of the settings profile.\n'
                                        'This functionality is disabled if multiple books are selected.'))
         main_layout.addWidget(metadata_groupbox)
         metadata_layout = QGridLayout()
