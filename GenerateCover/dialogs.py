@@ -133,7 +133,7 @@ class UnsavedSettingsDialog(QDialog):
         # Dialog buttons
         button_box = QDialogButtonBox()
         self.discard_changes_button = button_box.addButton( _(' Discard Changes '), QDialogButtonBox.RejectRole)
-        self.discard_changes_button.setToolTip(('Revert unsaved changes and generate cover using the original<br/>' +
+        self.discard_changes_button.setToolTip(_('Revert unsaved changes and generate cover using the original<br/>' +
                                                 'setting values (not as shown)'))
         self.discard_changes_button.clicked.connect(self.reject)
         self.is_deferred_save = False
