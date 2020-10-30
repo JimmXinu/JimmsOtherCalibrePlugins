@@ -43,6 +43,7 @@ else:
         return x.toPyObject()
 
 from calibre.constants import iswindows
+from calibre.constants import numeric_version as calibre_version
 from calibre.gui2 import gprefs, error_dialog, UNDEFINED_QDATETIME
 from calibre.gui2.actions import menu_action_unique_name
 from calibre.gui2.complete2 import EditWithComplete
@@ -184,8 +185,16 @@ def create_menu_action_unique(ia, parent_menu, menu_text, image=None, tooltip=No
     if shortcut_name is None:
         shortcut_name = menu_text.replace('&','')
 
-    ac = ia.create_menu_action(parent_menu, unique_name, menu_text, icon=None, shortcut=shortcut,
-        description=tooltip, triggered=triggered, shortcut_name=shortcut_name)
+    if calibre_version >= (5,4,0):
+        ac = ia.create_menu_action(parent_menu, unique_name, menu_text, icon=None,
+                                   shortcut=shortcut, description=tooltip,
+                                   triggered=triggered, shortcut_name=shortcut_name,
+                                   persist_shortcut=True)
+        # so that shortcuts specific to other libraries aren't discarded.
+    else:
+        ac = ia.create_menu_action(parent_menu, unique_name, menu_text, icon=None,
+                                   shortcut=shortcut, description=tooltip,
+                                   triggered=triggered, shortcut_name=shortcut_name)
     if shortcut == False and not orig_shortcut == False:
         if ac.calibre_shortcut_unique_name in ia.gui.keyboard.shortcuts:
             kb.replace_action(ac.calibre_shortcut_unique_name, ac)
