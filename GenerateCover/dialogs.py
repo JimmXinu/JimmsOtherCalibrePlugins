@@ -51,12 +51,8 @@ from calibre.utils.zipfile import ZipFile
 import calibre_plugins.generate_cover.config as cfg
 from calibre_plugins.generate_cover.common_utils import (SizePersistedDialog, ReadOnlyLineEdit,
                                                    ImageTitleLayout, get_icon)
-try:
-    from calibre_plugins.generate_cover.draw_old import (
-        generate_cover_for_book, get_image_size, get_title_author_series)
-except ImportError:
-    from calibre_plugins.generate_cover.draw import (
-        generate_cover_for_book, get_image_size, get_title_author_series)
+from calibre_plugins.generate_cover.draw import (
+    generate_cover_for_book, get_image_size, get_title_author_series)
 
 
 class GenerateCoverProgressDialog(QProgressDialog):

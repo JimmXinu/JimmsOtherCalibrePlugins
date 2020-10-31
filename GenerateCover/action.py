@@ -21,10 +21,7 @@ from calibre.gui2.actions import InterfaceAction
 import calibre_plugins.generate_cover.config as cfg
 from calibre_plugins.generate_cover.common_utils import set_plugin_icon_resources, get_icon
 from calibre_plugins.generate_cover.dialogs import CoverOptionsDialog, GenerateCoverProgressDialog
-try:
-    from calibre_plugins.generate_cover.draw_old import generate_cover_for_book
-except ImportError:
-    from calibre_plugins.generate_cover.draw import generate_cover_for_book
+from calibre_plugins.generate_cover.draw import generate_cover_for_book
 
 PLUGIN_ICONS = ['images/generate_cover.png', 'images/rename.png',
                 'images/import.png', 'images/export.png']
