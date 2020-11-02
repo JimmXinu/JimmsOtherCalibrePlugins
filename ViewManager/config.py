@@ -44,7 +44,6 @@ else:
 from calibre.gui2 import error_dialog, question_dialog
 from calibre.utils.config import JSONConfig
 from calibre.utils.icu import sort_key
-from calibre.utils.search_query_parser import saved_searches
 
 from calibre_plugins.view_manager.common_utils import (get_library_uuid, get_icon,
                                                     KeyboardConfigDialog, PrefsViewerDialog)
@@ -379,7 +378,8 @@ class ConfigWidget(QWidget):
         QWidget.__init__(self)
         self.plugin_action = plugin_action
         self.gui = plugin_action.gui
-        self.library = get_library_config(self.gui.current_db)
+        self.db = self.gui.current_db
+        self.library = get_library_config(self.db)
         self.views = self.library[KEY_VIEWS]
         self.all_columns = self.get_current_columns()
         self.view_name = None
@@ -516,7 +516,8 @@ class ConfigWidget(QWidget):
 
         self.apply_search_checkbox = QCheckBox('Apply saved &search', self)
         self.apply_search_checkbox.setToolTip("Apply the selected saved search when the View is activated.")
-        self.saved_search_combo = SearchComboBox(self, entries=saved_searches().names(),empty="(Clear Search)")
+        print("calling saved_searches:%s"%self.db.saved_search_names())
+        self.saved_search_combo = SearchComboBox(self, entries=self.db.saved_search_names(),empty="(Clear Search)")
         self.saved_search_combo.setToolTip("Saved search to apply.")
         # enable/disable combo based on check.
         self.saved_search_combo.setEnabled(self.apply_search_checkbox.isChecked())
@@ -524,7 +525,7 @@ class ConfigWidget(QWidget):
 
         self.apply_virtlib_checkbox = QCheckBox('Switch to &Virtual library', self)
         self.apply_virtlib_checkbox.setToolTip("Switch to the selected Virtual library when the View is activated.")
-        self.virtlib_combo = SearchComboBox(self,entries=self.gui.library_view.model().db.prefs.get('virtual_libraries', {}),empty="(No Virtual library)")
+        self.virtlib_combo = SearchComboBox(self,entries=self.db.prefs.get('virtual_libraries', {}),empty="(No Virtual library)")
         self.virtlib_combo.setToolTip("Virtual library to switch to.")
         # enable/disable combo based on check.
         self.virtlib_combo.setEnabled(self.apply_virtlib_checkbox.isChecked())
@@ -532,7 +533,7 @@ class ConfigWidget(QWidget):
 
         self.apply_restriction_checkbox = QCheckBox('Apply VL additional search &restriction', self)
         self.apply_restriction_checkbox.setToolTip("Apply the selected saved search as a Virtual library additional restriction when the View is activated.")
-        self.search_restriction_combo = SearchComboBox(self,entries=saved_searches().names(),empty="(Clear VL restriction search)")
+        self.search_restriction_combo = SearchComboBox(self,entries=self.db.saved_search_names(),empty="(Clear VL restriction search)")
         self.search_restriction_combo.setToolTip("Saved search to apply as VL additional search restriction.")
         # enable/disable combo based on check.
         self.search_restriction_combo.setEnabled(self.apply_restriction_checkbox.isChecked())
