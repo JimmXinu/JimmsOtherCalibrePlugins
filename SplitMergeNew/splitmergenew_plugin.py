@@ -248,7 +248,7 @@ class SplitMergeNewPlugin(InterfaceAction):
         ## add to FFF update lists
         self.gui.library_view.select_rows([book_id])
         fff_plugin = self.gui.iactions['FanFicFare']
-        fff_plugin.update_lists()
+        fff_plugin.update_lists(True)
         
         remove_dir(tdir)
         # logger.debug(good_list)
