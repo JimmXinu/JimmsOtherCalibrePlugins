@@ -120,8 +120,8 @@ class ReadingListAction(InterfaceAction):
             view_topmenu_names = cfg.get_view_topmenu_list_names(db)
             default_list_names_list = list([default_list_name])
             view_submenu_names = list(set(all_list_names) - set(view_topmenu_names) - set(default_list_names_list))
-            view_submenu_list_names = list(set(list_names) - set(view_topmenu_names) - set(default_list_names_list))
-            view_submenu_auto_names = list(set(auto_list_names) - set(view_topmenu_names) - set(default_list_names_list))
+            view_submenu_list_names = sorted(list(set(list_names) - set(view_topmenu_names) - set(default_list_names_list)))
+            view_submenu_auto_names = sorted(list(set(auto_list_names) - set(view_topmenu_names) - set(default_list_names_list)))
 
             # used to be just len(manual lists) > 1, but now allowing
             # auto lists to be default.
