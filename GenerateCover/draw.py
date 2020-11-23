@@ -239,7 +239,7 @@ def create_cover_page(top_lines, bottom_lines, display_image, options,
         if image_border_width > 0:
             logo = add_border(logo, image_border_width, border_color, bgcolor)
 
-        left = int(max(0, (available[0] - lwidth) / 2.))
+        left = int(max(0, (width - lwidth) / 2.))
         top = top + image_mgn + ((available[1] - lheight) / 2.)
         canvas.compose(logo, int(left), int(top))
 
