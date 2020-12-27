@@ -44,7 +44,6 @@ class DeleteFile(Tool):
     def delete_file(self):
         print(self.boss.gui.file_list.file_list.current_edited_name)
         
-        # self.boss.delete_requested([self.boss.gui.file_list.file_list.current_edited_name],{})
         self.request_delete(self.boss.gui.file_list.file_list)
 
     # inspired by calibre.gui2.tweak_book.file_list.request_delete()
@@ -79,14 +78,31 @@ class DeleteFile(Tool):
         print(other_removals)
         self.boss.delete_requested(spine_removals, other_removals)
 
-    def other(self):
-        children = (text.child(i) for i in range(text.childCount()))
-        spine_removals = [(unicode_type(item.data(0, NAME_ROLE) or ''), unicode_type(item.data(0, NAME_ROLE) or '')==name) for item in children]
-        other_removals = set()
-        if not spine_removals:
-            ## if it's not a spine object, assume 'other'
-            other_removals.add(name)
-            
-        print(spine_removals)
-        print(other_removals)
-        self.boss.delete_requested(spine_removals, other_removals)
+
+class CompareOriginal(Tool):
+    name = 'Compare Original'
+
+    #: If True the user can choose to place this tool in the plugins toolbar
+    allowed_in_toolbar = True
+
+    #: If True the user can choose to place this tool in the plugins menu
+    allowed_in_menu = True
+
+    def create_action(self, for_toolbar=True):
+
+        # Create an action, this will be added to the plugins toolbar and
+        # the plugins menu
+        ac = QAction(get_icon('diff.png'), _('Compare Original File'), self.gui)
+        if not for_toolbar:
+            # Register a keyboard shortcut for this toolbar action. We only
+            # register it for the action created for the menu, not the toolbar,
+            # to avoid a double trigger
+            self.register_shortcut(ac, 'compare-original', default_keys=())
+        ac.triggered.connect(self.compare_original)
+        return ac
+
+    def compare_original(self):
+        # print(self.boss.gui.checkpoints)
+        m = self.boss.gui.checkpoints.view.model()
+        self.boss.gui.checkpoints.view.setCurrentIndex(m.index(0))
+        self.boss.gui.checkpoints.compare_clicked()

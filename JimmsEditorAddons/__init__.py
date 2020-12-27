@@ -9,11 +9,11 @@ __docformat__ = 'restructuredtext en'
 
 from calibre.customize import EditBookToolPlugin
 
-class EditorDeleteFile(EditBookToolPlugin):
+class JimmsEditorAddons(EditBookToolPlugin):
 
-    name = 'Delete Files'
+    name = 'Jimms Editor Addons'
     version = (0,0,0)
     author = ''
     supported_platforms = ['windows', 'osx', 'linux']
-    description = 'Delete current file'
+    description = 'Jimms Editor Addons'
     minimum_calibre_version = (5, 6, 0)
