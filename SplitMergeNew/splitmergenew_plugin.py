@@ -159,15 +159,19 @@ class SplitMergeNewPlugin(InterfaceAction):
         book['good']=False
         count = 0
         keep_lines=[]
-        showlist=['toc','guide','anchor','id','href']
+        # showlist=['toc','guide','anchor','id','href']
         for line in lines:
             new_chap = '(new)' in "".join(line.get('toc',[]))
             if new_chap:
                 book['good']=True
             if ( new_chap or
-                'cover' in line['id'] or
+                # 'cover' in line['id'] or
                 'title_page' in line['id']): # or 'log_page' in line['id'])
                 keep_lines.append(count)
+
+                ## XXX Create and include a title page, or a
+                ## title-author only epub or something?  Lengthy title
+                ## page is a pain if doing TTS.
                 
                 ## Also grab the previous chapter if new.
                 # if ( new_chap and
