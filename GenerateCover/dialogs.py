@@ -626,7 +626,10 @@ class SavedSettingsTab(QWidget):
                     # Read the .JSON file to get the setting (migrating to latest schema if required)
                     archive_config = JSONConfig('resources/images/generate_cover/gc_setting')
                     setting_version = archive_config[cfg.STORE_SCHEMA_VERSION]
-                    setting = six.itervalues(archive_config[cfg.STORE_SAVED_SETTINGS]).next()
+                    ## six.itervalues doesn't have a next() in Calibre's bundled version?
+                    # setting = six.itervalues(archive_config[cfg.STORE_SAVED_SETTINGS]).next()
+                    ## Whatever.  This is ugly, but it works for getting the 'first' value.
+                    setting = [x for x in six.itervalues(archive_config[cfg.STORE_SAVED_SETTINGS])][0]
                     setting_name = setting[cfg.KEY_NAME]
                     setting = cfg.migrate_config_setting(setting_version, setting_name, setting)
 
