@@ -883,7 +883,7 @@ class ReadingListAction(InterfaceAction):
                 else:
                     db.bulk_modify_tags(book_ids, remove=[tag_to_apply])
                 return True
-            else:
+            elif tags_column:
                 custom_columns = db.field_metadata.custom_field_metadata()
                 col = custom_columns[tags_column]
                 typ = col['datatype']
