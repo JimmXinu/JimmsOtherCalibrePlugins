@@ -51,7 +51,7 @@ class ReadingListAction(InterfaceAction):
     # Create our top-level menu/toolbar action (text, icon_path, tooltip, keyboard shortcut)
     action_spec = (_('Reading List'), None, _('View or edit lists of books'), None)
     popup_type = QToolButton.InstantPopup
-    action_type = _('current')
+    action_type = 'current'
 
     plugin_device_connection_changed = pyqtSignal(object);
     plugin_device_metadata_available = pyqtSignal();
@@ -145,7 +145,7 @@ class ReadingListAction(InterfaceAction):
                     std_name = _('Add to the "%s" list') % list_name
                     self.create_menu_item_ex(self.add_sub_menu, list_name,
                                         tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
-                                        favourites_menu_unique_name=_('Add to list: %s') % list_name,
+                                        favourites_menu_unique_name='Add to list: %s' % list_name,
                                         triggered=partial(self._add_selected_to_list, list_name))
                 self.add_all_action = self.create_menu_item_ex(m, _('Add to all lists'),
                                                           image='plus.png',
@@ -165,7 +165,7 @@ class ReadingListAction(InterfaceAction):
                     std_series_name = _('Add series to the "%s" list') % list_name
                     self.create_menu_item_ex(self.add_sub_menu, list_name,
                                         tooltip=std_series_name, unique_name=std_series_name, shortcut_name=std_series_name,
-                                        favourites_menu_unique_name=_('Add series to list: %s') % list_name,
+                                        favourites_menu_unique_name='Add series to list: %s' % list_name,
                                         triggered=partial(self._add_selected_series_to_list, list_name))
                 self.add_series_all_action = self.create_menu_item_ex(m, _('Add series to all lists'),
                                                           image='plusplus.png',
@@ -191,7 +191,7 @@ class ReadingListAction(InterfaceAction):
                     std_name = _('Remove from the "%s" list') % list_name
                     self.create_menu_item_ex(self.remove_sub_menu, list_name,
                                         tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
-                                        favourites_menu_unique_name=_('Remove from list: %s') % list_name,
+                                        favourites_menu_unique_name='Remove from list: %s' % list_name,
                                         triggered=partial(self._remove_selected_from_list, list_name))
                 self.remove_all_action = self.create_menu_item_ex(m, _('Remove from all lists'),
                                                              image='minus.png',
@@ -211,7 +211,7 @@ class ReadingListAction(InterfaceAction):
                     self.create_menu_item_ex(m, _('View %s list (%d)') % (list_name, len(list_content)),
                                         image='search.png',
                                         tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
-                                        favourites_menu_unique_name=_('View list: %s') % list_name,
+                                        favourites_menu_unique_name='View list: %s' % list_name,
                                         triggered=partial(self.view_list, list_name))
             if view_submenu_names:
                 self.view_sub_menu = m.addMenu(get_icon('search.png'), _('View list'))
@@ -224,7 +224,7 @@ class ReadingListAction(InterfaceAction):
                         std_name = _('View books on the "%s" list') % list_name
                         self.create_menu_item_ex(self.view_sub_menu, '%s (%d)' % (list_name, len(list_content)),
                                             tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
-                                            favourites_menu_unique_name=_('View list: %s') % list_name,
+                                            favourites_menu_unique_name='View list: %s' % list_name,
                                             triggered=partial(self.view_list, list_name))
                 if view_submenu_auto_names:
                     if view_submenu_list_names:
@@ -234,7 +234,7 @@ class ReadingListAction(InterfaceAction):
                         std_name = _('View books on the "%s" list') % list_name
                         self.create_menu_item_ex(self.view_sub_menu, '%s (%d)' % (list_name, len(list_content)),
                                             tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
-                                            favourites_menu_unique_name=_('View list: %s') % list_name,
+                                            favourites_menu_unique_name='View list: %s' % list_name,
                                             triggered=partial(self.view_list, list_name))
 
             m.addSeparator()
@@ -252,7 +252,7 @@ class ReadingListAction(InterfaceAction):
                     std_name = _('Edit books on the "%s" list') % list_name
                     self.create_menu_item_ex(self.edit_sub_menu, list_name,
                                         tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
-                                        favourites_menu_unique_name=_('Edit list: %s') % list_name,
+                                        favourites_menu_unique_name='Edit list: %s' % list_name,
                                         triggered=partial(self.edit_list, list_name))
 
             m.addSeparator()
@@ -266,7 +266,7 @@ class ReadingListAction(InterfaceAction):
                 self.clear_sub_menu = m.addMenu(get_icon('edit-clear.png'), _('Clear list'))
                 self.clear_sub_menu.setStatusTip(_('Clear all from the specified list'))
                 self.clear_sub_menu_action = self.clear_sub_menu.menuAction()
-                self.clear_sub_menu_action.favourites_menu_unique_name = _('Clear list')
+                self.clear_sub_menu_action.favourites_menu_unique_name = 'Clear list'
                 total_count = 0
                 for list_name in list_names:
                     list_content = library[cfg.KEY_LISTS][list_name][cfg.KEY_CONTENT]
@@ -274,7 +274,7 @@ class ReadingListAction(InterfaceAction):
                     std_name = _('Clear the "%s" list') % list_name
                     self.create_menu_item_ex(self.clear_sub_menu, '%s (%d)' % (list_name, len(list_content)),
                                         tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
-                                        favourites_menu_unique_name=_('Clear list: %s') % list_name,
+                                        favourites_menu_unique_name='Clear list: %s' % list_name,
                                         triggered=partial(self._clear_list, list_name))
                 self.clear_sub_menu.setTitle(_('Clear list (%d)') % total_count)
 
@@ -287,7 +287,7 @@ class ReadingListAction(InterfaceAction):
                     std_name = _('Set your default list to "%s"') % list_name
                     self.create_menu_item_ex(self.default_sub_menu, list_name, is_checked=is_checked,
                                         tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
-                                        favourites_menu_unique_name=_('Set default list: %s') % list_name,
+                                        favourites_menu_unique_name='Set default list: %s' % list_name,
                                         triggered=partial(self.switch_default_list, list_name))
                 if auto_list_names:
                     self.default_sub_menu.addSeparator()
@@ -296,11 +296,11 @@ class ReadingListAction(InterfaceAction):
                         std_name = _('Set your default list to "%s"') % list_name
                         self.create_menu_item_ex(self.default_sub_menu, list_name, is_checked=is_checked,
                                                  tooltip=std_name, unique_name=std_name, shortcut_name=std_name,
-                                                 favourites_menu_unique_name=_('Set default list: %s') % list_name,
+                                                 favourites_menu_unique_name='Set default list: %s' % list_name,
                                                  triggered=partial(self.switch_default_list, list_name))
             m.addSeparator()
             self.sync_now_action = self.create_menu_item_ex(m, _('Sync Now'), 'images/book_sync.png',
-                                        favourites_menu_unique_name=_('Sync Now'),
+                                        favourites_menu_unique_name='Sync Now',
                                         triggered=partial(self.sync_now, force_sync=True))
             m.addSeparator()
             create_menu_action_unique(self, m, _('&Customize plugin') + '...', 'config.png',
@@ -588,7 +588,7 @@ class ReadingListAction(InterfaceAction):
                 self.gui.status_bar.showMessage(message)
                 if any_tags_changed:
                     self.gui.tags_view.recount()
-                if unicode(self.gui.search.text()).startswith(_('marked:reading_list_')):
+                if unicode(self.gui.search.text()).startswith('marked:reading_list_'):
                     self.view_list(list_name)
                 else:
                     refresh_book_ids = set(changed_series_id_list).union(set(removed_ids))
@@ -639,7 +639,7 @@ class ReadingListAction(InterfaceAction):
                     current = self.gui.library_view.currentIndex()
                     self.gui.library_view.model().current_changed(current, previous)
                     self.gui.tags_view.recount()
-                if unicode(self.gui.search.text()).startswith(_('marked:reading_list_')):
+                if unicode(self.gui.search.text()).startswith('marked:reading_list_'):
                     self.view_list(self.view_list_name)
             return True
 
@@ -742,7 +742,7 @@ class ReadingListAction(InterfaceAction):
                 self.gui.status_bar.showMessage(message)
                 if any_tags_changed:
                     self.gui.tags_view.recount()
-                if unicode(self.gui.search.text()).startswith(_('marked:reading_list_')):
+                if unicode(self.gui.search.text()).startswith('marked:reading_list_'):
                     self.view_list(list_name)
                 else:
                     refresh_book_ids = set(changed_series_id_list).union(set(removed_ids))
@@ -817,10 +817,10 @@ class ReadingListAction(InterfaceAction):
         # Mark the results in our database
         db.set_marked_ids(marked_ids)
         # Search to display the list contents
-        self.gui.search.set_search_string(_('marked:') + marked_text)
+        self.gui.search.set_search_string('marked:' + marked_text)
         # Sort by our marked column to display the books in order
         if list_info[cfg.KEY_SORT_LIST]:
-            self.gui.library_view.sort_by_named_field(_('marked'), True)
+            self.gui.library_view.sort_by_named_field('marked', True)
         self.view_list_name = list_name
 
     def create_list(self, list_name, book_id_list, display_warnings=True):
@@ -857,7 +857,7 @@ class ReadingListAction(InterfaceAction):
 
     def _is_list_currently_viewed(self, list_name):
         marked_text = 'reading_list_' + self._get_list_safe_name(list_name)
-        return unicode(self.gui.search.text()).startswith(_('marked:') + marked_text)
+        return unicode(self.gui.search.text()).startswith('marked:' + marked_text)
 
     def switch_default_list(self, list_name):
         cfg.set_default_list(self.gui.current_db, list_name)
@@ -1117,11 +1117,11 @@ class ReadingListAction(InterfaceAction):
 
             # If user has a Kindle and set to update collections then do so
             if change_collections:
-                create_collections = device.get(_('collections'), False)
+                create_collections = device.get('collections', False)
                 if create_collections:
                     self._create_kindle_collections()
         if ids_changed:
-            if unicode(self.gui.search.text()).startswith(_('marked:reading_list_')):
+            if unicode(self.gui.search.text()).startswith('marked:reading_list_'):
                 self.view_list(list_name)
             else:
                 self.gui.library_view.model().refresh_ids(ids_changed)
@@ -1222,7 +1222,7 @@ class ReadingListAction(InterfaceAction):
                 return False, ids_to_remove, on_device_ids
             return False, [], on_device_ids
 
-        delete_action = self.gui.iactions.get(_('Remove Books'), None)
+        delete_action = self.gui.iactions.get('Remove Books', None)
         if not delete_action:
             error_dialog(self.gui, _('Reading List error',
                          'Unable to find the Remove Books plugin'), show=True)
@@ -1325,7 +1325,7 @@ class ReadingListAction(InterfaceAction):
         # Check for the Kindle Collections plugin being installed
         if DEBUG:
             prints(_('READING LIST: Attempting to recreate Kindle collections'))
-        plugin = self.gui.iactions.get(_('Kindle Collections'), None)
+        plugin = self.gui.iactions.get('Kindle Collections', None)
         if not plugin:
             return info_dialog(self.gui, _('Kindle Collections Failed',
                                'You must have the Kindle Collections plugin installed '

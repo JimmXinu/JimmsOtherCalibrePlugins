@@ -48,7 +48,7 @@ from calibre_plugins.reading_list.common_utils import (get_icon, KeyboardConfigD
 
 PREFS_NAMESPACE = 'ReadingListPlugin'
 
-PREFS_KEY_SETTINGS = _('settings')
+PREFS_KEY_SETTINGS = 'settings'
 # 'settings': { 'default':'DefaultListName',
 #               'lists': { 'name': {'content':[],
 #                          'tagsColumn':'tags', 'tagsText: '',
@@ -77,7 +77,7 @@ KEY_POPULATE_SEARCH = 'populateSearch'
 KEY_SORT_LIST = 'sortList'
 KEY_DISPLAY_TOP_MENU = 'displayTopMenu'
 
-TOKEN_ANY_DEVICE = _('*Any Device')
+TOKEN_ANY_DEVICE = '*Any Device'
 
 POPULATE_TYPES = [('POPMANUAL', 'Manually add/remove items'),
                   ('POPDEVICE', 'Auto populated from books on device'),
@@ -99,10 +99,10 @@ MODIFY_TYPES = [('TAGNONE',      'Do not update calibre column'),
 KEY_SCHEMA_VERSION = STORE_SCHEMA_VERSION = 'SchemaVersion'
 DEFAULT_SCHEMA_VERSION = 1.64
 
-STORE_OPTIONS = _('Options')
+STORE_OPTIONS = 'Options'
 KEY_REMOVE_DIALOG = 'removeDialog'
 
-STORE_DEVICES = _('Devices')
+STORE_DEVICES = 'Devices'
 # Devices store consists of:
 # 'Devices': { 'dev_uuid': {'type':'xxx', 'uuid':'xxx', 'name:'xxx', 'location_code':'main',
 #                           'active':True, 'collections':False} ,
