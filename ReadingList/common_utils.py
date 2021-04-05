@@ -722,8 +722,8 @@ class PrefsViewerDialog(SizePersistedDialog):
         key = unicode(self.keys_list.currentItem().text())
         self.db.prefs.set_namespaced(self.namespace, key, val)
 
-        restart = prompt_for_restart(self, _('Settings changed',
-                           '<p>Settings for this plugin in this library have been changed.</p>'
+        restart = prompt_for_restart(self, _('Settings changed'),
+                           _('<p>Settings for this plugin in this library have been changed.</p>'
                            '<p>Please restart calibre now.</p>'))
         self.close()
         if restart:
@@ -743,8 +743,8 @@ class PrefsViewerDialog(SizePersistedDialog):
         for k in keys:
             del self.db.prefs[k]
         self._populate_settings()
-        restart = prompt_for_restart(self, _('Settings deleted',
-                           '<p>All settings for this plugin in this library have been cleared.</p>'
+        restart = prompt_for_restart(self, _('Settings deleted'),
+                           _('<p>All settings for this plugin in this library have been cleared.</p>'
                            '<p>Please restart calibre now.</p>'))
         self.close()
         if restart:

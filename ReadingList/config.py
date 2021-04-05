@@ -77,24 +77,24 @@ KEY_POPULATE_SEARCH = 'populateSearch'
 KEY_SORT_LIST = 'sortList'
 KEY_DISPLAY_TOP_MENU = 'displayTopMenu'
 
-TOKEN_ANY_DEVICE = '*Any Device'
+TOKEN_ANY_DEVICE = _('*Any Device')
 
-POPULATE_TYPES = [('POPMANUAL', 'Manually add/remove items'),
-                  ('POPDEVICE', 'Auto populated from books on device'),
-                  ('POPSEARCH', 'Auto populated from search')]
+POPULATE_TYPES = [('POPMANUAL', _('Manually add/remove items')),
+                  ('POPDEVICE', _('Auto populated from books on device')),
+                  ('POPSEARCH', _('Auto populated from search'))]
 
-SYNC_TYPES = [('SYNCNEW',    'Add new list items to device'),
-              ('SYNCALL',    'Add/overwrite all list items to device'),
-              ('SYNCREM',    'Remove list items from device'),
-              ('SYNCREPNEW', 'Replace device with list, add new items only'),
-              ('SYNCREPOVR', 'Replace device with list, add/overwrite all')]
+SYNC_TYPES = [('SYNCNEW',    _('Add new list items to device')),
+              ('SYNCALL',    _('Add/overwrite all list items to device')),
+              ('SYNCREM',    _('Remove list items from device')),
+              ('SYNCREPNEW', _('Replace device with list, add new items only')),
+              ('SYNCREPOVR', _('Replace device with list, add/overwrite all'))]
 
-SYNC_AUTO_DESC = 'Auto populate list from books on device'
+SYNC_AUTO_DESC = _('Auto populate list from books on device')
 
-MODIFY_TYPES = [('TAGNONE',      'Do not update calibre column'),
-                ('TAGADDREMOVE', 'Update column for add or remove'),
-                ('TAGADD',       'Update column for add to list only'),
-                ('TAGREMOVE',    'Update column for remove from list only')]
+MODIFY_TYPES = [('TAGNONE',      _('Do not update calibre column')),
+                ('TAGADDREMOVE', _('Update column for add or remove')),
+                ('TAGADD',       _('Update column for add to list only')),
+                ('TAGREMOVE',    _('Update column for remove from list only'))]
 
 KEY_SCHEMA_VERSION = STORE_SCHEMA_VERSION = 'SchemaVersion'
 DEFAULT_SCHEMA_VERSION = 1.64
@@ -414,7 +414,7 @@ class DevicesTableWidget(QTableWidget):
     def populate_table(self, devices, connected_device_info):
         self.clear()
         self.setRowCount(len(devices))
-        header_labels = ['Menu', 'Name', 'Location', 'Status', 'Kindle Collections']
+        header_labels = [_('Menu'), _('Name'), _('Location'), _('Status'), _('Kindle Collections')]
         self.setColumnCount(len(header_labels))
         self.setHorizontalHeaderLabels(header_labels)
         self.verticalHeader().setDefaultSectionSize(32)
@@ -864,7 +864,9 @@ class ListsTab(QWidget):
         # Verify it does not clash with any other lists in the list
         for list_name in self.lists.keys():
             if list_name.lower() == new_list_name.lower():
-                return error_dialog(self, _('Add failed', 'A list with the same name already exists'), show=True)
+                return error_dialog(self, _('Add failed'),
+                                    _('A list with the same name already exists'),
+                                    show=True)
 
         # As we are about to switch list, persist the current lists details if any
         self.persist_list_config()
@@ -879,8 +881,8 @@ class ListsTab(QWidget):
             return
         # Display a prompt allowing user to specify a rename list
         old_list_name = self.list_name
-        new_list_name, ok = QInputDialog.getText(self, _('Rename list',
-                    'Enter a new display name for this list:'), text=old_list_name)
+        new_list_name, ok = QInputDialog.getText(self, _('Rename list'),
+                    _('Enter a new display name for this list:'), text=old_list_name)
         if not ok:
             # Operation cancelled
             return
@@ -892,7 +894,8 @@ class ListsTab(QWidget):
             if list_name == old_list_name:
                 continue
             if list_name.lower() == new_list_name.lower():
-                return error_dialog(self, _('Add failed', 'A list with the same name already exists'),
+                return error_dialog(self, _('Add failed'),
+                                    _('A list with the same name already exists'),
                                     show=True, show_copy_button=False)
 
         # As we are about to rename list, persist the current lists details if any
@@ -910,10 +913,11 @@ class ListsTab(QWidget):
         if not self.list_name:
             return
         if len(self.lists) == 1:
-            return error_dialog(self, _('Cannot delete', 'You must have at least one list'),
-                                    show=True, show_copy_button=False)
-        if not confirm(_('Do you want to delete the list named \'%s\''%self.list_name,
-                        'reading_list_delete_list', self)):
+            return error_dialog(self, _('Cannot delete'),
+                                _('You must have at least one list'),
+                                show=True, show_copy_button=False)
+        if not confirm(_('Do you want to delete the list named \'%s\'')%self.list_name,
+                        'reading_list_delete_list', self):
             return
         book_ids = get_book_list(self.gui.current_db, self.list_name)
         self.plugin_action.apply_tags_to_list(self.list_name, book_ids, add=False)
@@ -1015,16 +1019,17 @@ class DevicesTab(QWidget):
     def _rename_device_clicked(self):
         (device_info, is_connected) = self.devices_table.get_selected_device_info()
         if not device_info:
-            return error_dialog(self, _('Rename failed', 'You must select a device first'),
+            return error_dialog(self, _('Rename failed'),
+                                _('You must select a device first'),
                                 show=True, show_copy_button=False)
         if not is_connected:
-            return error_dialog(self, _('Rename failed',
-                                'You can only rename a device that is currently connected'),
+            return error_dialog(self, _('Rename failed'),
+                                _('You can only rename a device that is currently connected'),
                                 show=True, show_copy_button=False)
 
         old_name = device_info['name']
-        new_device_name, ok = QInputDialog.getText(self, _('Rename device',
-                    'Enter a new display name for this device:'), text=old_name)
+        new_device_name, ok = QInputDialog.getText(self, _('Rename device'),
+                    _('Enter a new display name for this device:'), text=old_name)
         if not ok:
             # Operation cancelled
             return
@@ -1037,18 +1042,20 @@ class DevicesTab(QWidget):
             # Ensure the devices combo is refreshed for the current list
             self.parent_dialog.lists_tab.refresh_current_list_info()
         except:
-            return error_dialog(self, _('Rename failed', 'An error occured while renaming.'),
+            return error_dialog(self, _('Rename failed'),
+                                _('An error occured while renaming.'),
                                 det_msg=traceback.format_exc(), show=True)
 
     def _delete_device_clicked(self):
         (device_info, _is_connected) = self.devices_table.get_selected_device_info()
         if not device_info:
-            return error_dialog(self, _('Delete failed', 'You must select a device first'),
+            return error_dialog(self, _('Delete failed'),
+                                _('You must select a device first'),
                                 show=True, show_copy_button=False)
         name = device_info['name']
-        if not question_dialog(self, _('Are you sure?', '<p>'+
-                'You are about to remove the <b>%s</b> device from this list. '%name +
-                'Are you sure you want to continue?')):
+        if not question_dialog(self, _('Are you sure?'), '<p>'+
+                _('You are about to remove the <b>%s</b> device from this list. ')%name +
+                _('Are you sure you want to continue?')):
             return
         self.parent_dialog.lists_tab.persist_list_config()
         self.devices_table.delete_selected_row()

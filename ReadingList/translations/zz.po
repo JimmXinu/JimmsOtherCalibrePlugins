@@ -1,0 +1,1044 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2021-04-05 12:26-0500\n"
+"PO-Revision-Date: 2021-04-05 12:30-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"zzProject-Id-Version: \n"
+"zzProject-Id-Version: \n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 2.4.2\n"
+
+#: action.py:52
+msgid "Reading List"
+msgstr "zzReading List"
+
+#: action.py:52
+msgid "View or edit lists of books"
+msgstr "zzView or edit lists of books"
+
+#: action.py:135
+msgid "Add to default list"
+msgstr "zzAdd to default list"
+
+#: action.py:138
+msgid "Add to %s list"
+msgstr "zzAdd to %s list"
+
+#: action.py:143
+msgid "Add to list"
+msgstr "zzAdd to list"
+
+#: action.py:144
+msgid "Add to the specified list"
+msgstr "zzAdd to the specified list"
+
+#: action.py:146
+msgid "Add to the \"%s\" list"
+msgstr "zzAdd to the \"%s\" list"
+
+#: action.py:150
+msgid "Add to list: %s"
+msgstr "zzAdd to list: %s"
+
+#: action.py:152
+msgid "Add to all lists"
+msgstr "zzAdd to all lists"
+
+#: action.py:158
+msgid "Add series to default list"
+msgstr "zzAdd series to default list"
+
+#: action.py:161
+msgid "Add series to %s list"
+msgstr "zzAdd series to %s list"
+
+#: action.py:166
+msgid "Add series to list"
+msgstr "zzAdd series to list"
+
+#: action.py:167
+msgid "Add all books in series to the specified list"
+msgstr "zzAdd all books in series to the specified list"
+
+#: action.py:169
+msgid "Add series to the \"%s\" list"
+msgstr "zzAdd series to the \"%s\" list"
+
+#: action.py:173
+msgid "Add series to list: %s"
+msgstr "zzAdd series to list: %s"
+
+#: action.py:175
+msgid "Add series to all lists"
+msgstr "zzAdd series to all lists"
+
+#: action.py:181
+msgid "Move to list..."
+msgstr "zzMove to list..."
+
+#: action.py:183
+msgid "Move to list"
+msgstr "zzMove to list"
+
+#: action.py:187
+msgid "Remove from default list"
+msgstr "zzRemove from default list"
+
+#: action.py:195
+msgid "Remove from list"
+msgstr "zzRemove from list"
+
+#: action.py:196
+msgid "Remove from the specified list"
+msgstr "zzRemove from the specified list"
+
+#: action.py:198
+msgid "Remove from the \"%s\" list"
+msgstr "zzRemove from the \"%s\" list"
+
+#: action.py:202
+msgid "Remove from list: %s"
+msgstr "zzRemove from list: %s"
+
+#: action.py:204
+msgid "Remove from all lists"
+msgstr "zzRemove from all lists"
+
+#: action.py:211
+msgid "View default list"
+msgstr "zzView default list"
+
+#: action.py:213 action.py:222
+msgid "View %s list (%d)"
+msgstr "zzView %s list (%d)"
+
+#: action.py:220 action.py:236 action.py:247
+msgid "View books on the \"%s\" list"
+msgstr "zzView books on the \"%s\" list"
+
+#: action.py:225 action.py:240 action.py:251
+msgid "View list: %s"
+msgstr "zzView list: %s"
+
+#: action.py:228 action.py:231
+msgid "View list"
+msgstr "zzView list"
+
+#: action.py:229
+msgid "View books on the specified list"
+msgstr "zzView books on the specified list"
+
+#: action.py:256
+msgid "Edit default list"
+msgstr "zzEdit default list"
+
+#: action.py:259
+msgid "Edit %s list"
+msgstr "zzEdit %s list"
+
+#: action.py:264
+msgid "Edit list"
+msgstr "zzEdit list"
+
+#: action.py:265
+msgid "Edit books on the specified list"
+msgstr "zzEdit books on the specified list"
+
+#: action.py:267
+msgid "Edit books on the \"%s\" list"
+msgstr "zzEdit books on the \"%s\" list"
+
+#: action.py:271
+msgid "Edit list: %s"
+msgstr "zzEdit list: %s"
+
+#: action.py:275
+msgid "Clear default list"
+msgstr "zzClear default list"
+
+#: action.py:278
+msgid "Clear %s list"
+msgstr "zzClear %s list"
+
+#: action.py:283 action.py:286
+msgid "Clear list"
+msgstr "zzClear list"
+
+#: action.py:284
+msgid "Clear all from the specified list"
+msgstr "zzClear all from the specified list"
+
+#: action.py:291
+msgid "Clear the \"%s\" list"
+msgstr "zzClear the \"%s\" list"
+
+#: action.py:295
+msgid "Clear list: %s"
+msgstr "zzClear list: %s"
+
+#: action.py:297
+msgid "Clear list (%d)"
+msgstr "zzClear list (%d)"
+
+#: action.py:301
+msgid "Set default list"
+msgstr "zzSet default list"
+
+#: action.py:302
+msgid "Switch the list to use as the current default"
+msgstr "zzSwitch the list to use as the current default"
+
+#: action.py:305 action.py:315
+msgid "Set your default list to \"%s\""
+msgstr "zzSet your default list to \"%s\""
+
+#: action.py:309 action.py:319
+msgid "Set default list: %s"
+msgstr "zzSet default list: %s"
+
+#: action.py:322 action.py:323
+msgid "Sync Now"
+msgstr "zzSync Now"
+
+#: action.py:327
+msgid "&Customize plugin"
+msgstr "zz&Customize plugin"
+
+#: action.py:336
+msgid "Sync Now (%d)"
+msgstr "zzSync Now (%d)"
+
+#: action.py:360 action.py:378
+msgid "Cannot add to list"
+msgstr "zzCannot add to list"
+
+#: action.py:361 action.py:379 action.py:581 action.py:698 action.py:742
+#: action.py:786 action.py:826 action.py:859
+msgid "No list name specified"
+msgstr "zzNo list name specified"
+
+#: action.py:459 config.py:1056
+msgid "Are you sure?"
+msgstr "zzAre you sure?"
+
+#: action.py:460
+msgid "Are you sure you want to clear the '%s' reading list?"
+msgstr "zzAre you sure you want to clear the '%s' reading list?"
+
+#: action.py:506
+msgid "The selected book(s) already exist on this list: <b>%s</b>"
+msgstr "zzThe selected book(s) already exist on this list: <b>%s</b>"
+
+#: action.py:508
+msgid "Failed to add to list"
+msgstr "zzFailed to add to list"
+
+#: action.py:517
+msgid "Added %d books to your %s list"
+msgstr "zzAdded %d books to your %s list"
+
+#: action.py:559
+msgid "Added to %d reading lists"
+msgstr "zzAdded to %d reading lists"
+
+#: action.py:580
+msgid "Cannot remove from list"
+msgstr "zzCannot remove from list"
+
+#: action.py:599
+msgid "The selected book(s) do not exist on this list"
+msgstr "zzThe selected book(s) do not exist on this list"
+
+#: action.py:609 action.py:763 action.py:807
+msgid "Removed %d books from your %s list"
+msgstr "zzRemoved %d books from your %s list"
+
+#: action.py:656
+msgid "Removed from %d reading lists"
+msgstr "zzRemoved from %d reading lists"
+
+#: action.py:692 action.py:697
+msgid "Cannot move to list"
+msgstr "zzCannot move to list"
+
+#: action.py:693
+msgid "No source list names specified"
+msgstr "zzNo source list names specified"
+
+#: action.py:718
+msgid "Moved %d books to your list(s)"
+msgstr "zzMoved %d books to your list(s)"
+
+#: action.py:741
+msgid "Cannot clear list"
+msgstr "zzCannot clear list"
+
+#: action.py:753
+msgid "No books exist on this list"
+msgstr "zzNo books exist on this list"
+
+#: action.py:785
+msgid "Cannot edit list"
+msgstr "zzCannot edit list"
+
+#: action.py:825
+msgid "Cannot view list"
+msgstr "zzCannot view list"
+
+#: action.py:858 action.py:867
+msgid "Cannot create list"
+msgstr "zzCannot create list"
+
+#: action.py:861
+msgid "Reading List: Cannot create list as list_name not specified"
+msgstr "zzReading List: Cannot create list as list_name not specified"
+
+#: action.py:868
+msgid "A list already exists with this name"
+msgstr "zzA list already exists with this name"
+
+#: action.py:870
+msgid "Reading List: Cannot create list as list_name is duplicate:"
+msgstr "zzReading List: Cannot create list as list_name is duplicate:"
+
+#: action.py:1010
+msgid "READING LIST: Device disconnected"
+msgstr "zzREADING LIST: Device disconnected"
+
+#: action.py:1019
+msgid "READING LIST: Metadata available:"
+msgstr "zzREADING LIST: Metadata available:"
+
+#: action.py:1064
+msgid "READING LIST: Device found to sync to:"
+msgstr "zzREADING LIST: Device found to sync to:"
+
+#: action.py:1067
+msgid "READING LIST: Not syncing to device as not active"
+msgstr "zzREADING LIST: Not syncing to device as not active"
+
+#: action.py:1072
+msgid "READING LIST: Sync Now - force_sync="
+msgstr "zzREADING LIST: Sync Now - force_sync="
+
+#: action.py:1087
+msgid "Cannot sync to device"
+msgstr "zzCannot sync to device"
+
+#: action.py:1088
+msgid "No device found for UUID: %s"
+msgstr "zzNo device found for UUID: %s"
+
+#: action.py:1102
+msgid "READING LIST: Updating automatic column list(s) "
+msgstr "zzREADING LIST: Updating automatic column list(s) "
+
+#: action.py:1127
+msgid "READING LIST: Not syncing '%s' to device as autosync is false"
+msgstr "zzREADING LIST: Not syncing '%s' to device as autosync is false"
+
+#: action.py:1135
+msgid "READING LIST: Updating automatic device list(s) "
+msgstr "zzREADING LIST: Updating automatic device list(s) "
+
+#: action.py:1189
+msgid "READING LIST: Skipping %d books in '%s' list with no formats"
+msgstr "zzREADING LIST: Skipping %d books in '%s' list with no formats"
+
+#: action.py:1193
+msgid "READING LIST: Syncing %d books in '%s' to: %s (location:%s)"
+msgstr "zzREADING LIST: Syncing %d books in '%s' to: %s (location:%s)"
+
+#: action.py:1202
+msgid "READING LIST: No books on '%s' list need to be synced"
+msgstr "zzREADING LIST: No books on '%s' list need to be synced"
+
+#: action.py:1227
+msgid "Main memory"
+msgstr "zzMain memory"
+
+#: action.py:1230
+msgid "Storage Card A"
+msgstr "zzStorage Card A"
+
+#: action.py:1233
+msgid "Storage Card B"
+msgstr "zzStorage Card B"
+
+#: action.py:1238
+msgid "READING LIST: No books on '%s' list found on device to remove"
+msgstr "zzREADING LIST: No books on '%s' list found on device to remove"
+
+#: action.py:1249
+msgid "Reading List error"
+msgstr "zzReading List error"
+
+#: action.py:1250
+msgid "Unable to find the Remove Books plugin"
+msgstr "zzUnable to find the Remove Books plugin"
+
+#: action.py:1277
+msgid "Deleting books from device."
+msgstr "zzDeleting books from device."
+
+#: action.py:1316
+msgid "READING LIST: Auto-populating device list: "
+msgstr "zzREADING LIST: Auto-populating device list: "
+
+#: action.py:1321
+msgid "READING LIST: Removing %d ids from automatic list: %s"
+msgstr "zzREADING LIST: Removing %d ids from automatic list: %s"
+
+#: action.py:1324
+msgid "READING LIST: Adding %d ids to automatic list: %s"
+msgstr "zzREADING LIST: Adding %d ids to automatic list: %s"
+
+#: action.py:1334
+msgid "READING LIST: Auto-populating search list: "
+msgstr "zzREADING LIST: Auto-populating search list: "
+
+#: action.py:1339
+msgid "READING LIST: Aborting updating auto-search list as has no expression: "
+msgstr ""
+"zzREADING LIST: Aborting updating auto-search list as has no expression: "
+
+#: action.py:1343
+msgid "READING LIST: Now %d ids on automatic list: %s"
+msgstr "zzREADING LIST: Now %d ids on automatic list: %s"
+
+#: action.py:1349
+msgid "READING LIST: Attempting to recreate Kindle collections"
+msgstr "zzREADING LIST: Attempting to recreate Kindle collections"
+
+#: action.py:1352
+msgid "Kindle Collections Failed"
+msgstr "zzKindle Collections Failed"
+
+#: action.py:1353
+msgid ""
+"You must have the Kindle Collections plugin installed in order to recreate "
+"collections after a sync."
+msgstr ""
+"zzYou must have the Kindle Collections plugin installed in order to recreate "
+"collections after a sync."
+
+#: common_utils.py:269
+msgid "Restart required"
+msgstr "zzRestart required"
+
+#: common_utils.py:270
+msgid ""
+"Title image not found - you must restart Calibre before using this plugin!"
+msgstr ""
+"zzTitle image not found - you must restart Calibre before using this plugin!"
+
+#: common_utils.py:501
+msgid "Keyboard shortcut dialog"
+msgstr "zzKeyboard shortcut dialog"
+
+#: common_utils.py:503
+msgid "Keyboard shortcuts"
+msgstr "zzKeyboard shortcuts"
+
+#: common_utils.py:550
+msgid "Undefined"
+msgstr "zzUndefined"
+
+#: common_utils.py:637
+msgid "Restart calibre now"
+msgstr "zzRestart calibre now"
+
+#: common_utils.py:651
+msgid "Prefs Viewer dialog"
+msgstr "zzPrefs Viewer dialog"
+
+#: common_utils.py:652
+msgid "Preferences for: "
+msgstr "zzPreferences for: "
+
+#: common_utils.py:685
+msgid "Clear"
+msgstr "zzClear"
+
+#: common_utils.py:687
+msgid "Clear all settings for this plugin"
+msgstr "zzClear all settings for this plugin"
+
+#: common_utils.py:714
+msgid ""
+"<p>Are you sure you want to change your settings in this library for this "
+"plugin?</p><p>Any settings in other libraries or stored in a JSON file in "
+"your calibre plugins folder will not be touched.</p><p>You must restart "
+"calibre afterwards.</p>"
+msgstr ""
+"zz<p>Are you sure you want to change your settings in this library for this "
+"plugin?</p><p>Any settings in other libraries or stored in a JSON file in "
+"your calibre plugins folder will not be touched.</p><p>You must restart "
+"calibre afterwards.</p>"
+
+#: common_utils.py:725
+msgid "Settings changed"
+msgstr "zzSettings changed"
+
+#: common_utils.py:726
+msgid ""
+"<p>Settings for this plugin in this library have been changed.</p><p>Please "
+"restart calibre now.</p>"
+msgstr ""
+"zz<p>Settings for this plugin in this library have been changed.</"
+"p><p>Please restart calibre now.</p>"
+
+#: common_utils.py:734
+msgid ""
+"<p>Are you sure you want to clear your settings in this library for this "
+"plugin?</p><p>Any settings in other libraries or stored in a JSON file in "
+"your calibre plugins folder will not be touched.</p><p>You must restart "
+"calibre afterwards.</p>"
+msgstr ""
+"zz<p>Are you sure you want to clear your settings in this library for this "
+"plugin?</p><p>Any settings in other libraries or stored in a JSON file in "
+"your calibre plugins folder will not be touched.</p><p>You must restart "
+"calibre afterwards.</p>"
+
+#: common_utils.py:746
+msgid "Settings deleted"
+msgstr "zzSettings deleted"
+
+#: common_utils.py:747
+msgid ""
+"<p>All settings for this plugin in this library have been cleared.</"
+"p><p>Please restart calibre now.</p>"
+msgstr ""
+"zz<p>All settings for this plugin in this library have been cleared.</"
+"p><p>Please restart calibre now.</p>"
+
+#: config.py:80
+msgid "*Any Device"
+msgstr "zz*Any Device"
+
+#: config.py:82
+msgid "Manually add/remove items"
+msgstr "zzManually add/remove items"
+
+#: config.py:83
+msgid "Auto populated from books on device"
+msgstr "zzAuto populated from books on device"
+
+#: config.py:84
+msgid "Auto populated from search"
+msgstr "zzAuto populated from search"
+
+#: config.py:86
+msgid "Add new list items to device"
+msgstr "zzAdd new list items to device"
+
+#: config.py:87
+msgid "Add/overwrite all list items to device"
+msgstr "zzAdd/overwrite all list items to device"
+
+#: config.py:88
+msgid "Remove list items from device"
+msgstr "zzRemove list items from device"
+
+#: config.py:89
+msgid "Replace device with list, add new items only"
+msgstr "zzReplace device with list, add new items only"
+
+#: config.py:90
+msgid "Replace device with list, add/overwrite all"
+msgstr "zzReplace device with list, add/overwrite all"
+
+#: config.py:92
+msgid "Auto populate list from books on device"
+msgstr "zzAuto populate list from books on device"
+
+#: config.py:94
+msgid "Do not update calibre column"
+msgstr "zzDo not update calibre column"
+
+#: config.py:95
+msgid "Update column for add or remove"
+msgstr "zzUpdate column for add or remove"
+
+#: config.py:96
+msgid "Update column for add to list only"
+msgstr "zzUpdate column for add to list only"
+
+#: config.py:97
+msgid "Update column for remove from list only"
+msgstr "zzUpdate column for remove from list only"
+
+#: config.py:417
+msgid "Kindle Collections"
+msgstr "zzKindle Collections"
+
+#: config.py:417
+msgid "Location"
+msgstr "zzLocation"
+
+#: config.py:417
+msgid "Menu"
+msgstr "zzMenu"
+
+#: config.py:417
+msgid "Name"
+msgstr "zzName"
+
+#: config.py:417
+msgid "Status"
+msgstr "zzStatus"
+
+#: config.py:521
+msgid "Lists:"
+msgstr "zzLists:"
+
+#: config.py:528
+msgid "Add list"
+msgstr "zzAdd list"
+
+#: config.py:533
+msgid "Delete list"
+msgstr "zzDelete list"
+
+#: config.py:538 config.py:884
+msgid "Rename list"
+msgstr "zzRename list"
+
+#: config.py:546
+msgid "Population Options:"
+msgstr "zzPopulation Options:"
+
+#: config.py:554
+msgid "&List type:"
+msgstr "zz&List type:"
+
+#: config.py:555
+msgid "Choose how this list will be populated"
+msgstr "zzChoose how this list will be populated"
+
+#: config.py:562
+msgid "&Auto populate from search:"
+msgstr "zz&Auto populate from search:"
+
+#: config.py:563
+msgid ""
+"If list is populated from a search, specify the calibre search expression"
+msgstr ""
+"zzIf list is populated from a search, specify the calibre search expression"
+
+#: config.py:571
+msgid "Sync Options:"
+msgstr "zzSync Options:"
+
+#: config.py:579
+msgid "&Device to sync this list to:"
+msgstr "zz&Device to sync this list to:"
+
+#: config.py:580
+msgid ""
+"By specifying a device you can sync either manually or\n"
+"automatically the contents of a list to that device.\n"
+"This replaces the Book Sync plugin functionality"
+msgstr ""
+"zzBy specifying a device you can sync either manually or\n"
+"automatically the contents of a list to that device.\n"
+"This replaces the Book Sync plugin functionality"
+
+#: config.py:588
+msgid "&When syncing this list:"
+msgstr "zz&When syncing this list:"
+
+#: config.py:589
+msgid ""
+"Control how your items are synced to the device.\n"
+"Sync only new items, sync all items overwriting existing\n"
+"or use this list to just remove items from your device."
+msgstr ""
+"zzControl how your items are synced to the device.\n"
+"Sync only new items, sync all items overwriting existing\n"
+"or use this list to just remove items from your device."
+
+#: config.py:597
+msgid "Sync to this device as soon as it is connected"
+msgstr "zzSync to this device as soon as it is connected"
+
+#: config.py:598
+msgid ""
+"Uncheck this option if you prefer to manually sync to your device.\n"
+"If no device is specified this checkbox has no effect"
+msgstr ""
+"zzUncheck this option if you prefer to manually sync to your device.\n"
+"If no device is specified this checkbox has no effect"
+
+#: config.py:602
+msgid "Clear this list after a sync to this device"
+msgstr "zzClear this list after a sync to this device"
+
+#: config.py:603
+msgid ""
+"If unchecked, only items not on the device already will be synced.\n"
+"If no device is specified this checkbox has no effect.\n"
+"This option can only be used with manual type lists."
+msgstr ""
+"zzIf unchecked, only items not on the device already will be synced.\n"
+"If no device is specified this checkbox has no effect.\n"
+"This option can only be used with manual type lists."
+
+#: config.py:611
+msgid "Column Update Options:"
+msgstr "zzColumn Update Options:"
+
+#: config.py:619
+msgid "When &changing this list:"
+msgstr "zzWhen &changing this list:"
+
+#: config.py:620
+msgid ""
+"Optionally modify tags or a custom column when you\n"
+"add and/or remove items from this list."
+msgstr ""
+"zzOptionally modify tags or a custom column when you\n"
+"add and/or remove items from this list."
+
+#: config.py:627
+msgid "&Column to update:"
+msgstr "zz&Column to update:"
+
+#: config.py:628
+msgid ""
+"Optionally specify a column to add/remove a value from\n"
+"when adding or removing items from this list"
+msgstr ""
+"zzOptionally specify a column to add/remove a value from\n"
+"when adding or removing items from this list"
+
+#: config.py:636
+msgid "&Value in column to add/remove:"
+msgstr "zz&Value in column to add/remove:"
+
+#: config.py:637
+msgid ""
+"Specify the tag or custom column value to be added when adding\n"
+"to this list or removed when the book is taken off the list"
+msgstr ""
+"zzSpecify the tag or custom column value to be added when adding\n"
+"to this list or removed when the book is taken off the list"
+
+#: config.py:647
+msgid "Reading Order Options:"
+msgstr "zzReading Order Options:"
+
+#: config.py:655
+msgid "&Store in series column:"
+msgstr "zz&Store in series column:"
+
+#: config.py:656
+msgid ""
+"You can optionally display the current reading list order\n"
+"in a custom series column. You should not edit this column directly!\n"
+"Only usable with Manually managed lists that are not Cleared on Sync."
+msgstr ""
+"zzYou can optionally display the current reading list order\n"
+"in a custom series column. You should not edit this column directly!\n"
+"Only usable with Manually managed lists that are not Cleared on Sync."
+
+#: config.py:664
+msgid "&Series name:"
+msgstr "zz&Series name:"
+
+#: config.py:665
+msgid ""
+"Specify the name for this reading order series\n"
+"If left blank, will use the name of the list this book is on."
+msgstr ""
+"zzSpecify the name for this reading order series\n"
+"If left blank, will use the name of the list this book is on."
+
+#: config.py:674
+msgid "Display Options:"
+msgstr "zzDisplay Options:"
+
+#: config.py:682
+msgid "Move \"View list\" to the top level of the plugin menu for this list"
+msgstr "zzMove \"View list\" to the top level of the plugin menu for this list"
+
+#: config.py:683
+msgid ""
+"By default Reading List creates a View List submenu for all your lists when "
+"you have multiple.\n"
+"If checked, this list will be moved to the top level menu for ease of "
+"access.\n"
+"NOTE: Your \"default\" list will always appear on the top menu, regardless "
+"of this checkbox"
+msgstr ""
+"zzBy default Reading List creates a View List submenu for all your lists "
+"when you have multiple.\n"
+"If checked, this list will be moved to the top level menu for ease of "
+"access.\n"
+"NOTE: Your \"default\" list will always appear on the top menu, regardless "
+"of this checkbox"
+
+#: config.py:688
+msgid "Apply reading list order when viewing list"
+msgstr "zzApply reading list order when viewing list"
+
+#: config.py:689
+msgid ""
+"If checked, viewing a reading list will also change your Calibre sort "
+"order.\n"
+"Lists can be manually reordered using this plugin, defaulting to order added "
+"to list.\n"
+"If unchecked, current calibre sort will be left unchanged when you view the "
+"list."
+msgstr ""
+"zzIf checked, viewing a reading list will also change your Calibre sort "
+"order.\n"
+"Lists can be manually reordered using this plugin, defaulting to order added "
+"to list.\n"
+"If unchecked, current calibre sort will be left unchanged when you view the "
+"list."
+
+#: config.py:858
+msgid "Add new list"
+msgstr "zzAdd new list"
+
+#: config.py:859
+msgid "Default"
+msgstr "zzDefault"
+
+#: config.py:859
+msgid "Enter a unique display name for this list:"
+msgstr "zzEnter a unique display name for this list:"
+
+#: config.py:867 config.py:897
+msgid "Add failed"
+msgstr "zzAdd failed"
+
+#: config.py:868 config.py:898
+msgid "A list with the same name already exists"
+msgstr "zzA list with the same name already exists"
+
+#: config.py:885
+msgid "Enter a new display name for this list:"
+msgstr "zzEnter a new display name for this list:"
+
+#: config.py:916
+msgid "Cannot delete"
+msgstr "zzCannot delete"
+
+#: config.py:917
+msgid "You must have at least one list"
+msgstr "zzYou must have at least one list"
+
+#: config.py:919
+msgid "Do you want to delete the list named '%s'"
+msgstr "zzDo you want to delete the list named '%s'"
+
+#: config.py:951
+msgid "Devices:"
+msgstr "zzDevices:"
+
+#: config.py:962
+msgid "Add connected device"
+msgstr "zzAdd connected device"
+
+#: config.py:964
+msgid ""
+"If you do not have a device connected currently, either plug one\n"
+"in now or exit the dialog and connect to folder/iTunes first"
+msgstr ""
+"zzIf you do not have a device connected currently, either plug one\n"
+"in now or exit the dialog and connect to folder/iTunes first"
+
+#: config.py:971
+msgid "Rename the currently connected device"
+msgstr "zzRename the currently connected device"
+
+#: config.py:976
+msgid "Delete this device from the device list"
+msgstr "zzDelete this device from the device list"
+
+#: config.py:1022 config.py:1026 config.py:1045
+msgid "Rename failed"
+msgstr "zzRename failed"
+
+#: config.py:1023 config.py:1053
+msgid "You must select a device first"
+msgstr "zzYou must select a device first"
+
+#: config.py:1027
+msgid "You can only rename a device that is currently connected"
+msgstr "zzYou can only rename a device that is currently connected"
+
+#: config.py:1031
+msgid "Rename device"
+msgstr "zzRename device"
+
+#: config.py:1032
+msgid "Enter a new display name for this device:"
+msgstr "zzEnter a new display name for this device:"
+
+#: config.py:1046
+msgid "An error occured while renaming."
+msgstr "zzAn error occured while renaming."
+
+#: config.py:1052
+msgid "Delete failed"
+msgstr "zzDelete failed"
+
+#: config.py:1057
+msgid "You are about to remove the <b>%s</b> device from this list. "
+msgstr "zzYou are about to remove the <b>%s</b> device from this list. "
+
+#: config.py:1058
+msgid "Are you sure you want to continue?"
+msgstr "zzAre you sure you want to continue?"
+
+#: config.py:1112
+msgid "Keyboard shortcuts..."
+msgstr "zzKeyboard shortcuts..."
+
+#: config.py:1113
+msgid "Edit the keyboard shortcuts associated with this plugin"
+msgstr "zzEdit the keyboard shortcuts associated with this plugin"
+
+#: config.py:1118
+msgid "Reset disabled &confirmation dialogs"
+msgstr "zzReset disabled &confirmation dialogs"
+
+#: config.py:1119
+msgid "Reset all show me again dialogs for the Reading List plugin"
+msgstr "zzReset all show me again dialogs for the Reading List plugin"
+
+#: config.py:1124
+msgid "&View library preferences..."
+msgstr "zz&View library preferences..."
+
+#: config.py:1125
+msgid "View data stored in the library database for this plugin"
+msgstr "zzView data stored in the library database for this plugin"
+
+#: config.py:1130
+msgid "Show dialog when removing books from device"
+msgstr "zzShow dialog when removing books from device"
+
+#: config.py:1131
+msgid ""
+"If syncing your list means books are removed from your device, then\n"
+"a dialog will be displayed allowing you to confirm first.\n"
+"Uncheck this option to allow unattended syncing to your device."
+msgstr ""
+"zzIf syncing your list means books are removed from your device, then\n"
+"a dialog will be displayed allowing you to confirm first.\n"
+"Uncheck this option to allow unattended syncing to your device."
+
+#: config.py:1143
+msgid "Done"
+msgstr "zzDone"
+
+#: config.py:1144
+msgid "Confirmation dialogs have all been reset"
+msgstr "zzConfirmation dialogs have all been reset"
+
+#: config.py:1161
+msgid "Lists"
+msgstr "zzLists"
+
+#: config.py:1162
+msgid "Devices"
+msgstr "zzDevices"
+
+#: config.py:1163
+msgid "Other"
+msgstr "zzOther"
+
+#: dialogs.py:109
+msgid "<p>Are you sure you want to remove this book from the list?"
+msgstr "zz<p>Are you sure you want to remove this book from the list?"
+
+#: dialogs.py:111
+msgid "<p>Are you sure you want to remove the selected %d books from the list?"
+msgstr ""
+"zz<p>Are you sure you want to remove the selected %d books from the list?"
+
+#: dialogs.py:195
+msgid "reading list plugin:edit list dialog"
+msgstr "zzreading list plugin:edit list dialog"
+
+#: dialogs.py:196
+msgid "Edit List"
+msgstr "zzEdit List"
+
+#: dialogs.py:200
+msgid "'%s' list books"
+msgstr "zz'%s' list books"
+
+#: dialogs.py:213
+msgid "Move selected books to the top of the list"
+msgstr "zzMove selected books to the top of the list"
+
+#: dialogs.py:219
+msgid "Move selected books 10 rows up the list"
+msgstr "zzMove selected books 10 rows up the list"
+
+#: dialogs.py:225
+msgid "Move selected books up the list"
+msgstr "zzMove selected books up the list"
+
+#: dialogs.py:235
+msgid "Remove selected books from the list"
+msgstr "zzRemove selected books from the list"
+
+#: dialogs.py:244
+msgid "Move selected books down the list"
+msgstr "zzMove selected books down the list"
+
+#: dialogs.py:250
+msgid "Move selected books 10 rows down the list"
+msgstr "zzMove selected books 10 rows down the list"
+
+#: dialogs.py:257
+msgid "Move selected books to the bottom of the list"
+msgstr "zzMove selected books to the bottom of the list"
+
+#: dialogs.py:280
+msgid "reading list plugin:move books dialog"
+msgstr "zzreading list plugin:move books dialog"
+
+#: dialogs.py:281
+msgid "Move Books"
+msgstr "zzMove Books"
+
+#: dialogs.py:285
+msgid "Move books between lists"
+msgstr "zzMove books between lists"
+
+#: dialogs.py:290
+msgid "Select list(s) to remove from"
+msgstr "zzSelect list(s) to remove from"
+
+#: dialogs.py:296
+msgid "Select &All"
+msgstr "zzSelect &All"
+
+#: dialogs.py:300
+msgid "Select &None"
+msgstr "zzSelect &None"
+
+#: dialogs.py:304
+msgid "Select list to add to"
+msgstr "zzSelect list to add to"
+
+#~| msgid "Remove image from this list"
+#~ msgid "Remove from %s list"
+#~ msgstr "zzRemove from %s list"

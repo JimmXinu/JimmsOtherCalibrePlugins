@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-03 22:35-0300\n"
-"PO-Revision-Date: 2021-04-03 22:39-0300\n"
+"POT-Creation-Date: 2021-04-04 13:38-0300\n"
+"PO-Revision-Date: 2021-04-04 13:51-0300\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,10 +25,6 @@ msgstr "Lista de Lectura"
 #: action.py:52
 msgid "View or edit lists of books"
 msgstr "Ver o editar listas de libros"
-
-#: action.py:54
-msgid "current"
-msgstr "actual"
 
 #: action.py:135
 msgid "Add to default list"
@@ -150,7 +146,7 @@ msgstr "Ver libros en la lista \"%s\""
 msgid "View list: %s"
 msgstr "Ver lista: %s"
 
-#: action.py:217
+#: action.py:217 action.py:220
 msgid "View list"
 msgstr "Ver lista"
 
@@ -297,10 +293,6 @@ msgstr "Los libros seleccionados no existen en esta lista"
 msgid "Removed %d books from your %s list"
 msgstr "Se quitaron %d libros de su lista %s"
 
-#: action.py:591 action.py:642 action.py:745 action.py:1124
-msgid "marked:reading_list_"
-msgstr "marcado:reading_list_"
-
 #: action.py:634
 #, python-format
 msgid "Removed from %d reading lists"
@@ -334,14 +326,6 @@ msgstr "No se puede editar la lista"
 #: action.py:803
 msgid "Cannot view list"
 msgstr "No se puede ver la lista"
-
-#: action.py:820 action.py:860
-msgid "marked:"
-msgstr "marcado:"
-
-#: action.py:823
-msgid "marked"
-msgstr "marcado"
 
 #: action.py:836 action.py:845
 msgid "Cannot create list"
@@ -480,58 +464,54 @@ msgstr "READING LIST: Ahora %d ids en la lista automática: %s"
 msgid "READING LIST: Attempting to recreate Kindle collections"
 msgstr "READING LIST: Intentar recrear colecciones de Kindle"
 
-#: action.py:1328
-msgid "Kindle Collections"
-msgstr "Kindle Collections"
-
 #: action.py:1330
 msgid "Kindle Collections Failed"
 msgstr "Kindle Collections Falló"
 
-#: common_utils.py:274
+#: common_utils.py:269
 msgid "Restart required"
 msgstr "Reinicio requerido"
 
-#: common_utils.py:275
+#: common_utils.py:270
 msgid ""
 "Title image not found - you must restart Calibre before using this plugin!"
 msgstr ""
 "No se encontró la imagen del título - debe reiniciar Calibre antes de usar "
 "este complemento!"
 
-#: common_utils.py:506
+#: common_utils.py:501
 msgid "Keyboard shortcut dialog"
 msgstr "Diálogo de método abreviado de teclado"
 
-#: common_utils.py:508
+#: common_utils.py:503
 msgid "Keyboard shortcuts"
 msgstr "Atajos de teclado"
 
-#: common_utils.py:555
+#: common_utils.py:550
 msgid "Undefined"
 msgstr "Indefinido"
 
-#: common_utils.py:642
+#: common_utils.py:637
 msgid "Restart calibre now"
 msgstr "Reiniciar Calibre ahora"
 
-#: common_utils.py:656
+#: common_utils.py:651
 msgid "Prefs Viewer dialog"
 msgstr "Cuadro de diálogo Visor de preferencias"
 
-#: common_utils.py:657
+#: common_utils.py:652
 msgid "Preferences for: "
 msgstr "Preferencias para: "
 
-#: common_utils.py:690
+#: common_utils.py:685
 msgid "Clear"
 msgstr "Borrar"
 
-#: common_utils.py:692
+#: common_utils.py:687
 msgid "Clear all settings for this plugin"
 msgstr "Borrar todas las configuraciones para este complemento"
 
-#: common_utils.py:719
+#: common_utils.py:714
 msgid ""
 "<p>Are you sure you want to change your settings in this library for this "
 "plugin?</p><p>Any settings in other libraries or stored in a JSON file in "
@@ -543,11 +523,11 @@ msgstr ""
 "bibliotecas o almacenada en un archivo JSON en la carpeta de complementos de "
 "calibre. </p ><p> Debe reiniciar calibre después. </p>"
 
-#: common_utils.py:730
+#: common_utils.py:725
 msgid "Settings changed"
 msgstr "Configuración modificada"
 
-#: common_utils.py:739
+#: common_utils.py:734
 msgid ""
 "<p>Are you sure you want to clear your settings in this library for this "
 "plugin?</p><p>Any settings in other libraries or stored in a JSON file in "
@@ -559,17 +539,66 @@ msgstr ""
 "almacenada en un archivo JSON en la carpeta de complementos de calibre no se "
 "tocará. </p ><p> Debe reiniciar calibre después. </p>"
 
-#: common_utils.py:751
+#: common_utils.py:746
 msgid "Settings deleted"
 msgstr "Configuración eliminada"
-
-#: config.py:51
-msgid "settings"
-msgstr "ajustes"
 
 #: config.py:80
 msgid "*Any Device"
 msgstr "*Cualquier dispositivo"
+
+#: config.py:82
+msgid "Manually add/remove items"
+msgstr "Agregar o quitar elementos manualmente"
+
+#: config.py:83
+msgid "Auto populated from books on device"
+msgstr "Completado automáticamente a partir de libros en el dispositivo"
+
+#: config.py:84
+msgid "Auto populated from search"
+msgstr "Completado automáticamente a partir de la búsqueda"
+
+#: config.py:86
+msgid "Add new list items to device"
+msgstr "Agregar nuevos elementos de lista al dispositivo"
+
+#: config.py:87
+msgid "Add/overwrite all list items to device"
+msgstr ""
+"Agregar / sobrescribir todos los elementos de la lista en el dispositivo"
+
+#: config.py:88
+msgid "Remove list items from device"
+msgstr "Eliminar elementos de la lista del dispositivo"
+
+#: config.py:89
+msgid "Replace device with list, add new items only"
+msgstr "Eliminar elementos de la lista del dispositivo"
+
+#: config.py:90
+msgid "Replace device with list, add/overwrite all"
+msgstr "Reemplazar dispositivo con lista, agregar/sobrescribir todo"
+
+#: config.py:92
+msgid "Auto populate list from books on device"
+msgstr "Completar automáticamente la lista de libros en el dispositivo"
+
+#: config.py:94
+msgid "Do not update calibre column"
+msgstr "No actualice la columna de calibre"
+
+#: config.py:95
+msgid "Update column for add or remove"
+msgstr "Actualizar columna para agregar o quitar"
+
+#: config.py:96
+msgid "Update column for add to list only"
+msgstr "Actualizar columna solo para agregar a la lista"
+
+#: config.py:97
+msgid "Update column for remove from list only"
+msgstr "Actualizar columna para eliminar solo de la lista"
 
 #: config.py:102
 msgid "Options"
@@ -578,6 +607,38 @@ msgstr "Opciones"
 #: config.py:105 config.py:1155
 msgid "Devices"
 msgstr "Dispositivos"
+
+#: config.py:132 config.py:133 config.py:859
+msgid "Default"
+msgstr "Defecto"
+
+#: config.py:156 config.py:157 config.py:158
+msgid "OPTIONS"
+msgstr "OPCIONES"
+
+#: config.py:227 config.py:228 config.py:236 config.py:238
+msgid "Libraries"
+msgstr "bibliotecas"
+
+#: config.py:417
+msgid "Menu"
+msgstr "Menú"
+
+#: config.py:417
+msgid "Name"
+msgstr "Nombre"
+
+#: config.py:417
+msgid "Location"
+msgstr "Ubicación"
+
+#: config.py:417
+msgid "Status"
+msgstr "Estado"
+
+#: config.py:417
+msgid "Kindle Collections"
+msgstr "Kindle Collecciones"
 
 #: config.py:521
 msgid "Lists:"
@@ -812,10 +873,6 @@ msgstr "Agregar nueva lista"
 msgid "Enter a unique display name for this list:"
 msgstr "Ingrese un nombre de visualización único para esta lista:"
 
-#: config.py:859
-msgid "Default"
-msgstr "Defecto"
-
 #: config.py:867 config.py:895
 msgid "Add failed"
 msgstr "No se pudo agregar"
@@ -922,7 +979,7 @@ msgstr "Todos los cuadros de diálogo de confirmación se han restablecido"
 
 #: config.py:1154
 msgid "Lists"
-msgstr "Listas"
+msgstr "Listas:"
 
 #: config.py:1156
 msgid "Other"
@@ -945,7 +1002,7 @@ msgstr "reading list plugin:cuadro de diálogo de edición de lista"
 
 #: dialogs.py:196
 msgid "Edit List"
-msgstr "Editar lista"
+msgstr "Editar Lista"
 
 #: dialogs.py:200
 #, python-format
