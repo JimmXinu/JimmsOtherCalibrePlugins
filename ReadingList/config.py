@@ -7,6 +7,11 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+try:
+    load_translations()
+except NameError:
+    pass # load_translations() added in calibre 1.9
+
 import copy, traceback
 import six
 from six import text_type as unicode
@@ -72,24 +77,24 @@ KEY_POPULATE_SEARCH = 'populateSearch'
 KEY_SORT_LIST = 'sortList'
 KEY_DISPLAY_TOP_MENU = 'displayTopMenu'
 
-TOKEN_ANY_DEVICE = '*Any Device'
+TOKEN_ANY_DEVICE = _('*Any Device')
 
-POPULATE_TYPES = [('POPMANUAL', 'Manually add/remove items'),
-                  ('POPDEVICE', 'Auto populated from books on device'),
-                  ('POPSEARCH', 'Auto populated from search')]
+POPULATE_TYPES = [('POPMANUAL', _('Manually add/remove items')),
+                  ('POPDEVICE', _('Auto populated from books on device')),
+                  ('POPSEARCH', _('Auto populated from search'))]
 
-SYNC_TYPES = [('SYNCNEW',    'Add new list items to device'),
-              ('SYNCALL',    'Add/overwrite all list items to device'),
-              ('SYNCREM',    'Remove list items from device'),
-              ('SYNCREPNEW', 'Replace device with list, add new items only'),
-              ('SYNCREPOVR', 'Replace device with list, add/overwrite all')]
+SYNC_TYPES = [('SYNCNEW',    _('Add new list items to device')),
+              ('SYNCALL',    _('Add/overwrite all list items to device')),
+              ('SYNCREM',    _('Remove list items from device')),
+              ('SYNCREPNEW', _('Replace device with list, add new items only')),
+              ('SYNCREPOVR', _('Replace device with list, add/overwrite all'))]
 
-SYNC_AUTO_DESC = 'Auto populate list from books on device'
+SYNC_AUTO_DESC = _('Auto populate list from books on device')
 
-MODIFY_TYPES = [('TAGNONE',      'Do not update calibre column'),
-                ('TAGADDREMOVE', 'Update column for add or remove'),
-                ('TAGADD',       'Update column for add to list only'),
-                ('TAGREMOVE',    'Update column for remove from list only')]
+MODIFY_TYPES = [('TAGNONE',      _('Do not update calibre column')),
+                ('TAGADDREMOVE', _('Update column for add or remove')),
+                ('TAGADD',       _('Update column for add to list only')),
+                ('TAGREMOVE',    _('Update column for remove from list only'))]
 
 KEY_SCHEMA_VERSION = STORE_SCHEMA_VERSION = 'SchemaVersion'
 DEFAULT_SCHEMA_VERSION = 1.64
@@ -409,7 +414,7 @@ class DevicesTableWidget(QTableWidget):
     def populate_table(self, devices, connected_device_info):
         self.clear()
         self.setRowCount(len(devices))
-        header_labels = ['Menu', 'Name', 'Location', 'Status', 'Kindle Collections']
+        header_labels = [_('Menu'), _('Name'), _('Location'), _('Status'), _('Kindle Collections')]
         self.setColumnCount(len(header_labels))
         self.setHorizontalHeaderLabels(header_labels)
         self.verticalHeader().setDefaultSectionSize(32)
@@ -513,24 +518,24 @@ class ListsTab(QWidget):
         # -------- Lists configuration ---------
         select_list_layout = QHBoxLayout()
         layout.addLayout(select_list_layout)
-        lists_label = QLabel('Lists:', self)
+        lists_label = QLabel(_('Lists:'), self)
         select_list_layout.addWidget(lists_label)
         self.select_list_combo = ListComboBox(self, self.lists, self.default_list)
         self.select_list_combo.setMinimumSize(150, 20)
         self.select_list_combo.currentIndexChanged.connect(self._select_list_combo_changed)
         select_list_layout.addWidget(self.select_list_combo)
         self.add_list_button = QtGui.QToolButton(self)
-        self.add_list_button.setToolTip('Add list')
+        self.add_list_button.setToolTip(_('Add list'))
         self.add_list_button.setIcon(QIcon(I('plus.png')))
         self.add_list_button.clicked.connect(self.add_list)
         select_list_layout.addWidget(self.add_list_button)
         self.delete_list_button = QtGui.QToolButton(self)
-        self.delete_list_button.setToolTip('Delete list')
+        self.delete_list_button.setToolTip(_('Delete list'))
         self.delete_list_button.setIcon(QIcon(I('minus.png')))
         self.delete_list_button.clicked.connect(self.delete_list)
         select_list_layout.addWidget(self.delete_list_button)
         self.rename_list_button = QtGui.QToolButton(self)
-        self.rename_list_button.setToolTip('Rename list')
+        self.rename_list_button.setToolTip(_('Rename list'))
         self.rename_list_button.setIcon(QIcon(I('edit-undo.png')))
         self.rename_list_button.clicked.connect(self.rename_list)
         select_list_layout.addWidget(self.rename_list_button)
@@ -538,7 +543,7 @@ class ListsTab(QWidget):
 
         # -------- Population Options configuration ---------
         layout.addSpacing(5)
-        populate_group_box = QGroupBox('Population Options:', self)
+        populate_group_box = QGroupBox(_('Population Options:'), self)
         layout.addWidget(populate_group_box)
         populate_group_box_layout = QVBoxLayout()
         populate_group_box.setLayout(populate_group_box_layout)
@@ -546,16 +551,16 @@ class ListsTab(QWidget):
         populate_grid_layout = QGridLayout()
         populate_group_box_layout.addLayout(populate_grid_layout)
 
-        populate_type_label = QLabel('&List type:', self)
-        populate_type_label.setToolTip('Choose how this list will be populated')
+        populate_type_label = QLabel(_('&List type:'), self)
+        populate_type_label.setToolTip(_('Choose how this list will be populated'))
         self.populate_type_combo = ListTypeComboBox(self, POPULATE_TYPES)
         self.populate_type_combo.currentIndexChanged.connect(self._populate_type_combo_changed)
         populate_type_label.setBuddy(self.populate_type_combo)
         populate_grid_layout.addWidget(populate_type_label, 0, 0, 1, 1)
         populate_grid_layout.addWidget(self.populate_type_combo, 0, 1, 1, 1)
 
-        self.populate_search_label = QLabel('&Auto populate from search:', self)
-        self.populate_search_label.setToolTip('If list is populated from a search, specify the calibre search expression')
+        self.populate_search_label = QLabel(_('&Auto populate from search:'), self)
+        self.populate_search_label.setToolTip(_('If list is populated from a search, specify the calibre search expression'))
         self.populate_search_ledit = QLineEdit(self)
         self.populate_search_label.setBuddy(self.populate_search_ledit)
         populate_grid_layout.addWidget(self.populate_search_label, 1, 0, 1, 1)
@@ -563,7 +568,7 @@ class ListsTab(QWidget):
 
         # -------- Sync Options configuration ---------
         layout.addSpacing(5)
-        sync_lists_group_box = QGroupBox('Sync Options:', self)
+        sync_lists_group_box = QGroupBox(_('Sync Options:'), self)
         layout.addWidget(sync_lists_group_box)
         sync_lists_group_box_layout = QVBoxLayout()
         sync_lists_group_box.setLayout(sync_lists_group_box_layout)
@@ -571,39 +576,39 @@ class ListsTab(QWidget):
         sync_lists_grid_layout = QGridLayout()
         sync_lists_group_box_layout.addLayout(sync_lists_grid_layout)
 
-        device_label = QLabel('&Device to sync this list to:', self)
-        device_label.setToolTip('By specifying a device you can sync either manually or\n'
+        device_label = QLabel(_('&Device to sync this list to:'), self)
+        device_label.setToolTip(_('By specifying a device you can sync either manually or\n'
                                 'automatically the contents of a list to that device.\n'
-                                'This replaces the Book Sync plugin functionality')
+                                'This replaces the Book Sync plugin functionality'))
         self.device_combo = DeviceColumnComboBox(self)
         device_label.setBuddy(self.device_combo)
         sync_lists_grid_layout.addWidget(device_label, 0, 0, 1, 1)
         sync_lists_grid_layout.addWidget(self.device_combo, 0, 1, 1, 1)
 
-        sync_type_label = QLabel('&When syncing this list:', self)
-        sync_type_label.setToolTip('Control how your items are synced to the device.\n'
+        sync_type_label = QLabel(_('&When syncing this list:'), self)
+        sync_type_label.setToolTip(_('Control how your items are synced to the device.\n'
                                 'Sync only new items, sync all items overwriting existing\n'
-                                'or use this list to just remove items from your device.')
+                                'or use this list to just remove items from your device.'))
         self.sync_type_combo = ListTypeComboBox(self, SYNC_TYPES)
         sync_type_label.setBuddy(self.sync_type_combo)
         sync_lists_grid_layout.addWidget(sync_type_label, 1, 0, 1, 1)
         sync_lists_grid_layout.addWidget(self.sync_type_combo, 1, 1, 1, 1)
 
-        self.sync_auto_checkbox = QCheckBox('Sync to this device as soon as it is connected', self)
-        self.sync_auto_checkbox.setToolTip('Uncheck this option if you prefer to manually sync to your device.\n'
-                                           'If no device is specified this checkbox has no effect')
+        self.sync_auto_checkbox = QCheckBox(_('Sync to this device as soon as it is connected'), self)
+        self.sync_auto_checkbox.setToolTip(_('Uncheck this option if you prefer to manually sync to your device.\n'
+                                           'If no device is specified this checkbox has no effect'))
         sync_lists_grid_layout.addWidget(self.sync_auto_checkbox, 2, 0, 1, 2)
 
-        self.sync_clear_checkbox = QCheckBox('Clear this list after a sync to this device', self)
-        self.sync_clear_checkbox.setToolTip('If unchecked, only items not on the device already will be synced.\n'
+        self.sync_clear_checkbox = QCheckBox(_('Clear this list after a sync to this device'), self)
+        self.sync_clear_checkbox.setToolTip(_('If unchecked, only items not on the device already will be synced.\n'
                                             'If no device is specified this checkbox has no effect.\n'
-                                            'This option can only be used with manual type lists.')
+                                            'This option can only be used with manual type lists.'))
         self.sync_clear_checkbox.stateChanged.connect(self._able_series_settings)
         sync_lists_grid_layout.addWidget(self.sync_clear_checkbox, 3, 0, 1, 2)
 
         # -------- Column Update Options configuration ---------
         layout.addSpacing(5)
-        col_update_group_box = QGroupBox('Column Update Options:', self)
+        col_update_group_box = QGroupBox(_('Column Update Options:'), self)
         layout.addWidget(col_update_group_box)
         col_update_group_box_layout = QVBoxLayout()
         col_update_group_box.setLayout(col_update_group_box_layout)
@@ -611,26 +616,26 @@ class ListsTab(QWidget):
         col_update_grid_layout = QGridLayout()
         col_update_group_box_layout.addLayout(col_update_grid_layout)
 
-        self.modify_type_label = QLabel('When &changing this list:', self)
-        self.modify_type_label.setToolTip('Optionally modify tags or a custom column when you\n'
-                                'add and/or remove items from this list.')
+        self.modify_type_label = QLabel(_('When &changing this list:'), self)
+        self.modify_type_label.setToolTip(_('Optionally modify tags or a custom column when you\n'
+                                'add and/or remove items from this list.'))
         self.modify_type_combo = ListTypeComboBox(self, MODIFY_TYPES)
         self.modify_type_label.setBuddy(self.modify_type_combo)
         col_update_grid_layout.addWidget(self.modify_type_label, 0, 0, 1, 1)
         col_update_grid_layout.addWidget(self.modify_type_combo, 0, 1, 1, 1)
 
-        self.tags_column_label = QLabel('&Column to update:', self)
-        self.tags_column_label.setToolTip('Optionally specify a column to add/remove a value from\n'
-                                     'when adding or removing items from this list')
+        self.tags_column_label = QLabel(_('&Column to update:'), self)
+        self.tags_column_label.setToolTip(_('Optionally specify a column to add/remove a value from\n'
+                                     'when adding or removing items from this list'))
         self.tags_column_combo = CustomColumnComboBox(self)
         self.tags_column_combo.currentIndexChanged.connect(self._tags_column_combo_changed)
         self.tags_column_label.setBuddy(self.tags_column_combo)
         col_update_grid_layout.addWidget(self.tags_column_label, 1, 0, 1, 1)
         col_update_grid_layout.addWidget(self.tags_column_combo, 1, 1, 1, 1)
 
-        self.tags_value_label = QLabel('&Value in column to add/remove:', self)
-        self.tags_value_label.setToolTip('Specify the tag or custom column value to be added when adding\n'
-                              'to this list or removed when the book is taken off the list')
+        self.tags_value_label = QLabel(_('&Value in column to add/remove:'), self)
+        self.tags_value_label.setToolTip(_('Specify the tag or custom column value to be added when adding\n'
+                              'to this list or removed when the book is taken off the list'))
         self.tags_value_ledit = EditWithComplete(self)
         self.tags_value_ledit.set_add_separator(False)
         self.tags_value_label.setBuddy(self.tags_value_ledit)
@@ -639,7 +644,7 @@ class ListsTab(QWidget):
 
         # -------- Reading Series Column configuration ---------
         layout.addSpacing(5)
-        series_col_group_box = QGroupBox('Reading Order Options:', self)
+        series_col_group_box = QGroupBox(_('Reading Order Options:'), self)
         layout.addWidget(series_col_group_box)
         series_col_group_box_layout = QVBoxLayout()
         series_col_group_box.setLayout(series_col_group_box_layout)
@@ -647,18 +652,18 @@ class ListsTab(QWidget):
         series_col_grid_layout = QGridLayout()
         series_col_group_box_layout.addLayout(series_col_grid_layout)
 
-        self.series_column_label = QLabel('&Store in series column:', self)
-        self.series_column_label.setToolTip('You can optionally display the current reading list order\n'
+        self.series_column_label = QLabel(_('&Store in series column:'), self)
+        self.series_column_label.setToolTip(_('You can optionally display the current reading list order\n'
                                 'in a custom series column. You should not edit this column directly!\n'
-                                'Only usable with Manually managed lists that are not Cleared on Sync.')
+                                'Only usable with Manually managed lists that are not Cleared on Sync.'))
         self.series_column_combo = CustomColumnComboBox(self)
         self.series_column_label.setBuddy(self.series_column_combo)
         series_col_grid_layout.addWidget(self.series_column_label, 0, 0, 1, 1)
         series_col_grid_layout.addWidget(self.series_column_combo, 0, 1, 1, 1)
 
-        self.series_name_label = QLabel('&Series name:', self)
-        self.series_name_label.setToolTip('Specify the name for this reading order series\n'
-                                     'If left blank, will use the name of the list this book is on.')
+        self.series_name_label = QLabel(_('&Series name:'), self)
+        self.series_name_label.setToolTip(_('Specify the name for this reading order series\n'
+                                     'If left blank, will use the name of the list this book is on.'))
         self.series_name_edit = QLineEdit(self)
         self.series_name_label.setBuddy(self.series_name_edit)
         series_col_grid_layout.addWidget(self.series_name_label, 1, 0, 1, 1)
@@ -666,7 +671,7 @@ class ListsTab(QWidget):
 
         # -------- Display Options configuration ---------
         layout.addSpacing(5)
-        display_opt_group_box = QGroupBox('Display Options:', self)
+        display_opt_group_box = QGroupBox(_('Display Options:'), self)
         layout.addWidget(display_opt_group_box)
         display_opt_group_box_layout = QVBoxLayout()
         display_opt_group_box.setLayout(display_opt_group_box_layout)
@@ -674,16 +679,16 @@ class ListsTab(QWidget):
         display_opt_grid_layout = QGridLayout()
         display_opt_group_box_layout.addLayout(display_opt_grid_layout)
 
-        self.display_top_menu_checkbox = QCheckBox('Move "View list" to the top level of the plugin menu for this list', self)
-        self.display_top_menu_checkbox.setToolTip('By default Reading List creates a View List submenu for all your lists when you have multiple.\n'
+        self.display_top_menu_checkbox = QCheckBox(_('Move "View list" to the top level of the plugin menu for this list'), self)
+        self.display_top_menu_checkbox.setToolTip(_('By default Reading List creates a View List submenu for all your lists when you have multiple.\n'
                                             'If checked, this list will be moved to the top level menu for ease of access.\n'
-                                            'NOTE: Your "default" list will always appear on the top menu, regardless of this checkbox')
+                                            'NOTE: Your "default" list will always appear on the top menu, regardless of this checkbox'))
         display_opt_grid_layout.addWidget(self.display_top_menu_checkbox, 0, 0, 1, 1)
 
-        self.sort_list_checkbox = QCheckBox('Apply reading list order when viewing list', self)
-        self.sort_list_checkbox.setToolTip('If checked, viewing a reading list will also change your Calibre sort order.\n'
+        self.sort_list_checkbox = QCheckBox(_('Apply reading list order when viewing list'), self)
+        self.sort_list_checkbox.setToolTip(_('If checked, viewing a reading list will also change your Calibre sort order.\n'
                                            'Lists can be manually reordered using this plugin, defaulting to order added to list.\n'
-                                            'If unchecked, current calibre sort will be left unchanged when you view the list.')
+                                            'If unchecked, current calibre sort will be left unchanged when you view the list.'))
         display_opt_grid_layout.addWidget(self.sort_list_checkbox, 1, 0, 1, 1)
         layout.insertStretch(-1)
 
@@ -850,8 +855,8 @@ class ListsTab(QWidget):
 
     def add_list(self):
         # Display a prompt allowing user to specify a new list
-        new_list_name, ok = QInputDialog.getText(self, 'Add new list',
-                    'Enter a unique display name for this list:', text='Default')
+        new_list_name, ok = QInputDialog.getText(self, _('Add new list'),
+                    _('Enter a unique display name for this list:'), text=_('Default'))
         if not ok:
             # Operation cancelled
             return
@@ -859,7 +864,9 @@ class ListsTab(QWidget):
         # Verify it does not clash with any other lists in the list
         for list_name in self.lists.keys():
             if list_name.lower() == new_list_name.lower():
-                return error_dialog(self, 'Add failed', 'A list with the same name already exists', show=True)
+                return error_dialog(self, _('Add failed'),
+                                    _('A list with the same name already exists'),
+                                    show=True)
 
         # As we are about to switch list, persist the current lists details if any
         self.persist_list_config()
@@ -874,8 +881,8 @@ class ListsTab(QWidget):
             return
         # Display a prompt allowing user to specify a rename list
         old_list_name = self.list_name
-        new_list_name, ok = QInputDialog.getText(self, 'Rename list',
-                    'Enter a new display name for this list:', text=old_list_name)
+        new_list_name, ok = QInputDialog.getText(self, _('Rename list'),
+                    _('Enter a new display name for this list:'), text=old_list_name)
         if not ok:
             # Operation cancelled
             return
@@ -887,7 +894,8 @@ class ListsTab(QWidget):
             if list_name == old_list_name:
                 continue
             if list_name.lower() == new_list_name.lower():
-                return error_dialog(self, 'Add failed', 'A list with the same name already exists',
+                return error_dialog(self, _('Add failed'),
+                                    _('A list with the same name already exists'),
                                     show=True, show_copy_button=False)
 
         # As we are about to rename list, persist the current lists details if any
@@ -905,9 +913,10 @@ class ListsTab(QWidget):
         if not self.list_name:
             return
         if len(self.lists) == 1:
-            return error_dialog(self, 'Cannot delete', 'You must have at least one list',
-                                    show=True, show_copy_button=False)
-        if not confirm('Do you want to delete the list named \'%s\''%self.list_name,
+            return error_dialog(self, _('Cannot delete'),
+                                _('You must have at least one list'),
+                                show=True, show_copy_button=False)
+        if not confirm(_('Do you want to delete the list named \'%s\'')%self.list_name,
                         'reading_list_delete_list', self):
             return
         book_ids = get_book_list(self.gui.current_db, self.list_name)
@@ -939,7 +948,7 @@ class DevicesTab(QWidget):
         self.setLayout(layout)
 
         # -------- Device configuration ---------
-        devices_group_box = QGroupBox('Devices:', self)
+        devices_group_box = QGroupBox(_('Devices:'), self)
         layout.addWidget(devices_group_box)
         devices_group_box_layout = QVBoxLayout()
         devices_group_box.setLayout(devices_group_box_layout)
@@ -950,21 +959,21 @@ class DevicesTab(QWidget):
         buttons_layout = QHBoxLayout()
         devices_group_box_layout.addLayout(buttons_layout)
 
-        self.add_device_btn = QPushButton('Add connected device', self)
+        self.add_device_btn = QPushButton(_('Add connected device'), self)
         self.add_device_btn.setToolTip(
-                'If you do not have a device connected currently, either plug one\n'
-                'in now or exit the dialog and connect to folder/iTunes first')
+                _('If you do not have a device connected currently, either plug one\n'
+                'in now or exit the dialog and connect to folder/iTunes first'))
         self.add_device_btn.setIcon(QIcon(I('plus.png')))
         self.add_device_btn.clicked.connect(self._add_device_clicked)
         buttons_layout.addWidget(self.add_device_btn, 1)
         self.rename_device_btn = QtGui.QToolButton(self)
         self.rename_device_btn.setIcon(get_icon('edit-undo.png'))
-        self.rename_device_btn.setToolTip('Rename the currently connected device')
+        self.rename_device_btn.setToolTip(_('Rename the currently connected device'))
         self.rename_device_btn.clicked.connect(self._rename_device_clicked)
         buttons_layout.addWidget(self.rename_device_btn)
         self.delete_device_btn = QtGui.QToolButton(self)
         self.delete_device_btn.setIcon(QIcon(I('trash.png')))
-        self.delete_device_btn.setToolTip('Delete this device from the device list')
+        self.delete_device_btn.setToolTip(_('Delete this device from the device list'))
         self.delete_device_btn.clicked.connect(self._delete_device_clicked)
         buttons_layout.addWidget(self.delete_device_btn)
 
@@ -1010,16 +1019,17 @@ class DevicesTab(QWidget):
     def _rename_device_clicked(self):
         (device_info, is_connected) = self.devices_table.get_selected_device_info()
         if not device_info:
-            return error_dialog(self, 'Rename failed', 'You must select a device first',
+            return error_dialog(self, _('Rename failed'),
+                                _('You must select a device first'),
                                 show=True, show_copy_button=False)
         if not is_connected:
-            return error_dialog(self, 'Rename failed',
-                                'You can only rename a device that is currently connected',
+            return error_dialog(self, _('Rename failed'),
+                                _('You can only rename a device that is currently connected'),
                                 show=True, show_copy_button=False)
 
         old_name = device_info['name']
-        new_device_name, ok = QInputDialog.getText(self, 'Rename device',
-                    'Enter a new display name for this device:', text=old_name)
+        new_device_name, ok = QInputDialog.getText(self, _('Rename device'),
+                    _('Enter a new display name for this device:'), text=old_name)
         if not ok:
             # Operation cancelled
             return
@@ -1032,18 +1042,20 @@ class DevicesTab(QWidget):
             # Ensure the devices combo is refreshed for the current list
             self.parent_dialog.lists_tab.refresh_current_list_info()
         except:
-            return error_dialog(self, 'Rename failed', 'An error occured while renaming.',
+            return error_dialog(self, _('Rename failed'),
+                                _('An error occured while renaming.'),
                                 det_msg=traceback.format_exc(), show=True)
 
     def _delete_device_clicked(self):
         (device_info, _is_connected) = self.devices_table.get_selected_device_info()
         if not device_info:
-            return error_dialog(self, 'Delete failed', 'You must select a device first',
+            return error_dialog(self, _('Delete failed'),
+                                _('You must select a device first'),
                                 show=True, show_copy_button=False)
         name = device_info['name']
         if not question_dialog(self, _('Are you sure?'), '<p>'+
-                'You are about to remove the <b>%s</b> device from this list. '%name +
-                'Are you sure you want to continue?'):
+                _('You are about to remove the <b>%s</b> device from this list. ')%name +
+                _('Are you sure you want to continue?')):
             return
         self.parent_dialog.lists_tab.persist_list_config()
         self.devices_table.delete_selected_row()
@@ -1097,7 +1109,7 @@ class OtherTab(QWidget):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
-        keyboard_shortcuts_button = QPushButton('Keyboard shortcuts...', self)
+        keyboard_shortcuts_button = QPushButton(_('Keyboard shortcuts...'), self)
         keyboard_shortcuts_button.setToolTip(_(
                     'Edit the keyboard shortcuts associated with this plugin'))
         keyboard_shortcuts_button.clicked.connect(parent_dialog.edit_shortcuts)
@@ -1109,16 +1121,16 @@ class OtherTab(QWidget):
         reset_confirmation_button.clicked.connect(self.reset_dialogs)
         layout.addWidget(reset_confirmation_button)
 
-        view_prefs_button = QPushButton('&View library preferences...', self)
+        view_prefs_button = QPushButton(_('&View library preferences...'), self)
         view_prefs_button.setToolTip(_(
                     'View data stored in the library database for this plugin'))
         view_prefs_button.clicked.connect(parent_dialog.view_prefs)
         layout.addWidget(view_prefs_button)
 
-        self.delete_confirmation_checkbox = QCheckBox('Show dialog when removing books from device', self)
-        self.delete_confirmation_checkbox.setToolTip('If syncing your list means books are removed from your device, then\n'
+        self.delete_confirmation_checkbox = QCheckBox(_('Show dialog when removing books from device'), self)
+        self.delete_confirmation_checkbox.setToolTip(_('If syncing your list means books are removed from your device, then\n'
                                            'a dialog will be displayed allowing you to confirm first.\n'
-                                           'Uncheck this option to allow unattended syncing to your device.')
+                                           'Uncheck this option to allow unattended syncing to your device.'))
         layout.addWidget(self.delete_confirmation_checkbox)
 
         layout.insertStretch(-1)
@@ -1146,9 +1158,9 @@ class ConfigWidget(QWidget):
         self.lists_tab = ListsTab(self, plugin_action)
         self.devices_tab = DevicesTab(self, plugin_action)
         self.other_tab = OtherTab(self)
-        tab_widget.addTab(self.lists_tab, 'Lists')
-        tab_widget.addTab(self.devices_tab, 'Devices')
-        tab_widget.addTab(self.other_tab, 'Other')
+        tab_widget.addTab(self.lists_tab, _('Lists'))
+        tab_widget.addTab(self.devices_tab, _('Devices'))
+        tab_widget.addTab(self.other_tab, _('Other'))
 
         # Force an initial display of list information
         self.devices_tab.update_from_connection_status(first_time=True)

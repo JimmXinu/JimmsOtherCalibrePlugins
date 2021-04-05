@@ -7,6 +7,11 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+try:
+    load_translations()
+except NameError:
+    pass # load_translations() added in calibre 1.9
+
 import six
 from six import text_type as unicode
 from six.moves import range
@@ -101,9 +106,9 @@ class EditListTableWidget(QTableWidget):
         rows = self.selectionModel().selectedRows()
         if len(rows) == 0:
             return
-        message = '<p>Are you sure you want to remove this book from the list?'
+        message = _('<p>Are you sure you want to remove this book from the list?')
         if len(rows) > 1:
-            message = '<p>Are you sure you want to remove the selected %d books from the list?'%len(rows)
+            message = _('<p>Are you sure you want to remove the selected %d books from the list?')%len(rows)
         if not confirm(message,'reading_list_delete_item', self):
             return
         first_sel_row = self.currentRow()
@@ -187,12 +192,12 @@ class EditListTableWidget(QTableWidget):
 
 class EditListDialog(SizePersistedDialog):
     def __init__(self, parent, books, list_name):
-        SizePersistedDialog.__init__(self, parent, 'reading list plugin:edit list dialog')
-        self.setWindowTitle('Edit List')
+        SizePersistedDialog.__init__(self, parent, _('reading list plugin:edit list dialog'))
+        self.setWindowTitle(_('Edit List'))
         layout = QVBoxLayout(self)
         self.setLayout(layout)
         title_layout = ImageTitleLayout(self, 'images/reading_list.png',
-                                        '\'%s\' list books'%list_name)
+                                        _('\'%s\' list books')%list_name)
         layout.addLayout(title_layout)
         books_layout = QHBoxLayout()
         layout.addLayout(books_layout)
@@ -205,19 +210,19 @@ class EditListDialog(SizePersistedDialog):
 
         # move to top button
         self.move_top_button = QtGui.QToolButton(self)
-        self.move_top_button.setToolTip('Move selected books to the top of the list')
+        self.move_top_button.setToolTip(_('Move selected books to the top of the list'))
         self.move_top_button.setIcon(get_icon('images/arrow_up_double_bar.png'))
         self.move_top_button.clicked.connect(self.books_table.move_to_top)
         button_layout.addWidget(self.move_top_button)
         # move up 10 rows button
         self.move_10_up_button = QtGui.QToolButton(self)
-        self.move_10_up_button.setToolTip('Move selected books 10 rows up the list')
+        self.move_10_up_button.setToolTip(_('Move selected books 10 rows up the list'))
         self.move_10_up_button.setIcon(get_icon('images/arrow_up_double.png'))
         self.move_10_up_button.clicked.connect(self.books_table.move_10_rows_up)
         button_layout.addWidget(self.move_10_up_button)
         # move up one row button
         self.move_up_button = QtGui.QToolButton(self)
-        self.move_up_button.setToolTip('Move selected books up the list')
+        self.move_up_button.setToolTip(_('Move selected books up the list'))
         self.move_up_button.setIcon(get_icon('images/arrow_up_single.png'))
         self.move_up_button.clicked.connect(self.books_table.move_rows_up)
         button_layout.addWidget(self.move_up_button)
@@ -227,7 +232,7 @@ class EditListDialog(SizePersistedDialog):
 
 	# remove from list button
         self.remove_button = QtGui.QToolButton(self)
-        self.remove_button.setToolTip('Remove selected books from the list')
+        self.remove_button.setToolTip(_('Remove selected books from the list'))
         self.remove_button.setIcon(get_icon('list_remove.png'))
         self.remove_button.clicked.connect(self.remove_from_list)
         button_layout.addWidget(self.remove_button)
@@ -236,20 +241,20 @@ class EditListDialog(SizePersistedDialog):
         # move down one row button
         button_layout.addItem(spacerItem1)
         self.move_down_button = QtGui.QToolButton(self)
-        self.move_down_button.setToolTip('Move selected books down the list')
+        self.move_down_button.setToolTip(_('Move selected books down the list'))
         self.move_down_button.setIcon(get_icon('images/arrow_down_single.png'))
         self.move_down_button.clicked.connect(self.books_table.move_rows_down)
         button_layout.addWidget(self.move_down_button)
         # move down 10 rows button
         self.move_10_down_button = QtGui.QToolButton(self)
-        self.move_10_down_button.setToolTip('Move selected books 10 rows down the list')
+        self.move_10_down_button.setToolTip(_('Move selected books 10 rows down the list'))
         #self.move_10_down_button.setIcon(QIcon(I('arrow-down.png')))
         self.move_10_down_button.setIcon(get_icon('images/arrow_down_double.png'))
         self.move_10_down_button.clicked.connect(self.books_table.move_10_rows_down)
         button_layout.addWidget(self.move_10_down_button)
         # move to bottom button
         self.move_bottom_button = QtGui.QToolButton(self)
-        self.move_bottom_button.setToolTip('Move selected books to the bottom of the list')
+        self.move_bottom_button.setToolTip(_('Move selected books to the bottom of the list'))
         #self.move_bottom_button.setIcon(QIcon(I('arrow-down.png')))
         self.move_bottom_button.setIcon(get_icon('images/arrow_down_double_bar.png'))
         self.move_bottom_button.clicked.connect(self.books_table.move_to_bottom)
@@ -272,31 +277,31 @@ class EditListDialog(SizePersistedDialog):
 
 class MoveBooksDialog(SizePersistedDialog):
     def __init__(self, parent, lists_in_use, list_names):
-        SizePersistedDialog.__init__(self, parent, 'reading list plugin:move books dialog')
-        self.setWindowTitle('Move Books')
+        SizePersistedDialog.__init__(self, parent, _('reading list plugin:move books dialog'))
+        self.setWindowTitle(_('Move Books'))
         layout = QVBoxLayout(self)
         self.setLayout(layout)
         title_layout = ImageTitleLayout(self, 'images/reading_list.png',
-                                        'Move books between lists')
+                                        _('Move books between lists'))
         layout.addLayout(title_layout)
         main_layout = QGridLayout()
         layout.addLayout(main_layout)
 
-        self.remove_from_label = QLabel('Select list(s) to remove from', self)
+        self.remove_from_label = QLabel(_('Select list(s) to remove from'), self)
         main_layout.addWidget(self.remove_from_label, 0, 0, 1, 2)
         self.remove_from_list = QListWidget(self)
         self.remove_from_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
         main_layout.addWidget(self.remove_from_list, 1, 0, 1, 2)
 
-        self.select_all_button = QPushButton('Select &All', self)
+        self.select_all_button = QPushButton(_('Select &All'), self)
         self.select_all_button.clicked.connect(self.remove_from_list.selectAll)
         main_layout.addWidget(self.select_all_button, 2, 0, 1, 1)
 
-        self.select_none_button = QPushButton('Select &None', self)
+        self.select_none_button = QPushButton(_('Select &None'), self)
         self.select_none_button.clicked.connect(self.remove_from_list.clearSelection)
         main_layout.addWidget(self.select_none_button, 2, 1, 1, 1)
 
-        self.dest_list_label = QLabel('Select list to add to', self)
+        self.dest_list_label = QLabel(_('Select list to add to'), self)
         main_layout.addWidget(self.dest_list_label, 0, 2, 1, 1)
         self.dest_list = QListWidget(self)
         self.dest_list.setSelectionMode(QAbstractItemView.ExtendedSelection)

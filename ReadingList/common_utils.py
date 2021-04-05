@@ -7,6 +7,11 @@ __license__   = 'GPL v3'
 __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
+try:
+    load_translations()
+except NameError:
+    pass # load_translations() added in calibre 1.9
+
 import os
 import six
 from six import text_type as unicode
@@ -493,9 +498,9 @@ class KeyboardConfigDialog(SizePersistedDialog):
     This dialog is used to allow editing of keyboard shortcuts.
     '''
     def __init__(self, gui, group_name):
-        SizePersistedDialog.__init__(self, gui, 'Keyboard shortcut dialog')
+        SizePersistedDialog.__init__(self, gui, _('Keyboard shortcut dialog'))
         self.gui = gui
-        self.setWindowTitle('Keyboard shortcuts')
+        self.setWindowTitle(_('Keyboard shortcuts'))
         layout = QVBoxLayout(self)
         self.setLayout(layout)
 
@@ -643,8 +648,8 @@ def prompt_for_restart(parent, title, message):
 class PrefsViewerDialog(SizePersistedDialog):
 
     def __init__(self, gui, namespace):
-        SizePersistedDialog.__init__(self, gui, 'Prefs Viewer dialog')
-        self.setWindowTitle('Preferences for: '+namespace)
+        SizePersistedDialog.__init__(self, gui, _('Prefs Viewer dialog'))
+        self.setWindowTitle(_('Preferences for: ')+namespace)
 
         self.gui = gui
         self.db = gui.current_db
@@ -677,9 +682,9 @@ class PrefsViewerDialog(SizePersistedDialog):
         button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         button_box.accepted.connect(self._apply_changes)
         button_box.rejected.connect(self.reject)
-        self.clear_button = button_box.addButton('Clear', QDialogButtonBox.ResetRole)
+        self.clear_button = button_box.addButton(_('Clear'), QDialogButtonBox.ResetRole)
         self.clear_button.setIcon(get_icon('trash.png'))
-        self.clear_button.setToolTip('Clear all settings for this plugin')
+        self.clear_button.setToolTip(_('Clear all settings for this plugin'))
         self.clear_button.clicked.connect(self._clear_settings)
         layout.addWidget(button_box)
 
@@ -706,10 +711,10 @@ class PrefsViewerDialog(SizePersistedDialog):
 
     def _apply_changes(self):
         from calibre.gui2.dialogs.confirm_delete import confirm
-        message = '<p>Are you sure you want to change your settings in this library for this plugin?</p>' \
+        message = _('<p>Are you sure you want to change your settings in this library for this plugin?</p>' \
                   '<p>Any settings in other libraries or stored in a JSON file in your calibre plugins ' \
                   'folder will not be touched.</p>' \
-                  '<p>You must restart calibre afterwards.</p>'
+                  '<p>You must restart calibre afterwards.</p>')
         if not confirm(message, self.namespace+'_clear_settings', self):
             return
 
@@ -717,19 +722,19 @@ class PrefsViewerDialog(SizePersistedDialog):
         key = unicode(self.keys_list.currentItem().text())
         self.db.prefs.set_namespaced(self.namespace, key, val)
 
-        restart = prompt_for_restart(self, 'Settings changed',
-                           '<p>Settings for this plugin in this library have been changed.</p>'
-                           '<p>Please restart calibre now.</p>')
+        restart = prompt_for_restart(self, _('Settings changed'),
+                           _('<p>Settings for this plugin in this library have been changed.</p>'
+                           '<p>Please restart calibre now.</p>'))
         self.close()
         if restart:
             self.gui.quit(restart=True)
 
     def _clear_settings(self):
         from calibre.gui2.dialogs.confirm_delete import confirm
-        message = '<p>Are you sure you want to clear your settings in this library for this plugin?</p>' \
+        message = _('<p>Are you sure you want to clear your settings in this library for this plugin?</p>' \
                   '<p>Any settings in other libraries or stored in a JSON file in your calibre plugins ' \
                   'folder will not be touched.</p>' \
-                  '<p>You must restart calibre afterwards.</p>'
+                  '<p>You must restart calibre afterwards.</p>')
         if not confirm(message, self.namespace+'_clear_settings', self):
             return
 
@@ -738,9 +743,9 @@ class PrefsViewerDialog(SizePersistedDialog):
         for k in keys:
             del self.db.prefs[k]
         self._populate_settings()
-        restart = prompt_for_restart(self, 'Settings deleted',
-                           '<p>All settings for this plugin in this library have been cleared.</p>'
-                           '<p>Please restart calibre now.</p>')
+        restart = prompt_for_restart(self, _('Settings deleted'),
+                           _('<p>All settings for this plugin in this library have been cleared.</p>'
+                           '<p>Please restart calibre now.</p>'))
         self.close()
         if restart:
             self.gui.quit(restart=True)
