@@ -240,7 +240,18 @@ def get_library_config(db):
     if library_config is None:
         library_config = db.prefs.get_namespaced(PREFS_NAMESPACE, PREFS_KEY_SETTINGS,
                                                  copy.deepcopy(DEFAULT_LIBRARY_VALUES))
+    if len(library_config[KEY_LISTS]) < 1:
+        # no lists, assume broken and get a new copy.
+        library_config = copy.deepcopy(DEFAULT_LIBRARY_VALUES)
     migrate_library_config_if_required(db, library_config)
+
+    ## A user some how got to a state where the default list was
+    ## deleted, but still set.  Not actually *saved* until user saves
+    ## config
+    if library_config[KEY_DEFAULT_LIST] not in library_config[KEY_LISTS]:
+        ## set to first list
+        lists = sorted(library_config[KEY_LISTS].keys())
+        library_config[KEY_DEFAULT_LIST] = lists[0]
     return library_config
 
 def set_library_config(db, library_config):
