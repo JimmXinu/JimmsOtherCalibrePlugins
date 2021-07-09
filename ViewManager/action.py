@@ -251,30 +251,31 @@ class ViewManagerAction(InterfaceAction):
     def switch_view(self, key):
         # print("switch_view(%s)"%key)
         library_config = cfg.get_library_config(self.gui.current_db)
-        view_info = library_config[cfg.KEY_VIEWS][key]
-        selected_ids = self.gui.library_view.get_selected_ids()
+        if key in library_config[cfg.KEY_VIEWS]:
+            view_info = library_config[cfg.KEY_VIEWS][key]
+            selected_ids = self.gui.library_view.get_selected_ids()
 
-        # Persist this as the last selected view
-        if library_config.get(cfg.KEY_LAST_VIEW, None) != key:
-            library_config[cfg.KEY_LAST_VIEW] = key
-            cfg.set_library_config(self.gui.current_db, library_config)
+            # Persist this as the last selected view
+            if library_config.get(cfg.KEY_LAST_VIEW, None) != key:
+                library_config[cfg.KEY_LAST_VIEW] = key
+                cfg.set_library_config(self.gui.current_db, library_config)
 
-        if view_info.get(cfg.KEY_APPLY_VIRTLIB,False):
-            self.apply_virtlib(view_info[cfg.KEY_VIRTLIB])
+            if view_info.get(cfg.KEY_APPLY_VIRTLIB,False):
+                self.apply_virtlib(view_info[cfg.KEY_VIRTLIB])
 
-        if view_info[cfg.KEY_APPLY_RESTRICTION]:
-            self.apply_restriction(view_info[cfg.KEY_RESTRICTION])
+            if view_info[cfg.KEY_APPLY_RESTRICTION]:
+                self.apply_restriction(view_info[cfg.KEY_RESTRICTION])
 
-        if view_info[cfg.KEY_APPLY_SEARCH]:
-            self.apply_search(view_info[cfg.KEY_SEARCH])
+            if view_info[cfg.KEY_APPLY_SEARCH]:
+                self.apply_search(view_info[cfg.KEY_SEARCH])
 
-        self.apply_column_and_sort(view_info)
+            self.apply_column_and_sort(view_info)
 
-        self.gui.library_view.select_rows(selected_ids)
-        if view_info.get(cfg.KEY_JUMP_TO_TOP,False):
-            self.gui.library_view.scroll_to_row(0)
-            self.gui.library_view.set_current_row(0)
-        self.current_view = key
+            self.gui.library_view.select_rows(selected_ids)
+            if view_info.get(cfg.KEY_JUMP_TO_TOP,False):
+                self.gui.library_view.scroll_to_row(0)
+                self.gui.library_view.set_current_row(0)
+            self.current_view = key
         self.rebuild_menus()
 
     def apply_virtlib(self, virtlib_name):
