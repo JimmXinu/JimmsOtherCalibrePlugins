@@ -735,8 +735,12 @@ class ListsTab(QWidget):
         else:
             self.sync_type_combo.setEnabled(True)
             if self.sync_type_combo.listKeyValues[0][0] == 'SYNCAUTO':
+                val = self.sync_type_combo.get_selected_type()
                 self.sync_type_combo.listKeyValues.pop(0)
-                self.sync_type_combo.populate_combo('SYNCNEW')
+                if val == 'SYNCAUTO':
+                    # only reset value if it was 'SYNCAUTO'. This was
+                    # getting tripped on the switched-to list.
+                    self.sync_type_combo.populate_combo('SYNCNEW')
             self.sync_auto_checkbox.setEnabled(True)
 
         if populate_type in ['POPSEARCH', 'POPDEVICE']:
