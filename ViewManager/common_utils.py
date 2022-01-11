@@ -11,36 +11,11 @@ import six
 from six import text_type as unicode
 
 import os
-try:
-    from PyQt5 import QtWidgets as QtGui
-    from PyQt5.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
-                          QTableWidgetItem, QFont, QLineEdit, QComboBox,
-                          QVBoxLayout, QDialogButtonBox, QStyledItemDelegate, QDateTime,
-                          QRegExpValidator, QRegExp, QTextEdit,
-                          QListWidget, QAbstractItemView)
-except ImportError as e:
-    from PyQt4 import QtGui
-    from PyQt4.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
-                          QTableWidgetItem, QFont, QLineEdit, QComboBox,
-                          QVBoxLayout, QDialogButtonBox, QStyledItemDelegate, QDateTime,
-                          QRegExpValidator, QRegExp, QTextEdit,
-                          QListWidget, QAbstractItemView)
-
-try:
-    from calibre.gui2 import QVariant
-    del QVariant
-except ImportError:
-    is_qt4 = False
-    convert_qvariant = lambda x: x
-else:
-    is_qt4 = True
-    def convert_qvariant(x):
-        vt = x.type()
-        if vt == x.String:
-            return unicode(x.toString())
-        if vt == x.List:
-            return [convert_qvariant(i) for i in x.toList()]
-        return x.toPyObject()
+from PyQt5 import QtWidgets as QtGui
+from PyQt5.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
+                      QTableWidgetItem, QFont, QLineEdit, QComboBox,
+                      QVBoxLayout, QDialogButtonBox, QStyledItemDelegate, QDateTime,
+                      QTextEdit, QListWidget, QAbstractItemView)
 
 from calibre.constants import iswindows
 from calibre.constants import numeric_version as calibre_version
@@ -388,16 +363,6 @@ class ReadOnlyLineEdit(QLineEdit):
         QLineEdit.__init__(self, text, parent)
         self.setEnabled(False)
 
-
-class NumericLineEdit(QLineEdit):
-    '''
-    Allows a numeric value up to two decimal places, or an integer
-    '''
-    def __init__(self, *args):
-        QLineEdit.__init__(self, *args)
-        self.setValidator(QRegExpValidator(QRegExp(r'(^\d*\.[\d]{1,2}$)|(^[1-9]\d*[\.]$)'), self))
-
-
 class KeyValueComboBox(QComboBox):
 
     def __init__(self, parent, values, selected_key):
@@ -506,7 +471,7 @@ class DateDelegate(QStyledItemDelegate):
         return qde
 
     def setEditorData(self, editor, index):
-        val = convert_qvariant(index.model().data(index, Qt.DisplayRole))
+        val = index.model().data(index, Qt.DisplayRole)
         if val is None or val == UNDEFINED_QDATETIME:
             if self.default_to_today:
                 val = self.default_date
@@ -550,7 +515,7 @@ class CompleteDelegate(QStyledItemDelegate):
             editor.update_items_cache(all_items)
             for item in sorted(all_items, key=sort_key):
                 editor.addItem(item)
-            ct = convert_qvariant(index.data(Qt.DisplayRole))
+            ct = index.data(Qt.DisplayRole)
             editor.show_initial_value(ct)
         else:
             editor = EnLineEdit(parent)

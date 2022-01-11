@@ -243,17 +243,19 @@ class SplitMergeNewPlugin(InterfaceAction):
         self.gui.tags_view.recount()
         
         ## run word counts
-        cp_plugin = self.gui.iactions['Count Pages']
-        cp_plugin.count_statistics([book_id],['WordCount'])
+        if 'Count Pages' in self.gui.iactions:
+            cp_plugin = self.gui.iactions['Count Pages']
+            cp_plugin.count_statistics([book_id],['WordCount'])
         
         ## run auto convert
         self.gui.iactions['Convert Books'].auto_convert_auto_add([book_id])
 
         ## add to FFF update lists
         self.gui.library_view.select_rows([book_id])
-        fff_plugin = self.gui.iactions['FanFicFare']
-        fff_plugin.update_lists(True)
-        
+        if 'FanFicFare' in self.gui.iactions:
+            fff_plugin = self.gui.iactions['FanFicFare']
+            fff_plugin.update_lists(True)
+
         remove_dir(tdir)
         # logger.debug(good_list)
         

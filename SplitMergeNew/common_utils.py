@@ -11,18 +11,10 @@ import os
 import six
 from six import text_type as unicode
 
-try:
-    from PyQt5 import QtWidgets as QtGui
-    from PyQt5.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
-                          QTableWidgetItem, QFont, QLineEdit, QComboBox,
-                          QVBoxLayout, QDialogButtonBox, QStyledItemDelegate, QDateTime,
-                          QTextEdit, QListWidget, QAbstractItemView)
-except ImportError as e:
-    from PyQt4 import QtGui
-    from PyQt4.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
-                          QTableWidgetItem, QFont, QLineEdit, QComboBox,
-                          QVBoxLayout, QDialogButtonBox, QStyledItemDelegate, QDateTime,
-                          QTextEdit, QListWidget, QAbstractItemView)
+from PyQt5.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
+                      QTableWidgetItem, QFont, QLineEdit, QComboBox,
+                      QVBoxLayout, QDialogButtonBox, QStyledItemDelegate, QDateTime,
+                      QTextEdit, QListWidget, QAbstractItemView)
 
 from calibre.constants import iswindows
 from calibre.gui2 import gprefs, error_dialog, UNDEFINED_QDATETIME, info_dialog
@@ -255,14 +247,14 @@ class ReadOnlyTableWidgetItem(QTableWidgetItem):
     def __init__(self, text):
         if text is None:
             text = ''
-        QTableWidgetItem.__init__(self, text, QtGui.QTableWidgetItem.UserType)
+        QTableWidgetItem.__init__(self, text)
         self.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled)
 
 
 class RatingTableWidgetItem(QTableWidgetItem):
 
     def __init__(self, rating, is_read_only=False):
-        QTableWidgetItem.__init__(self, '', QtGui.QTableWidgetItem.UserType)
+        QTableWidgetItem.__init__(self, '')
         self.setData(Qt.DisplayRole, rating)
         if is_read_only:
             self.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled)
@@ -274,10 +266,10 @@ class DateTableWidgetItem(QTableWidgetItem):
         if date_read == UNDEFINED_DATE and default_to_today:
             date_read = now()
         if is_read_only:
-            QTableWidgetItem.__init__(self, format_date(date_read, None), QtGui.QTableWidgetItem.UserType)
+            QTableWidgetItem.__init__(self, format_date(date_read, None))
             self.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled)
         else:
-            QTableWidgetItem.__init__(self, '', QtGui.QTableWidgetItem.UserType)
+            QTableWidgetItem.__init__(self, '')
             self.setData(Qt.DisplayRole, QDateTime(date_read))
 
 
@@ -488,7 +480,6 @@ class PrefsViewerDialog(SizePersistedDialog):
         self.keys_list.setAlternatingRowColors(True)
         ml.addWidget(self.keys_list)
         self.value_text = QTextEdit(self)
-        self.value_text.setTabStopWidth(24)
         self.value_text.setReadOnly(True)
         ml.addWidget(self.value_text, 1)
 
