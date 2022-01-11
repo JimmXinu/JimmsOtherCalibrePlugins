@@ -10,10 +10,7 @@ __docformat__ = 'restructuredtext en'
 import weakref
 from six import text_type as unicode
 
-try:
-    from PyQt5.Qt import (QToolButton, QMenu, QAction)
-except ImportError as e:
-    from PyQt4.Qt import (QToolButton, QMenu, QAction)
+from PyQt5.Qt import (QToolButton, QMenu, QAction)
 
 from calibre.gui2.actions import InterfaceAction
 

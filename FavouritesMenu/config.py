@@ -11,16 +11,10 @@ import six
 from six import text_type as unicode
 from six.moves import range
 
-try:
-    from PyQt5.Qt import (QWidget, QHBoxLayout, QMenu, QTreeWidget, Qt, QIcon,
-                          QTreeWidgetItem, QListWidget, QListWidgetItem, QSize,
-                          QToolButton, QVBoxLayout, QAbstractItemView,
-                          QPainter, QPoint, QPixmap, QBrush)
-except ImportError as e:
-    from PyQt4.Qt import (QWidget, QHBoxLayout, QMenu, QTreeWidget, Qt, QIcon,
-                          QTreeWidgetItem, QListWidget, QListWidgetItem, QSize,
-                          QToolButton, QVBoxLayout, QAbstractItemView,
-                          QPainter, QPoint, QPixmap, QBrush)
+from PyQt5.Qt import (QWidget, QHBoxLayout, QMenu, QTreeWidget, Qt, QIcon,
+                      QTreeWidgetItem, QListWidget, QListWidgetItem, QSize,
+                      QToolButton, QVBoxLayout, QAbstractItemView,
+                      QPainter, QPoint, QPixmap, QBrush)
 
 try:
     from calibre.gui2 import QVariant
