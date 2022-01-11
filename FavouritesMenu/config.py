@@ -16,22 +16,6 @@ from PyQt5.Qt import (QWidget, QHBoxLayout, QMenu, QTreeWidget, Qt, QIcon,
                       QToolButton, QVBoxLayout, QAbstractItemView,
                       QPainter, QPoint, QPixmap, QBrush)
 
-try:
-    from calibre.gui2 import QVariant
-    del QVariant
-except ImportError:
-    is_qt4 = False
-    convert_qvariant = lambda x: x
-else:
-    is_qt4 = True
-    def convert_qvariant(x):
-        vt = x.type()
-        if vt == x.String:
-            return unicode(x.toString())
-        if vt == x.List:
-            return [convert_qvariant(i) for i in x.toList()]
-        return x.toPyObject()
-
 from calibre.utils.config import JSONConfig
 from calibre_plugins.favourites_menu.common_utils import (get_icon)
 
@@ -107,7 +91,7 @@ class FavMenusListWidget(QListWidget):
         paths_text = '/'.join(remove_fav_menu['path'])
         for row in range(self.count()):
             lw = self.item(row)
-            data = convert_qvariant(lw.data(Qt.UserRole))
+            data = lw.data(Qt.UserRole)
             if data is not None:
                 fav_menu = data[0]
                 if paths_text == '/'.join(fav_menu['path']):
@@ -118,7 +102,7 @@ class FavMenusListWidget(QListWidget):
         fav_menus = []
         for row in range(self.count()):
             lw = self.item(row)
-            data = convert_qvariant(lw.data(Qt.UserRole))
+            data = lw.data(Qt.UserRole)
             if data is None:
                 # Only add separators if not first or last item and not duplicated
                 if len(fav_menus) > 0 and row < self.count() - 1:
@@ -244,7 +228,7 @@ class ConfigWidget(QWidget):
         if idx < 0:
             return
         item = self.items_list.currentItem()
-        data = convert_qvariant(item.data(Qt.UserRole))
+        data = item.data(Qt.UserRole)
         if data is not None:
             # Not removing a separator
             fav_menu = data[0]
@@ -269,7 +253,7 @@ class ConfigWidget(QWidget):
         if idx < 0:
             return
         item = self.items_list.currentItem()
-        data = convert_qvariant(item.data(Qt.UserRole))
+        data = item.data(Qt.UserRole)
         if data is not None:
             self.items_list.editItem(item)
 
@@ -282,7 +266,7 @@ class ConfigWidget(QWidget):
         data = None
         if idx >= 0:
             item = self.items_list.currentItem()
-            data = convert_qvariant(item.data(Qt.UserRole))
+            data = item.data(Qt.UserRole)
         self.rename_btn.setEnabled(data is not None)
 
     def _build_lookup_menu_map(self, fav_menus):
@@ -426,7 +410,7 @@ class ConfigWidget(QWidget):
         while True:
             parent = item.parent()
             if parent is None:
-                paths.insert(0, convert_qvariant(item.data(column, Qt.UserRole)))
+                paths.insert(0, item.data(column, Qt.UserRole))
                 break
             else:
                 paths.insert(0, unicode(item.text(column)))
