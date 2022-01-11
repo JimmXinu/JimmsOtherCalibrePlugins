@@ -12,7 +12,7 @@ from calibre.customize import EditBookToolPlugin
 class JimmsEditorAddons(EditBookToolPlugin):
 
     name = 'Jimms Editor Addons'
-    version = (0,0,1)
+    version = (0,1,0)
     author = ''
     supported_platforms = ['windows', 'osx', 'linux']
     description = 'Jimms Editor Addons'
