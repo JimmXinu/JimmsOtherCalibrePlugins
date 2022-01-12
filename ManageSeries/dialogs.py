@@ -18,22 +18,6 @@ from PyQt5.Qt import (Qt, QHBoxLayout, QVBoxLayout, QLabel, QApplication,
                       QDialogButtonBox, QAbstractItemView, QTableWidget, QAction,
                       QTableWidgetItem, QComboBox, QUrl, QCheckBox, QDoubleSpinBox)
 
-try:
-    from calibre.gui2 import QVariant
-    del QVariant
-except ImportError:
-    is_qt4 = False
-    convert_qvariant = lambda x: x
-else:
-    is_qt4 = True
-    def convert_qvariant(x):
-        vt = x.type()
-        if vt == x.String:
-            return unicode(x.toString())
-        if vt == x.List:
-            return [convert_qvariant(i) for i in x.toList()]
-        return x.toPyObject()
-
 from calibre.ebooks.metadata import fmt_sidx
 from calibre.ebooks.metadata.book.base import Metadata
 from calibre.gui2 import question_dialog, open_url
@@ -800,7 +784,7 @@ class SeriesDialog(SizePersistedDialog):
         if column == 0:
             book.set_title(unicode(self.series_table.item(row, column).text()).strip())
         elif column == 2:
-            qtdate = convert_qvariant(self.series_table.item(row, column).data(Qt.DisplayRole))
+            qtdate = self.series_table.item(row, column).data(Qt.DisplayRole)
             book.set_pubdate(qt_to_dt(qtdate, as_utc=False))
 
     def item_selection_changed(self):
