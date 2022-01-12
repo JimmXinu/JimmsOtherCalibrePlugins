@@ -721,9 +721,9 @@ class ListsTab(QWidget):
             self.sync_type_combo.listKeyValues.insert(0, ('SYNCAUTO', SYNC_AUTO_DESC))
             self.sync_type_combo.populate_combo('SYNCAUTO')
             self.sync_type_combo.setEnabled(False)
-            self.sync_auto_checkbox.setChecked(Qt.Checked)
+            self.sync_auto_checkbox.setCheckState(Qt.Checked)
             self.sync_auto_checkbox.setEnabled(False)
-            self.sync_clear_checkbox.setChecked(Qt.Unchecked)
+            self.sync_clear_checkbox.setCheckState(Qt.Unchecked)
         else:
             self.sync_type_combo.setEnabled(True)
             if self.sync_type_combo.listKeyValues[0][0] == 'SYNCAUTO':
@@ -787,14 +787,14 @@ class ListsTab(QWidget):
         self.sync_type_combo.populate_combo(list_type)
         self.populate_search_ledit.setText(populate_search)
         self.device_combo.populate_combo(self.parent_dialog.get_devices_list(), sync_device_uuid)
-        self.sync_auto_checkbox.setChecked(Qt.Checked if sync_automatically else Qt.Unchecked)
-        self.sync_clear_checkbox.setChecked(Qt.Checked if clear_after_sync else Qt.Unchecked)
+        self.sync_auto_checkbox.setCheckState(Qt.Checked if sync_automatically else Qt.Unchecked)
+        self.sync_clear_checkbox.setCheckState(Qt.Checked if clear_after_sync else Qt.Unchecked)
         self.tags_column_combo.populate_combo(self.tags_custom_columns, tags_column, ['', 'tags'])
         self._tags_column_combo_changed()
         self.series_column_combo.populate_combo(self.series_custom_columns, series_column, [''])
         self.series_name_edit.setText(series_name)
-        self.display_top_menu_checkbox.setChecked(Qt.Checked if display_top_menu else Qt.Unchecked)
-        self.sort_list_checkbox.setChecked(Qt.Checked if sort_list else Qt.Unchecked)
+        self.display_top_menu_checkbox.setCheckState(Qt.Checked if display_top_menu else Qt.Unchecked)
+        self.sort_list_checkbox.setCheckState(Qt.Checked if sort_list else Qt.Unchecked)
         self.modify_type_combo.populate_combo(modify_type)
         self.tags_value_ledit.setText(tags_text)
         self._populate_type_combo_changed()
@@ -1174,7 +1174,7 @@ class ConfigWidget(QWidget):
         self.lists_tab.refresh_current_list_info()
 
         remove_dialog = plugin_prefs[STORE_OPTIONS].get(KEY_REMOVE_DIALOG, True)
-        self.other_tab.delete_confirmation_checkbox.setChecked(Qt.Checked if remove_dialog else Qt.Unchecked)
+        self.other_tab.delete_confirmation_checkbox.setCheckState(Qt.Checked if remove_dialog else Qt.Unchecked)
 
     def connect_signals(self):
         self.plugin_action.plugin_device_connection_changed.connect(self.devices_tab.on_device_connection_changed)
