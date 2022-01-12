@@ -13,18 +13,11 @@ from six.moves import range
 
 import copy, os
 from functools import partial
-try:
-    from PyQt5 import QtWidgets as QtGui
-    from PyQt5.Qt import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
-                          QGroupBox, QComboBox, QGridLayout, QListWidget,
-                          QListWidgetItem, QIcon, QInputDialog, Qt,
-                          QAction, QCheckBox, QPushButton, QScrollArea, QSpinBox)
-except ImportError as e:
-    from PyQt4 import QtGui
-    from PyQt4.Qt import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
-                          QGroupBox, QComboBox, QGridLayout, QListWidget,
-                          QListWidgetItem, QIcon, QInputDialog, Qt,
-                          QAction, QCheckBox, QPushButton, QScrollArea, QSpinBox)
+from PyQt5 import QtWidgets as QtGui
+from PyQt5.Qt import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
+                      QGroupBox, QComboBox, QGridLayout, QListWidget,
+                      QListWidgetItem, QIcon, QInputDialog, Qt,
+                      QAction, QCheckBox, QPushButton, QScrollArea, QSpinBox)
 try:
     from calibre.gui2 import QVariant
     del QVariant

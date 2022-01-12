@@ -16,10 +16,7 @@ pp = pprint.PrettyPrinter(indent=4)
 import sys
 from collections import OrderedDict
 from functools import partial
-try:
-    from PyQt5.Qt import QMenu, QToolButton, QInputDialog
-except ImportError as e:
-    from PyQt4.Qt import QMenu, QToolButton, QInputDialog
+from PyQt5.Qt import QMenu, QToolButton, QInputDialog
 
 from calibre.gui2.actions import InterfaceAction
 from calibre.constants import numeric_version as calibre_version
