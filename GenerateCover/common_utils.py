@@ -23,22 +23,6 @@ from PyQt5.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
                       QRegExpValidator, QRegExp, QTextEdit,
                       QListWidget, QAbstractItemView)
 
-try:
-    from calibre.gui2 import QVariant
-    del QVariant
-except ImportError:
-    is_qt4 = False
-    convert_qvariant = lambda x: x
-else:
-    is_qt4 = True
-    def convert_qvariant(x):
-        vt = x.type()
-        if vt == x.String:
-            return unicode(x.toString())
-        if vt == x.List:
-            return [convert_qvariant(i) for i in x.toList()]
-        return x.toPyObject()
-
 from calibre.constants import iswindows
 from calibre.gui2 import gprefs, error_dialog, UNDEFINED_QDATETIME, info_dialog
 from calibre.gui2.actions import menu_action_unique_name
@@ -534,7 +518,7 @@ class DateDelegate(QStyledItemDelegate):
         return qde
 
     def setEditorData(self, editor, index):
-        val = convert_qvariant(index.model().data(index, Qt.DisplayRole))
+        val = index.model().data(index, Qt.DisplayRole)
         if val is None or val == UNDEFINED_QDATETIME:
             if self.default_to_today:
                 val = self.default_date
@@ -586,7 +570,7 @@ class CompleteDelegate(QStyledItemDelegate):
             editor.update_items_cache(all_items)
             for item in sorted(all_items, key=sort_key):
                 editor.addItem(item)
-            ct = convert_qvariant(index.data(Qt.DisplayRole))
+            ct = index.data(Qt.DisplayRole)
             editor.show_initial_value(ct)
         else:
             editor = EnLineEdit(parent)
