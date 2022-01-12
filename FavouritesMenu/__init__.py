@@ -15,7 +15,7 @@ class ActionFavouritesMenu(InterfaceActionBase):
     supported_platforms     = ['windows', 'osx', 'linux']
     author                  = 'Grant Drake'
     version                 = (1, 0, 6)
-    minimum_calibre_version = (0, 8, 18)
+    minimum_calibre_version = (2, 85, 1)
 
     actual_plugin           = 'calibre_plugins.favourites_menu.action:FavouritesMenuAction'
 
