@@ -18,21 +18,6 @@ from PyQt5.Qt import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                       QGroupBox, QComboBox, QGridLayout, QListWidget,
                       QListWidgetItem, QIcon, QInputDialog, Qt,
                       QAction, QCheckBox, QPushButton, QScrollArea, QSpinBox)
-try:
-    from calibre.gui2 import QVariant
-    del QVariant
-except ImportError:
-    is_qt4 = False
-    convert_qvariant = lambda x: x
-else:
-    is_qt4 = True
-    def convert_qvariant(x):
-        vt = x.type()
-        if vt == x.String:
-            return unicode(x.toString())
-        if vt == x.List:
-            return [convert_qvariant(i) for i in x.toList()]
-        return x.toPyObject()
 
 from calibre.gui2 import error_dialog, question_dialog
 from calibre.utils.config import JSONConfig
@@ -258,7 +243,7 @@ class ColumnListWidget(QListWidget):
         cols = []
         for idx in range(self.count()):
             item = self.item(idx)
-            data = convert_qvariant(item.data(Qt.UserRole)).strip()
+            data = item.data(Qt.UserRole).strip()
             if item.checkState() == Qt.Checked or data == 'ondevice':
                 use_width = -1
                 for colname, width in self.all_columns_with_widths:
@@ -326,7 +311,7 @@ class SortColumnListWidget(ColumnListWidget):
     def set_sort_icon(self, item):
         previous = self.blockSignals(True)
         if item.checkState() == Qt.Checked:
-            data = convert_qvariant(item.data(Qt.UserRole)).strip()
+            data = item.data(Qt.UserRole).strip()
             asc = int(data.rpartition('|')[2])
             if asc == 0:
                 item.setIcon(get_icon('images/sort_asc.png'))
@@ -349,7 +334,7 @@ class SortColumnListWidget(ColumnListWidget):
         item = self.currentItem()
         if item:
             self.blockSignals(True)
-            data = convert_qvariant(item.data(Qt.UserRole)).strip().split('|')
+            data = item.data(Qt.UserRole).strip().split('|')
             col = data[0]
             item.setData(Qt.UserRole, col+'|'+str(asc))
             self.set_sort_icon(item)
@@ -359,7 +344,7 @@ class SortColumnListWidget(ColumnListWidget):
         cols = []
         for idx in range(self.count()):
             item = self.item(idx)
-            data = convert_qvariant(item.data(Qt.UserRole)).strip().split('|')
+            data = item.data(Qt.UserRole).strip().split('|')
             if item.checkState() == Qt.Checked:
                 cols.append((data[0], int(data[1])))
         return cols
