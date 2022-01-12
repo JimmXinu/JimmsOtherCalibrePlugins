@@ -8,10 +8,7 @@ __copyright__ = '2011, Grant Drake <grant.drake@gmail.com>'
 __docformat__ = 'restructuredtext en'
 
 import os
-try:
-    from PyQt5.Qt import QWidget, QVBoxLayout, QPushButton
-except ImportError as e:
-    from PyQt4.Qt import QWidget, QVBoxLayout, QPushButton
+from PyQt5.Qt import QWidget, QVBoxLayout, QPushButton
 from calibre.utils.config import config_dir
 from calibre_plugins.manage_series.common_utils import KeyboardConfigDialog
 

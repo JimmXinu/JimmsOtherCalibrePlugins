@@ -13,16 +13,10 @@ from six.moves import range
 from six.moves.urllib.parse import quote_plus
 
 from functools import partial
-try:
-    from PyQt5 import QtWidgets as QtGui
-    from PyQt5.Qt import (Qt, QHBoxLayout, QVBoxLayout, QLabel, QApplication,
-                          QDialogButtonBox, QAbstractItemView, QTableWidget, QAction,
-                          QTableWidgetItem, QComboBox, QUrl, QCheckBox, QDoubleSpinBox)
-except ImportError as e:
-    from PyQt4.Qt import (Qt, QHBoxLayout, QVBoxLayout, QLabel, QApplication,
-                          QDialogButtonBox, QAbstractItemView, QTableWidget, QAction,
-                          QTableWidgetItem, QComboBox, QUrl, QCheckBox, QDoubleSpinBox)
-    from PyQt4 import QtGui
+from PyQt5 import QtWidgets as QtGui
+from PyQt5.Qt import (Qt, QHBoxLayout, QVBoxLayout, QLabel, QApplication,
+                      QDialogButtonBox, QAbstractItemView, QTableWidget, QAction,
+                      QTableWidgetItem, QComboBox, QUrl, QCheckBox, QDoubleSpinBox)
 
 try:
     from calibre.gui2 import QVariant
