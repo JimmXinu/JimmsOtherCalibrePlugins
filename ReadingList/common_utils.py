@@ -20,7 +20,7 @@ from PyQt5 import QtWidgets as QtGui
 from PyQt5.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
                       QTableWidgetItem, QFont, QLineEdit, QComboBox,
                       QVBoxLayout, QDialogButtonBox, QStyledItemDelegate, QDateTime,
-                      QRegExpValidator, QRegExp, QVariant, QTextEdit,
+                      QRegExpValidator, QRegExp, QTextEdit,
                       QListWidget, QAbstractItemView)
 
 from calibre.constants import iswindows
@@ -33,23 +33,6 @@ from calibre.gui2.widgets import EnLineEdit
 from calibre.utils.config import config_dir, tweaks
 from calibre.utils.date import now, format_date, qt_to_dt, UNDEFINED_DATE
 from calibre.utils.icu import sort_key
-
-try:
-    from calibre.gui2 import QVariant
-    del QVariant
-except ImportError:
-    is_qt4 = False
-    convert_qvariant = lambda x: x
-else:
-    is_qt4 = True
-
-    def convert_qvariant(x):
-        vt = x.type()
-        if vt == x.String:
-            return unicode(x.toString())
-        if vt == x.List:
-            return [convert_qvariant(i) for i in x.toList()]
-        return x.toPyObject()
 
 # Global definition of our plugin name. Used for common functions that require this.
 plugin_name = None
@@ -605,7 +588,6 @@ class CompleteDelegate(QStyledItemDelegate):
     def setModelData(self, editor, model, index):
         if isinstance(editor, EditWithComplete):
             val = editor.lineEdit().text()
-#            model.setData(index, QVariant(val), Qt.EditRole)
             model.setData(index, val, Qt.EditRole)
         else:
             QStyledItemDelegate.setModelData(self, editor, model, index)

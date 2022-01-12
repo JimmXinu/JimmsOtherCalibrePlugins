@@ -18,14 +18,14 @@ from six.moves import range
 
 from PyQt5 import QtWidgets as QtGui
 from PyQt5.Qt import (QVBoxLayout, QTableWidget, QHBoxLayout, QDialogButtonBox,
-                      QAbstractItemView, QVariant, Qt, QIcon, QGridLayout,
+                      QAbstractItemView, Qt, QIcon, QGridLayout,
                       QListWidget, QListWidgetItem, QLabel, QPushButton)
 
 from calibre.ebooks.metadata import fmt_sidx
 from calibre.gui2.dialogs.confirm_delete import confirm
 
 from calibre_plugins.reading_list.common_utils import (ReadOnlyTableWidgetItem, SizePersistedDialog,
-                                                   ImageTitleLayout, get_icon, convert_qvariant)
+                                                   ImageTitleLayout, get_icon)
 
 class AuthorTableWidgetItem(ReadOnlyTableWidgetItem):
     def __init__(self, text, sort_key):
@@ -83,7 +83,6 @@ class EditListTableWidget(QTableWidget):
 
     def populate_table_row(self, row, book):
         title_cell = ReadOnlyTableWidgetItem(book['title'])
-#        title_cell.setData(Qt.UserRole, QVariant(book['calibre_id']))
         title_cell.setData(Qt.UserRole, book['calibre_id'])
         self.setItem(row, 0, title_cell)
         self.setItem(row, 1, AuthorTableWidgetItem(book['author'], book['author_sort']))
@@ -92,7 +91,7 @@ class EditListTableWidget(QTableWidget):
     def get_calibre_ids(self):
         ids = []
         for row in range(self.rowCount()):
-            ids.append(convert_qvariant(self.item(row, 0).data(Qt.UserRole)))
+            ids.append(self.item(row, 0).data(Qt.UserRole))
         return ids
 
     def remove_selected_rows(self):

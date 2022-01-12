@@ -33,7 +33,7 @@ from calibre.utils.icu import sort_key
 from calibre_plugins.reading_list.common_utils import (get_icon, KeyboardConfigDialog,
                           ReadOnlyTextIconWidgetItem, CheckableTableWidgetItem, CustomColumnComboBox,
                           NoWheelComboBox, get_library_uuid, ReadOnlyTableWidgetItem,
-                          PrefsViewerDialog, convert_qvariant)
+                          PrefsViewerDialog)
 
 # Per library settings are persisted in the calibre library database.
 # Devices and other option settings are stored in the JSON file
@@ -339,7 +339,7 @@ class ListTypeComboBox(QComboBox):
         self.setCurrentIndex(selected_idx)
 
     def get_selected_type(self):
-        return unicode(convert_qvariant(self.itemData(self.currentIndex())))
+        return unicode(self.itemData(self.currentIndex()))
 
 
 class DeviceColumnComboBox(QComboBox):
@@ -468,7 +468,7 @@ class DevicesTableWidget(QTableWidget):
     def get_data(self):
         devices = {}
         for row in range(self.rowCount()):
-            (device_config, _is_connected) = convert_qvariant(self.item(row, 1).data(Qt.UserRole))
+            (device_config, _is_connected) = self.item(row, 1).data(Qt.UserRole)
             device_config['active'] = self.item(row, 0).get_boolean_value()
             w = self.cellWidget(row, 4)
             if w:
@@ -480,14 +480,14 @@ class DevicesTableWidget(QTableWidget):
 
     def get_selected_device_info(self):
         if self.currentRow() >= 0:
-            (device_config, is_connected) = convert_qvariant(self.item(self.currentRow(), 1).data(Qt.UserRole))
+            (device_config, is_connected) = self.item(self.currentRow(), 1).data(Qt.UserRole)
             return (device_config, is_connected)
         return None, None
 
     def set_current_row_device_name(self, device_name):
         if self.currentRow() >= 0:
             widget = self.item(self.currentRow(), 1)
-            (device_config, is_connected) = convert_qvariant(widget.data(Qt.UserRole))
+            (device_config, is_connected) = widget.data(Qt.UserRole)
             device_config['name'] = device_name
             widget.setData(Qt.UserRole, (device_config, is_connected))
             widget.setText(device_name)
