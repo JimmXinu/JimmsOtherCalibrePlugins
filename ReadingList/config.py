@@ -16,21 +16,13 @@ import copy, traceback
 import six
 from six import text_type as unicode
 
-try:
-    from PyQt5 import QtCore
-    from PyQt5 import QtWidgets as QtGui
-    from PyQt5.Qt import (QWidget, QVBoxLayout, QLabel, QLineEdit, Qt,
-                          QGroupBox, QComboBox, QHBoxLayout, QIcon,
-                          QInputDialog, QGridLayout, QPushButton,
-                          QCheckBox, QTableWidget, QAbstractItemView,
-                          QTabWidget)
-except ImportError:
-    from PyQt4 import QtGui, QtCore
-    from PyQt4.Qt import (QWidget, QVBoxLayout, QLabel, QLineEdit, Qt,
-                          QGroupBox, QComboBox, QHBoxLayout, QIcon,
-                          QInputDialog, QGridLayout, QPushButton,
-                          QCheckBox, QTableWidget, QAbstractItemView,
-                          QTabWidget)
+from PyQt5 import QtCore
+from PyQt5 import QtWidgets as QtGui
+from PyQt5.Qt import (QWidget, QVBoxLayout, QLabel, QLineEdit, Qt,
+                      QGroupBox, QComboBox, QHBoxLayout, QIcon,
+                      QInputDialog, QGridLayout, QPushButton,
+                      QCheckBox, QTableWidget, QAbstractItemView,
+                      QTabWidget)
 
 from calibre.gui2 import error_dialog, dynamic, info_dialog, question_dialog
 from calibre.gui2.complete2 import EditWithComplete

@@ -19,10 +19,7 @@ from functools import partial
 import six
 from six import text_type as unicode
 
-try:
-    from PyQt5.Qt import QMenu, QToolButton, pyqtSignal
-except ImportError:
-    from PyQt4.Qt import QMenu, QToolButton, pyqtSignal
+from PyQt5.Qt import QMenu, QToolButton, pyqtSignal
 
 from calibre import prints
 from calibre.constants import DEBUG

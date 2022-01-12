@@ -16,16 +16,10 @@ import six
 from six import text_type as unicode
 from six.moves import range
 
-try:
-    from PyQt5 import QtWidgets as QtGui
-    from PyQt5.Qt import (QVBoxLayout, QTableWidget, QHBoxLayout, QDialogButtonBox,
-                          QAbstractItemView, QVariant, Qt, QIcon, QGridLayout,
-                          QListWidget, QListWidgetItem, QLabel, QPushButton)
-except ImportError:
-    from PyQt4 import QtGui
-    from PyQt4.Qt import (QVBoxLayout, QTableWidget, QHBoxLayout, QDialogButtonBox,
-                          QAbstractItemView, QVariant, Qt, QIcon, QGridLayout,
-                          QListWidget, QListWidgetItem, QLabel, QPushButton)
+from PyQt5 import QtWidgets as QtGui
+from PyQt5.Qt import (QVBoxLayout, QTableWidget, QHBoxLayout, QDialogButtonBox,
+                      QAbstractItemView, QVariant, Qt, QIcon, QGridLayout,
+                      QListWidget, QListWidgetItem, QLabel, QPushButton)
 
 from calibre.ebooks.metadata import fmt_sidx
 from calibre.gui2.dialogs.confirm_delete import confirm

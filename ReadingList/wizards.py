@@ -14,20 +14,12 @@ import six
 from six import text_type as unicode
 from six.moves import range
 
-try:
-    from PyQt5.Qt import (QWizard, QWizardPage, QApplication, Qt, QTabWidget,
-                          QWidget, QTextEdit, QGridLayout, QLabel, QGroupBox,
-                          QVBoxLayout, QPushButton, QComboBox, QTableWidget,
-                          QHBoxLayout, QAbstractItemView, QLineEdit, QToolButton,
-                          QThread, pyqtSignal, QStyle, QMenu, QAction, QRadioButton,
-                          QCheckBox, QSpinBox)
-except ImportError:
-    from PyQt4.Qt import (QWizard, QWizardPage, QApplication, Qt, QTabWidget,
-                          QWidget, QTextEdit, QGridLayout, QLabel, QGroupBox,
-                          QVBoxLayout, QPushButton, QComboBox, QTableWidget,
-                          QHBoxLayout, QAbstractItemView, QLineEdit, QToolButton,
-                          QThread, pyqtSignal, QStyle, QMenu, QAction, QRadioButton,
-                          QCheckBox, QSpinBox)
+from PyQt5.Qt import (QWizard, QWizardPage, QApplication, Qt, QTabWidget,
+                      QWidget, QTextEdit, QGridLayout, QLabel, QGroupBox,
+                      QVBoxLayout, QPushButton, QComboBox, QTableWidget,
+                      QHBoxLayout, QAbstractItemView, QLineEdit, QToolButton,
+                      QThread, pyqtSignal, QStyle, QMenu, QAction, QRadioButton,
+                      QCheckBox, QSpinBox)
 
 from calibre import as_unicode
 from calibre.debug import iswindows

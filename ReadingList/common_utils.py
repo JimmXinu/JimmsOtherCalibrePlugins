@@ -16,20 +16,12 @@ import os
 import six
 from six import text_type as unicode
 
-try:
-    from PyQt5 import QtWidgets as QtGui
-    from PyQt5.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
-                          QTableWidgetItem, QFont, QLineEdit, QComboBox,
-                          QVBoxLayout, QDialogButtonBox, QStyledItemDelegate, QDateTime,
-                          QRegExpValidator, QRegExp, QVariant, QTextEdit,
-                          QListWidget, QAbstractItemView)
-except ImportError:
-    from PyQt4 import QtGui
-    from PyQt4.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
-                          QTableWidgetItem, QFont, QLineEdit, QComboBox,
-                          QVBoxLayout, QDialogButtonBox, QStyledItemDelegate, QDateTime,
-                          QRegExpValidator, QRegExp, QVariant, QTextEdit,
-                          QListWidget, QAbstractItemView)
+from PyQt5 import QtWidgets as QtGui
+from PyQt5.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
+                      QTableWidgetItem, QFont, QLineEdit, QComboBox,
+                      QVBoxLayout, QDialogButtonBox, QStyledItemDelegate, QDateTime,
+                      QRegExpValidator, QRegExp, QVariant, QTextEdit,
+                      QListWidget, QAbstractItemView)
 
 from calibre.constants import iswindows
 from calibre.constants import numeric_version as calibre_version

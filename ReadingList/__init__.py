@@ -89,10 +89,7 @@ class ActionReadingList(InterfaceActionBase):
 # For testing, run from command line with this:
 # calibre-debug -e __init__.py
 if __name__ == '__main__':
-    try:
-        from PyQt5.Qt import QApplication
-    except ImportError:
-        from PyQt4.Qt import QApplication
+    from PyQt5.Qt import QApplication
     from calibre.gui2.preferences import test_widget
     app = QApplication([])
     test_widget('Advanced', 'Plugins')
