@@ -16,12 +16,8 @@ import copy, os
 import six
 from six import text_type as unicode
 
-try:
-    from PyQt5.Qt import (QWidget, QVBoxLayout, QPushButton, QGridLayout,
-                          QLabel, QLineEdit, QGroupBox)
-except ImportError as e:
-    from PyQt4.Qt import (QWidget, QVBoxLayout, QPushButton, QGridLayout,
-                          QLabel, QLineEdit, QGroupBox)
+from PyQt5.Qt import (QWidget, QVBoxLayout, QPushButton, QGridLayout,
+                      QLabel, QLineEdit, QGroupBox)
 
 from calibre import prints
 from calibre.constants import DEBUG

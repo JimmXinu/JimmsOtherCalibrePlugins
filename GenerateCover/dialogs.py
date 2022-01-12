@@ -17,27 +17,15 @@ from functools import partial
 import six
 from six import text_type as unicode
 
-try:
-    from PyQt5 import QtWidgets as QtGui
-    from PyQt5.Qt import (Qt, QVBoxLayout, QLabel, QAbstractItemView, QCheckBox,
-                          QGroupBox, QIcon, QPixmap, QListWidget, QListWidgetItem,
-                          QDialog, QHBoxLayout, QDialogButtonBox, QPushButton,
-                          QLineEdit, QGridLayout, QColorDialog, QColor, QSpinBox,
-                          pyqtSignal, QComboBox, QTabWidget, QWidget, QInputDialog,
-                          QTimer, QTextEdit, QProgressDialog, QSize,
-                          QToolButton, QMenu, QFileDialog, QPainter, QPen, QRect,
-                          QAbstractListModel, QFont)
-
-except ImportError as e:
-    from PyQt4 import QtGui
-    from PyQt4.Qt import (Qt, QVBoxLayout, QLabel, QAbstractItemView, QCheckBox,
-                          QGroupBox, QIcon, QPixmap, QListWidget, QListWidgetItem,
-                          QDialog, QHBoxLayout, QDialogButtonBox, QPushButton,
-                          QLineEdit, QGridLayout, QColorDialog, QColor, QSpinBox,
-                          pyqtSignal, QComboBox, QTabWidget, QWidget, QInputDialog,
-                          QTimer, QTextEdit, QProgressDialog, QSize,
-                          QToolButton, QMenu, QFileDialog, QPainter, QPen, QRect,
-                          QAbstractListModel, QFont)
+from PyQt5 import QtWidgets as QtGui
+from PyQt5.Qt import (Qt, QVBoxLayout, QLabel, QAbstractItemView, QCheckBox,
+                      QGroupBox, QIcon, QPixmap, QListWidget, QListWidgetItem,
+                      QDialog, QHBoxLayout, QDialogButtonBox, QPushButton,
+                      QLineEdit, QGridLayout, QColorDialog, QColor, QSpinBox,
+                      pyqtSignal, QComboBox, QTabWidget, QWidget, QInputDialog,
+                      QTimer, QTextEdit, QProgressDialog, QSize,
+                      QToolButton, QMenu, QFileDialog, QPainter, QPen, QRect,
+                      QAbstractListModel, QFont)
 
 from calibre import fit_image
 from calibre.constants import iswindows
