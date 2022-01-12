@@ -75,7 +75,12 @@ def draw_sized_text(img, dw, line, top, left_margin, right_margin,
         left_margin = 0
         right_margin = 0
     p = QPainter(img.img)
-    p.setRenderHint(p.TextAntialiasing)
+    try:
+        # qt6
+        p.setRenderHint(p.RenderHint.TextAntialiasing)
+    except:
+        # qt5
+        p.setRenderHint(p.TextAntialiasing)
     pen = p.pen()
     pen.setColor(QColor(dw.fill_color))
     p.setPen(pen)

@@ -181,7 +181,12 @@ class ImageView(QWidget):
         target = QRect(x, y, w, h)
         p = QPainter(self)
         try:
-            p.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
+            try:
+                # qt6
+                p.setRenderHints(QPainter.RenderHint.Antialiasing | QPainter.RenderHint.SmoothPixmapTransform)
+            except:
+                # qt5
+                p.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
             p.drawPixmap(target, pmap)
             pen = QPen()
             pen.setWidth(self.BORDER_WIDTH)
