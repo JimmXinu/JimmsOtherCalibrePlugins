@@ -14,8 +14,7 @@ from six import text_type as unicode
 from PyQt5.Qt import (Qt, QIcon, QPixmap, QLabel, QDialog, QHBoxLayout,
                       QTableWidgetItem, QFont, QLineEdit, QComboBox,
                       QVBoxLayout, QDialogButtonBox, QStyledItemDelegate, QDateTime,
-                      QRegExpValidator, QRegExp, QTextEdit,
-                      QListWidget, QAbstractItemView)
+                      QTextEdit, QListWidget, QAbstractItemView)
 
 from calibre.constants import iswindows
 from calibre.gui2 import gprefs, error_dialog, UNDEFINED_QDATETIME, info_dialog
@@ -363,15 +362,6 @@ class ReadOnlyLineEdit(QLineEdit):
             text = ''
         QLineEdit.__init__(self, text, parent)
         self.setEnabled(False)
-
-
-class NumericLineEdit(QLineEdit):
-    '''
-    Allows a numeric value up to two decimal places, or an integer
-    '''
-    def __init__(self, *args):
-        QLineEdit.__init__(self, *args)
-        self.setValidator(QRegExpValidator(QRegExp(r'(^\d*\.[\d]{1,2}$)|(^[1-9]\d*[\.]$)'), self))
 
 
 class ListComboBox(QComboBox):
