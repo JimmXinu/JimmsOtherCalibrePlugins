@@ -14,7 +14,7 @@ from six.moves import range
 from PyQt5.Qt import (QWidget, QHBoxLayout, QMenu, QTreeWidget, Qt, QIcon,
                       QTreeWidgetItem, QListWidget, QListWidgetItem, QSize,
                       QToolButton, QVBoxLayout, QAbstractItemView,
-                      QPainter, QPoint, QPixmap, QBrush)
+                      QPainter, QRect, QPixmap, QBrush)
 
 from calibre.utils.config import JSONConfig
 from calibre_plugins.favourites_menu.common_utils import (get_icon)
@@ -293,7 +293,7 @@ class ConfigWidget(QWidget):
         pm = QPixmap(ICON_SIZE, ICON_SIZE)
         pm.fill(Qt.transparent)
         p = QPainter(pm)
-        p.drawPixmap(QPoint((ICON_SIZE - src.width()) / 2, (ICON_SIZE - src.height()) / 2), src)
+        p.drawPixmap(QRect(0, 0, ICON_SIZE, ICON_SIZE), src)
         p.end()
         return QIcon(pm)
 
