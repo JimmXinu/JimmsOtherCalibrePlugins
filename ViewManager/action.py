@@ -318,6 +318,22 @@ class ViewManagerAction(InterfaceAction):
 
         return state
 
+    def apply_save_state(self, view, state):
+        ## apply_state(save_state) added for performance ~Cal5.39. But
+        ## at the time of adding Cal5.99(qt6 beta) existed, so
+        ## try/except instead of version gate
+        kwargs = { 'save_state':False }
+        if 'sort_history' in state:
+            kwargs['max_sort_levels'] = len(state['sort_history'])
+        try:
+            view.apply_state(state,**kwargs)
+        except TypeError:
+            ## older version, doesn't have save_state yet.
+            del kwargs['save_state']
+            view.apply_state(state,**kwargs)
+
+        view.save_state()
+
     def apply_column_and_sort(self, view_info):
         # print("apply view_info:")
         # pp.pprint(view_info)
@@ -338,9 +354,7 @@ class ViewManagerAction(InterfaceAction):
         # print("set sort history:")
         # pp.pprint(sh)
         state['sort_history'] = sh
-        self.gui.library_view.apply_state(state,max_sort_levels=len(state['sort_history']))
-
-        self.gui.library_view.save_state()
+        self.apply_save_state(self.gui.library_view, state)
 
         if self.has_pin_view:
             self.set_pin_view(view_info.get(cfg.KEY_APPLY_PIN_COLUMNS,False))
@@ -350,8 +364,7 @@ class ViewManagerAction(InterfaceAction):
                     pin_state = self.contruct_state_from_view_info(cfg.KEY_PIN_COLUMNS,view_info)
                     # print("set pin_state:")
                     # pp.pprint(pin_state)
-                    self.gui.library_view.pin_view.apply_state(pin_state)
-                    self.gui.library_view.pin_view.save_state()
+                    self.apply_save_state(self.gui.library_view.pin_view, pin_state)
                 # set splitter location
                 self.set_pin_splitter_state(view_info.get(cfg.KEY_PIN_SPLITTER_STATE,None))
 

@@ -494,7 +494,7 @@ class ConfigWidget(QWidget):
 
         self.apply_search_checkbox = QCheckBox('Apply saved &search', self)
         self.apply_search_checkbox.setToolTip("Apply the selected saved search when the View is activated.")
-        print("calling saved_searches:%s"%self.db.saved_search_names())
+        # print("calling saved_searches:%s"%self.db.saved_search_names())
         self.saved_search_combo = SearchComboBox(self, entries=self.db.saved_search_names(),empty="(Clear Search)")
         self.saved_search_combo.setToolTip("Saved search to apply.")
         # enable/disable combo based on check.
