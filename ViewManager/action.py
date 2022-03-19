@@ -108,6 +108,9 @@ class ViewManagerAction(InterfaceAction):
                                                   triggered=partial(self.save_view,create=True))
         self.menu_actions.append(new_ac)
 
+        new_ac = create_menu_action_unique(self, m, 'Previous View', 'previous.png', shortcut_name='Previous View',
+                                           triggered=partial(self.next_view, previous=True))
+        self.menu_actions.append(new_ac)
         new_ac = create_menu_action_unique(self, m, 'Next View', 'next.png', shortcut_name='Next View',
                                            triggered=self.next_view)
         self.menu_actions.append(new_ac)
@@ -230,7 +233,7 @@ class ViewManagerAction(InterfaceAction):
             self.rebuild_menus()
             self.switch_view(new_view_name)
 
-    def next_view(self):
+    def next_view(self,previous=False):
         library_config = cfg.get_library_config(self.gui.current_db)
         views = library_config[cfg.KEY_VIEWS]
         keys = sorted(views.keys())
@@ -238,10 +241,17 @@ class ViewManagerAction(InterfaceAction):
             return
         key = None
         # print("self.current_view:%s"%self.current_view)
-        if self.current_view == None or self.current_view not in keys or self.current_view == keys[-1]:
-            key = keys[0]
+        if previous:
+            if self.current_view == None or self.current_view not in keys or self.current_view == keys[0]:
+                key = keys[-1]
+            else:
+                key = keys[keys.index(self.current_view)-1]
         else:
-            key = keys[keys.index(self.current_view)+1]
+            if self.current_view == None or self.current_view not in keys or self.current_view == keys[-1]:
+                key = keys[0]
+
+            else:
+                key = keys[keys.index(self.current_view)+1]
         if key != None:
             self.switch_view(key)
 
