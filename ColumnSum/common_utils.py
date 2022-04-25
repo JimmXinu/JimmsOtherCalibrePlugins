@@ -280,32 +280,6 @@ class NoWheelComboBox(QComboBox):
         event.ignore()
 
 
-class CheckableTableWidgetItem(QTableWidgetItem):
-
-    def __init__(self, checked=False, is_tristate=False):
-        QTableWidgetItem.__init__(self, '')
-        self.setFlags(Qt.ItemFlags(Qt.ItemIsSelectable | Qt.ItemIsUserCheckable | Qt.ItemIsEnabled ))
-        if is_tristate:
-            self.setFlags(self.flags() | Qt.ItemIsTristate)
-        if checked:
-            self.setCheckState(Qt.Checked)
-        else:
-            if is_tristate and checked is None:
-                self.setCheckState(Qt.PartiallyChecked)
-            else:
-                self.setCheckState(Qt.Unchecked)
-
-    def get_boolean_value(self):
-        '''
-        Return a boolean value indicating whether checkbox is checked
-        If this is a tristate checkbox, a partially checked value is returned as None
-        '''
-        if self.checkState() == Qt.PartiallyChecked:
-            return None
-        else:
-            return self.checkState() == Qt.Checked
-
-
 class TextIconWidgetItem(QTableWidgetItem):
 
     def __init__(self, text, icon):
