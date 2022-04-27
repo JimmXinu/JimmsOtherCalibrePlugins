@@ -24,7 +24,7 @@ class ActionReadingList(InterfaceActionBase):
     description             = 'Define orderable lists of books and synchronise to devices/folders'
     supported_platforms     = ['windows', 'osx', 'linux']
     author                  = 'Grant Drake'
-    version                 = (1, 8, 1)
+    version                 = (1, 9, 0)
     minimum_calibre_version = (2, 85, 1)
 
     #: This field defines the GUI plugin class that contains all the code
