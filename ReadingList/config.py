@@ -67,6 +67,7 @@ KEY_LIST_TYPE = 'listType'
 KEY_POPULATE_TYPE = 'populateType'
 KEY_POPULATE_SEARCH = 'populateSearch'
 KEY_SORT_LIST = 'sortList'
+KEY_RESTORE_SORT = 'restoreSort'
 KEY_DISPLAY_TOP_MENU = 'displayTopMenu'
 
 TOKEN_ANY_DEVICE = _('*Any Device')
@@ -89,7 +90,7 @@ MODIFY_TYPES = [('TAGNONE',      _('Do not update calibre column')),
                 ('TAGREMOVE',    _('Update column for remove from list only'))]
 
 KEY_SCHEMA_VERSION = STORE_SCHEMA_VERSION = 'SchemaVersion'
-DEFAULT_SCHEMA_VERSION = 1.64
+DEFAULT_SCHEMA_VERSION = 1.65
 
 STORE_OPTIONS = 'Options'
 KEY_REMOVE_DIALOG = 'removeDialog'
@@ -117,6 +118,7 @@ DEFAULT_LIST_VALUES = {
                         KEY_POPULATE_TYPE: 'POPMANUAL',
                         KEY_POPULATE_SEARCH: '',
                         KEY_SORT_LIST: True,
+                        KEY_RESTORE_SORT: False,
                         KEY_DISPLAY_TOP_MENU: False
                       }
 
@@ -208,6 +210,12 @@ def migrate_library_config_if_required(db, library_config):
             list_info[KEY_SORT_LIST] = True
             list_info[KEY_DISPLAY_TOP_MENU] = False
         library_config[KEY_LISTS] = lists
+
+    if schema_version < 1.65:
+        # Ensure all lists have a restore sort property.
+        lists = library_config[KEY_LISTS]
+        for list_info in six.itervalues(lists):
+            list_info[KEY_RESTORE_SORT] = False
 
     set_library_config(db, library_config)
 
@@ -692,8 +700,29 @@ class ListsTab(QWidget):
         self.sort_list_checkbox.setToolTip(_('If checked, viewing a reading list will also change your Calibre sort order.\n'
                                            'Lists can be manually reordered using this plugin, defaulting to order added to list.\n'
                                             'If unchecked, current calibre sort will be left unchanged when you view the list.'))
+        self.sort_list_checkbox.stateChanged.connect(self._sort_list_checkbox_state_changed)
         display_opt_grid_layout.addWidget(self.sort_list_checkbox, 1, 0, 1, 1)
+
+        self.restore_sort_checkbox = QCheckBox(_('Restore sort after viewing list'), self)
+        self.restore_sort_checkbox.setToolTip(_("If checked, calibre sort will be restored to its original state after\n"
+                                                "the user quits the reading list view by changing or clearing calibre's\n"
+                                                "search, switching libraries, or quitting calibre."))
+        horz = QHBoxLayout()
+        horz.addItem(QtGui.QSpacerItem(20, 1))
+        vertright = QVBoxLayout()
+        horz.addLayout(vertright)
+        vertright.addWidget(self.restore_sort_checkbox)
+        display_opt_grid_layout.addLayout(horz, 2, 0, 1, 1)
+
+        self._sort_list_checkbox_state_changed(self.sort_list_checkbox.checkState())
         layout.insertStretch(-1)
+
+    def _sort_list_checkbox_state_changed(self, state):
+        if state == Qt.Checked:
+            self.restore_sort_checkbox.setEnabled(True)
+        else:
+            self.restore_sort_checkbox.setCheckState(Qt.Unchecked)
+            self.restore_sort_checkbox.setEnabled(False)
 
     def _select_list_combo_changed(self):
         self.persist_list_config()
@@ -781,6 +810,7 @@ class ListsTab(QWidget):
         series_name = list_map.get(KEY_SERIES_NAME, DEFAULT_LIST_VALUES[KEY_SERIES_NAME])
         display_top_menu = list_map.get(KEY_DISPLAY_TOP_MENU, DEFAULT_LIST_VALUES[KEY_DISPLAY_TOP_MENU])
         sort_list = list_map.get(KEY_SORT_LIST, DEFAULT_LIST_VALUES[KEY_SORT_LIST])
+        restore_sort = list_map.get(KEY_RESTORE_SORT, DEFAULT_LIST_VALUES[KEY_RESTORE_SORT])
 
         # Display list configuration in the controls
         self.populate_type_combo.populate_combo(populate_type)
@@ -795,6 +825,7 @@ class ListsTab(QWidget):
         self.series_name_edit.setText(series_name)
         self.display_top_menu_checkbox.setCheckState(Qt.Checked if display_top_menu else Qt.Unchecked)
         self.sort_list_checkbox.setCheckState(Qt.Checked if sort_list else Qt.Unchecked)
+        self.restore_sort_checkbox.setCheckState(Qt.Checked if restore_sort else Qt.Unchecked)
         self.modify_type_combo.populate_combo(modify_type)
         self.tags_value_ledit.setText(tags_text)
         self._populate_type_combo_changed()
@@ -821,6 +852,7 @@ class ListsTab(QWidget):
         list_info[KEY_SERIES_NAME] = unicode(self.series_name_edit.text())
         list_info[KEY_DISPLAY_TOP_MENU] = self.display_top_menu_checkbox.checkState() == Qt.Checked
         list_info[KEY_SORT_LIST] = self.sort_list_checkbox.checkState() == Qt.Checked
+        list_info[KEY_RESTORE_SORT] = self.restore_sort_checkbox.checkState() == Qt.Checked
         self.lists[self.list_name] = list_info
 
     def _get_custom_columns(self, column_types):

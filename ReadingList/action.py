@@ -30,6 +30,7 @@ from calibre.gui2.actions import InterfaceAction
 from calibre.gui2.device import device_signals
 from calibre.gui2.dialogs.confirm_delete import confirm
 from calibre.gui2.dialogs.delete_matching_from_device import DeleteMatchingFromDeviceDialog
+from calibre.utils.config import tweaks
 
 import calibre_plugins.reading_list.config as cfg
 from calibre_plugins.reading_list.common_utils import (set_plugin_icon_resources, get_icon,
@@ -84,6 +85,33 @@ class ReadingListAction(InterfaceAction):
         # Subscribe to device connection events
         device_signals.device_connection_changed.connect(self._on_device_connection_changed)
         device_signals.device_metadata_available.connect(self._on_device_metadata_available)
+        self.sort_history = []
+        self.gui.search.cleared.connect(self.restore_state)
+        self.gui.search.changed.connect(self.restore_state)
+
+    def save_state(self):
+        # Backup sort history
+        self.sort_history = self.gui.library_view.get_state().get('sort_history', [])
+
+    def restore_state(self):
+        if self.view_list_name:
+            list_info = cfg.get_list_info(self.gui.current_db, self.view_list_name)
+            if list_info[cfg.KEY_RESTORE_SORT]:
+                try:
+                    max_sort_levels = min(tweaks['maximum_resort_levels'], len(self.sort_history))
+                    self.gui.library_view.apply_sort_history(self.sort_history, max_sort_levels=max_sort_levels)
+                    if DEBUG:
+                        prints('Reading List: sort columns restored: {}'.format(self.sort_history[:max_sort_levels]))
+                except Exception as e:
+                    if DEBUG:
+                        prints('Reading List: Error(s) when restoring sort history: {}'.format(e))
+        self.view_list_name = None
+
+    def library_about_to_change(self, olddb, db):
+        self.restore_state()
+
+    def shutting_down(self):
+        self.restore_state()
 
     def library_changed(self, db):
         # We need to reset our menus after switching libraries
@@ -821,6 +849,11 @@ class ReadingListAction(InterfaceAction):
         if list_name is None:
             return error_dialog(self.gui, _('Cannot view list'),
                                 _('No list name specified'), show=True)
+        # In case another reading list is already displayed, otherwise
+        # sort history will not be backed up properly
+        self.restore_state()
+
+        self.save_state()
         db = self.gui.current_db
 
         list_info = cfg.get_list_info(db, list_name)
