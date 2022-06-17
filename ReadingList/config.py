@@ -22,7 +22,7 @@ from PyQt5.Qt import (QWidget, QVBoxLayout, QLabel, QLineEdit, Qt,
                       QGroupBox, QComboBox, QHBoxLayout, QIcon,
                       QInputDialog, QGridLayout, QPushButton,
                       QCheckBox, QTableWidget, QAbstractItemView,
-                      QTabWidget)
+                      QScrollArea, QTabWidget)
 
 from calibre.gui2 import error_dialog, dynamic, info_dialog, question_dialog
 from calibre.gui2.complete2 import EditWithComplete
@@ -1191,8 +1191,13 @@ class ConfigWidget(QWidget):
         layout = QVBoxLayout(self)
         self.setLayout(layout)
 
+        self.scroll_area = QScrollArea(self)
+        self.scroll_area.setFrameShape(QScrollArea.NoFrame)
+        self.scroll_area.setWidgetResizable(True)
+        layout.addWidget(self.scroll_area)
+
         tab_widget = QTabWidget(self)
-        layout.addWidget(tab_widget)
+        self.scroll_area.setWidget(tab_widget)
 
         self.lists_tab = ListsTab(self, plugin_action)
         self.devices_tab = DevicesTab(self, plugin_action)
