@@ -718,7 +718,7 @@ class ListsTab(QWidget):
         layout.insertStretch(-1)
 
     def _sort_list_checkbox_state_changed(self, state):
-        if state == Qt.Checked:
+        if self.sort_list_checkbox.isChecked():
             self.restore_sort_checkbox.setEnabled(True)
         else:
             self.restore_sort_checkbox.setCheckState(Qt.Unchecked)
