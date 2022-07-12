@@ -42,6 +42,10 @@ from calibre_plugins.generate_cover.common_utils import (SizePersistedDialog, Re
 from calibre_plugins.generate_cover.draw import (
     generate_cover_for_book, get_image_size, get_title_author_series)
 
+try:
+    AnyFile = QFileDialog.FileMode.AnyFile
+except:
+    AnyFile = QFileDialog.AnyFile
 
 class GenerateCoverProgressDialog(QProgressDialog):
     '''
@@ -723,7 +727,7 @@ class SavedSettingsTab(QWidget):
 
     def pick_archive_name_to_export(self):
         fd = FileDialog(name='gc archive dialog', title=_('Save setting as'), filters=[(_('GC Files'), ['zip'])],
-                        parent=self, add_all_files_filter=False, mode=QFileDialog.AnyFile)
+                        parent=self, add_all_files_filter=False, mode=AnyFile)
         fd.setParent(None)
         if not fd.accepted:
             return None
