@@ -11,8 +11,8 @@ try:
     load_translations()
 except NameError:
     pass # load_translations() added in calibre 1.9
-	
-import copy, os
+
+import copy, os, shutil
 import six
 from six import text_type as unicode
 
@@ -27,7 +27,7 @@ from calibre_plugins.generate_cover.common_utils import (KeyboardConfigDialog,
                                         PrefsViewerDialog, CustomColumnComboBox)
 
 STORE_SCHEMA_VERSION = 'SchemaVersion'
-DEFAULT_SCHEMA_VERSION = 1.59
+DEFAULT_SCHEMA_VERSION = 2.21
 
 PREFS_NAMESPACE = 'GenerateCoverPlugin'
 PREFS_KEY_SETTINGS = 'settings'
@@ -110,7 +110,8 @@ plugin_prefs.defaults[STORE_FILES] = [TOKEN_CURRENT_COVER, I('library.png')]
 plugin_prefs.defaults[STORE_OTHER_OPTIONS] = copy.deepcopy(DEFAULT_OTHER_OPTIONS)
 
 def get_images_dir():
-    return os.path.join(config_dir, 'resources/images/generate_cover')
+    return os.path.join(config_dir, 'plugins/generate_cover')
+
 
 def migrate_image_file_path(path):
     # Version 1.5.3 changed image paths to be stored as relative to the calibre config
@@ -122,6 +123,28 @@ def migrate_image_file_path(path):
     if os.path.isabs(path):
         # Make the path relative to our generate cover images folder
         return os.path.relpath(path, get_images_dir())
+
+def migrate_image_file(path):
+    # Version 2.2.1 moved GC images to
+    # <calibre>/plugins/generate_cover because cal5->6 migration can
+    # delete contents of <calibre>/resources/images
+    old_images_dir = os.path.join(config_dir, 'resources/images/generate_cover')
+    if path in TOKEN_COVERS:
+        return path
+    if os.path.basename(path) == 'library.png':
+        return TOKEN_DEFAULT_COVER
+    old_file = os.path.join(old_images_dir, path)
+    new_file = os.path.join(get_images_dir(), path)
+    if DEBUG:
+        prints("Copying existing cover image:")
+        prints(old_file)
+        prints(new_file)
+    if os.path.exists(old_file):
+        if not os.path.exists(get_images_dir()):
+            os.makedirs(get_images_dir())
+        shutil.copyfile(old_file,new_file)
+
+    return path
 
 def migrate_config_if_required():
     # Contains code for migrating versions of json schema
@@ -157,7 +180,7 @@ def migrate_config_if_required():
         files = [migrate_image_file_path(f) for f in plugin_prefs[STORE_FILES]]
         plugin_prefs[STORE_FILES] = files
 
-    if schema_version < DEFAULT_SCHEMA_VERSION:
+    if schema_version < 1.59:
         if DEBUG:
             prints('Generate Cover - Upgrading from schema:', schema_version)
         current = plugin_prefs[STORE_CURRENT]
@@ -167,6 +190,14 @@ def migrate_config_if_required():
         for setting_name, saved_setting in six.iteritems(saved_settings):
             migrate_config_setting(schema_version, setting_name, saved_setting)
         plugin_prefs[STORE_SAVED_SETTINGS] = saved_settings
+
+    # Version 2.2.1 changed images to be stored in the calibre/plugins
+    # folder
+    if schema_version < 2.21:
+        if DEBUG:
+            prints('Generate Cover - Upgrading to 2.21 schema')
+        files = [migrate_image_file(f) for f in plugin_prefs[STORE_FILES]]
+        plugin_prefs[STORE_FILES] = files
 
 def migrate_config_setting(schema_version, setting_name, setting, is_current=False):
     # To upgrade to 1.2 we need to add a schema version and
@@ -226,6 +257,13 @@ def migrate_config_setting(schema_version, setting_name, setting, is_current=Fal
             prints('Generate Cover - Upgrading to 1.59 schema for setting: ',setting_name)
         setting[KEY_RESIZE_IMAGE_TO_FIT] = False
     return setting
+
+    # Version 2.2.1 changed images to be stored in the calibre/plugins
+    # folder
+    if schema_version < 2.21:
+        if DEBUG:
+            prints('Generate Cover - Upgrading to 2.21 schema for setting: ',setting_name)
+        setting[KEY_IMAGE_FILE] = migrate_image_file(setting[KEY_IMAGE_FILE])
 
 
 def migrate_library_config_if_required(db, library_config):
