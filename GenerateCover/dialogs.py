@@ -858,7 +858,7 @@ class SavedSettingsTab(QWidget):
         while True:
             if os.path.exists(dest_file_path):
                 if not question_dialog(self.parent_dialog, _('Overwrite existing'), '<p>'+
-                        _('An image file already exists with this name. Do you want to overwrite it?'),
+                        _('An image file named (%s) already exists. Do you want to overwrite it?')%image_name,
                         show_copy_button=False):
                     # Since user is not overwriting, offer chance for a new name for the image
                     new_image_name, ok = QInputDialog.getText(self.parent_dialog, _('Enter image name'),
