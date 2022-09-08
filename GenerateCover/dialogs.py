@@ -530,11 +530,12 @@ class SavedSettingsTab(QWidget):
         if not new_setting_name:
             return
         current_options = self.parent_dialog.current
-        current_options[cfg.KEY_NAME] = new_setting_name
         settings = cfg.plugin_prefs[cfg.STORE_SAVED_SETTINGS]
         settings[new_setting_name] = copy.deepcopy(current_options)
+        settings[new_setting_name][cfg.KEY_NAME] = new_setting_name
         cfg.plugin_prefs[cfg.STORE_SAVED_SETTINGS] = settings
         self.populate_settings_list(new_setting_name)
+        self.saved_setting_changed()
 
     def get_new_setting_name(self, heading, default_name=''):
         new_setting_name, ok = QInputDialog.getText(self.parent_dialog, heading,
