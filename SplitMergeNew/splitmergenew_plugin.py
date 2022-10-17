@@ -101,12 +101,11 @@ class SplitMergeNewPlugin(InterfaceAction):
                                              3000)
             return
             
-        if self.is_library_view():
-            book_list = [ {'id':x} for x in self.gui.library_view.get_selected_ids() ]
-
-        else: # device view, get from epubs on device.
+        if not self.is_library_view():
+            # device view, get from epubs on device.
             self.gui.status_bar.show_message(_('SplitMergeNew only works in libary'),
                                              3000)
+            return
 
         if not self.get_epubmerge_plugin():
             self.gui.status_bar.show_message(_('No EpubMerge'), 3000)
@@ -115,13 +114,13 @@ class SplitMergeNewPlugin(InterfaceAction):
         if not self.get_epubsplit_plugin():
             self.gui.status_bar.show_message(_('No EpubSplit'), 3000)
             return
-        # logger.debug(book_list)
 
         em = self.get_epubmerge_plugin()
         es = self.get_epubsplit_plugin()
 
         book_list = [ em._convert_id_to_book(x, good=False) for x in self.gui.library_view.get_selected_ids() ]
         # book_ids = self.gui.library_view.get_selected_ids()
+        # logger.debug(book_list)
 
         tdir = PersistentTemporaryDirectory(prefix='splitmergenew__')
         logger.debug("tdir:%s"%tdir)
