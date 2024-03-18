@@ -11,7 +11,7 @@ from qt.core import ( QAction, QMenu, QDialog, QIcon, QPixmap,
                       QDialogButtonBox
                        )
 
-import os
+import os, re
 
 # The base class that all tools must inherit from
 from calibre.gui2.tweak_book.plugin import Tool
@@ -182,11 +182,17 @@ class AddNewFileTOC(Tool):
     def add_file_and_toc(self):
         if not self.boss.ensure_book(_('You must first open a book to edit, before trying to create new files in it.')):
             return
+        prev_editing = self.boss.currently_editing or ''
         self.boss.commit_dirty_opf()
-        d = NewFileDialog(self.boss.gui)
+        d = NewFileDialog(self.boss.gui,
+                          prefix=prev_editing.rpartition('/')[0],
+                          ext=prev_editing.rpartition('.')[2])
         if d.exec() != QDialog.DialogCode.Accepted:
             return
-        added_name = self.boss.do_add_file(d.file_name, d.file_data, using_template=d.using_template, edit_file=True)
+        added_name = self.boss.do_add_file(d.file_name,
+                                           d.file_data,
+                                           using_template=d.using_template,
+                                           edit_file=True)
         if d.file_name.rpartition('.')[2].lower() in ('ttf', 'otf', 'woff'):
             from calibre.gui2.tweak_book.manage_fonts import (
                 show_font_face_rule_for_font_file,
@@ -196,26 +202,74 @@ class AddNewFileTOC(Tool):
             # frag = add_id(self.ebook, name, *frag)
             # container, name, loc
             with BusyCursor():
-                toc = get_toc(current_container())
-                print(toc)
-                toc.add(d.title.text(), d.file_name)
-                print(toc)
-                commit_toc(current_container(),
-                           toc,
-                           lang=toc.lang,
-                           uid=toc.uid)
-                current_container().commit()
-                self.boss.set_modified()
-                self.boss.update_editors_from_container()
-                self.boss.gui.toc_view.update_if_visible()
-                self.boss.gui.file_list.build(current_container())
+                self.boss.add_savepoint(_('Before: Add ToC %s') % d.title.text())
+                try:
+                    ## Attempting to put new ToC entry in 'correct'
+                    ## place.
+
+                    ## do_add_file() above puts the new file immediately
+                    ## after the currently open file (or at the end).
+
+                    ## Nothing forces ToC to be in the same sequence
+                    ## as files, but it usually is true.
+
+                    ## TOC object from get_toc() doesn't expose any methods
+                    ## to insert, only add/remove.
+                    toc = get_toc(current_container())
+                    #from pprint import pprint
+                    #pprint(toc.as_dict)
+                    # print(prev_editing)
+                    added = False
+                    if prev_editing:
+                        ## spin ToC (and sub-ToCs) to find (hopefully)
+                        ## the last reference to the current file.
+                        for i in reversed(list(toc.iterdescendants())):
+                            if i.dest == prev_editing:
+                                # print("t:%s d:%s"%(i.title,i.dest))
+                                ## add to parent list immediately after.
+                                c = TOC(d.title.text(), d.file_name)
+                                c.parent = i.parent
+                                ## [::-1] because python list lacks rindex
+                                l = i.parent.children
+                                l.insert(len(l) - l[::-1].index(i),c)
+                                added = True
+                                break
+                    if not added:
+                        toc.add(d.title.text(), d.file_name)
+                    # print(toc)
+                    commit_toc(current_container(),
+                               toc,
+                               lang=toc.lang,
+                               uid=toc.uid)
+                    # current_container().commit()
+                    self.boss.set_modified()
+                    self.boss.update_editors_from_container()
+                    self.boss.gui.toc_view.update_if_visible()
+                    self.boss.gui.file_list.build(current_container())
+                except:
+                    self.boss.rewind_savepoint()
+                    raise
 
 class NewFileDialog(QDialog):  # {{{
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None,
+                 title=None,
+                 prefix=None,
+                 ext=None):
         QDialog.__init__(self, parent)
+        self.prefix = prefix
+        self.ext = ext
         self.l = l = QVBoxLayout()
         self.setLayout(l)
+        la = QLabel(_(
+            'Choose a chapter title (replaces %CHAPTER% in template) and for ToC for example: <i>Chapter 1</i>'))
+        la.setWordWrap(True)
+        l.addWidget(la)
+        self.title = t = QLineEdit(self)
+        if title:
+            t.setText(title)
+        t.textChanged.connect(self.name_from_title)
+        l.addWidget(t)
         self.la = la = QLabel(_(
             'Choose a name for the new (blank) file. To place the file in a'
             ' specific folder in the book, include the folder name, for example: <i>text/chapter1.html'))
@@ -223,14 +277,10 @@ class NewFileDialog(QDialog):  # {{{
         self.setWindowTitle(_('Choose file'))
         l.addWidget(la)
         self.name = n = QLineEdit(self)
+        if self.prefix or self.ext:
+            n.setText(self.prefix + '/file.' + self.ext)
         n.textChanged.connect(self.update_ok)
         l.addWidget(n)
-        self.la = la = QLabel(_(
-            'Choose a chapter title (replaces %CHAPTER% in template) and for ToC for example: <i>Chapter 1</i>'))
-        la.setWordWrap(True)
-        l.addWidget(la)
-        self.title = t = QLineEdit(self)
-        l.addWidget(t)
         self.link_css = lc = QCheckBox(_('Automatically add style-sheet links into new HTML files'))
         lc.setChecked(tprefs['auto_link_stylesheets'])
         l.addWidget(lc)
@@ -282,12 +332,18 @@ class NewFileDialog(QDialog):  # {{{
     def update_ok(self, *args):
         self.ok_button.setEnabled(self.name_is_ok)
 
+    def name_from_title(self):
+        p =  self.prefix + '/' if self.prefix else ''
+        t = re.sub(r'[^\w]','',self.title.text().lower()) if self.title.text() else ''
+        e = '.' + self.ext if self.ext else ''
+        self.name.setText(p + t + e)
+
     def accept(self):
         if not self.name_is_ok:
             return error_dialog(self, _('No name specified'), _(
                 'You must specify a name for the new file, with an extension, for example, chapter1.html'), show=True)
         tprefs['auto_link_stylesheets'] = self.link_css.isChecked()
-        print("title:%s"%self.title.text())
+        # print("title:%s"%self.title.text())
         name = str(self.name.text())
         name, ext = name.rpartition('.')[0::2]
         name = (name + '.' + ext.lower()).replace('\\', '/')
