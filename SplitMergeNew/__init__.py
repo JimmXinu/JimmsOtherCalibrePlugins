@@ -42,7 +42,7 @@ class SplitMergeNewBase(InterfaceActionBase):
     description         = _('UI plugin to calculate aggregate values for numeric columns of selected books.')
     supported_platforms = ['windows', 'osx', 'linux']
     author              = 'Jim Miller'
-    version             = (0, 3, 0)
+    version             = (0, 4, 0)
     minimum_calibre_version = (2, 85, 1)
 
     #: This field defines the GUI plugin class that contains all the code
