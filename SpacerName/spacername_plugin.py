@@ -35,7 +35,7 @@ class SpacerNamePlugin(InterfaceAction):
         base = self.interface_action_base_plugin
         self.version = base.name+" v%d.%d.%d"%base.version
 
-        self.qaction.setText('---==========---')
+        self.qaction.setText('---==========================---')
         # Call function when plugin triggered.
         # self.qaction.triggered.connect(self.plugin_button)
 
