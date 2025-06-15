@@ -36,6 +36,9 @@ class KOREADER(USER_DEFINED):
     minimum_calibre_version = (8,4,0)
     version = (0,1,0)
 
+    ## also delete .sdr 'sidecar' dirs on file delete.
+    DELETE_EXTS  = ['.sdr']
+
     EXTRA_CUSTOMIZATION_MESSAGE = [
         _('USB Vendor ID (in hex)') + ':::<p>' + _(
             'Get this ID using Preferences -> Misc -> Get information to '
