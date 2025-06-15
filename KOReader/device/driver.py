@@ -34,7 +34,7 @@ class KOREADER(USER_DEFINED):
     supported_platforms = ['windows', 'osx', 'linux']
 
     minimum_calibre_version = (8,4,0)
-    version = (0,1,0)
+    version = (0,2,0)
 
     ## also delete .sdr 'sidecar' dirs on file delete.
     DELETE_EXTS  = ['.sdr']
@@ -69,9 +69,13 @@ class KOREADER(USER_DEFINED):
             'card a and the card is being seen as main memory') + '</p>',
         '',
         _('KOReader Cache File') + ':::<p>' + _(
-            '.adds/koreader/settings/bookinfo_cache.sqlite3') + '</p>',
+            "KOReader's cache sqlite3 file relative to Calibre's 'main' dir.") + '</p>',
         _('KOReader History File') + ':::<p>' + _(
-            '.adds/koreader/history.lua') + '</p>',
+            "KOReader's history.lua file relative to Calibre's 'main' dir.") + '</p>',
+        _('KOReader Onboard Path') + ':::<p>' + _(
+            "KOReader's relative path ON DEVICE.  Needs to match keys in cache and history.") + '</p>',
+        _('Bump Up History Tag') + ':::<p>' + _(
+            "If set, ONLY books with this tag will be bumped up the History list.  Otherwise, all sent books will be.") + '</p>',
     ]
     EXTRA_CUSTOMIZATION_DEFAULT = [
                 '0xffff',
@@ -88,29 +92,36 @@ class KOREADER(USER_DEFINED):
                 None,
                 '.adds/koreader/settings/bookinfo_cache.sqlite3',
                 '.adds/koreader/history.lua',
+                '/mnt/onboard',
+                '',
     ]
 
     OPT_KOREADER_CACHE        = 12
     OPT_KOREADER_HISTORY      = 13
+    OPT_KOREADER_ONBOARD      = 14
+    OPT_KOREADER_BUMP_TAG     = 15
 
     def upload_books(self, files, names, on_card=None, end_session=True,
                      metadata=None):
         logger.debug(f'uploading {len(files)} books')
-        logger.debug(f'uploading {names}')
+        # logger.debug(f'uploading {files} books')
+        # logger.debug(f'uploading {names}')
+        # logger.debug(f'uploading {metadata}')
         retlist = super(KOREADER, self).upload_books(files, names, on_card, end_session, metadata)
 
         e = self.settings().extra_customization
-        logger.debug("KOReader:upload_books: cache:%s"%e[self.OPT_KOREADER_CACHE])
-        logger.debug("KOReader:upload_books: history:%s"%e[self.OPT_KOREADER_HISTORY])
+        # logger.debug("KOReader:upload_books: cache:%s"%e[self.OPT_KOREADER_CACHE])
+        # logger.debug("KOReader:upload_books: history:%s"%e[self.OPT_KOREADER_HISTORY])
 
         cache_sql_path = os.path.join(self._main_prefix, e[self.OPT_KOREADER_CACHE])
         history_lua_path = os.path.join(self._main_prefix, e[self.OPT_KOREADER_HISTORY])
-        onboard_path = '/mnt/onboard'
+        onboard_path = e[self.OPT_KOREADER_ONBOARD]
+        bump_tag = e[self.OPT_KOREADER_BUMP_TAG]
 
-        logger.debug("KOReader:upload_books: cache_sql_path:%s"%cache_sql_path)
-        logger.debug("KOReader:upload_books: cache_sql_path isfile:%s"%os.path.isfile(cache_sql_path))
-        logger.debug("KOReader:upload_books: history_lua_path:%s"%history_lua_path)
-        logger.debug("KOReader:upload_books: history_lua_path isfile:%s"%os.path.isfile(history_lua_path))
+        # logger.debug("KOReader:upload_books: cache_sql_path:%s"%cache_sql_path)
+        # logger.debug("KOReader:upload_books: cache_sql_path isfile:%s"%os.path.isfile(cache_sql_path))
+        # logger.debug("KOReader:upload_books: history_lua_path:%s"%history_lua_path)
+        # logger.debug("KOReader:upload_books: history_lua_path isfile:%s"%os.path.isfile(history_lua_path))
 
         db = apsw.Connection(cache_sql_path)
 
@@ -151,18 +162,28 @@ class KOREADER(USER_DEFINED):
         odata = OrderedDict([ (x['file'], x) for x in data ])
         # logger.debug(odata)
 
+        bump_list = []
+        if bump_tag:
+            bump_list = [ bump_tag in m.tags for m in reversed(metadata) ]
+        # logger.debug(bump_list)
+        ## history only cares about order, so I don't bother updating
+        ## the time, although it would be easy.
         logger.debug(updated_filepaths)
-        for b in reversed(updated_filepaths):
-            if b not in odata:
-                odata[b] = {'file':b,'time':int(datetime.now().timestamp()) }
-            odata.move_to_end(b,last=False) # and the last shall be first...        
-
-        luadata.write(history_lua_path, list(odata.values()), encoding="utf-8",
-                      indent="\t", prefix="return ")
+        changed = False
+        for i, b in enumerate(reversed(updated_filepaths)):
+            # always if no bump_tag set.
+            if not bump_tag or bump_list[i]:
+                if b not in odata:
+                    odata[b] = {'file':b,'time':int(datetime.now().timestamp()) }
+                logger.debug('history bump:%s'%b)
+                odata.move_to_end(b,last=False) # and the last shall be first...
+                changed = True
+        if changed:
+            luadata.write(history_lua_path, list(odata.values()), encoding="utf-8",
+                          indent="\t", prefix="return ")
         return retlist
 
-    # XXX Also remove from cache on delete?  Deleting in KOReader doesn't bother...
-    # XXX .sdr dir? Keeping it keeps settings, etc in case it comes back?
-    #     koreader *does* delete .sdr dir...
-    #     I don't *think* the calibre KoboTouch driver does.
+    ## XXX Also remove from cache on delete?  Deleting in KOReader
+    ## doesn't bother, and there is a prune function in koreader.
+    ## So, no.
     
