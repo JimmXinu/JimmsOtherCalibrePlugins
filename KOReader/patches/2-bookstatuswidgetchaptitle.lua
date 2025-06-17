@@ -212,9 +212,19 @@ function BookStatusWidget:genTagsGroup(width)
         text = self.ui.doc_props.keywords:gsub("\n", ", "),
         lang = lang,
         width = width,
-        face = self.small_font_face,
+        face = self.medium_font_face,
         alignment = "center",
     }
+    if tags_text:getSize().h > height then
+        tags_text:free()
+        tags_text = TextBoxWidget:new{
+            text = self.ui.doc_props.keywords:gsub("\n", ", "),
+            lang = lang,
+            width = width,
+            face = self.small_font_face,
+            alignment = "center",
+        }
+    end
 
     return VerticalGroup:new{
         align = "center",
