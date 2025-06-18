@@ -56,18 +56,13 @@ end
 
 
 function BookStatusWidget:genBookInfoGroup()
-    local screen_width = Screen:getWidth()
-    local split_span_width = math.floor(screen_width * 0.05)
-
-    local info_height = 174
+    local width = Screen:getWidth()
+    local height = 174
     if Screen:getScreenMode() == "landscape" then
-        info_height = Screen:scaleBySize(info_height)
+        height = Screen:scaleBySize(height)
     else
-        info_height = Screen:scaleBySize(info_height * 1.5)
+        height = Screen:scaleBySize(height * 1.5)
     end
-
-    local height = info_height
-    local width = screen_width
 
     -- Get a chance to have title and authors rendered with alternate
     -- glyphs for the book language
@@ -136,8 +131,11 @@ function BookStatusWidget:genBookInfoGroup()
     table.insert(vert_group,
         CenterContainer:new{
             dimen = Geom:new{ w = width, h = text_author:getSize().h },
-            text_author
+            text_author,
         }
+    )
+    table.insert(vert_group,
+        VerticalSpan:new{ width = height * 0.1 }
     )
     -- progress bar
     local read_percentage = self.ui:getCurrentPage() / self.total_pages
@@ -201,7 +199,7 @@ function BookStatusWidget:genBookInfoGroup()
     )
 
     return CenterContainer:new{
-        dimen = Geom:new{ w = screen_width, h = img_height },
+        dimen = Geom:new{ w = width, h = height },
         vert_group, -- book_info_group,
     }
 end
