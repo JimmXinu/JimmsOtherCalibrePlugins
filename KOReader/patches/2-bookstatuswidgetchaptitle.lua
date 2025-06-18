@@ -31,8 +31,29 @@ local util = require("util")
 local _ = require("gettext")
 local Screen = Device.screen
 local T = require("ffi/util").template
+local dump = require("dump")
 
 local BookStatusWidget = require("ui/widget/bookstatuswidget")
+
+function BookStatusWidget:genThumbnailGroup(img_height,img_width)
+    local thumbnail = FileManagerBookInfo:getCoverImage(self.ui.document)
+    if thumbnail then
+        -- Much like BookInfoManager, honor AR here
+        local cbb_w, cbb_h = thumbnail:getWidth(), thumbnail:getHeight()
+        if cbb_w > img_width or cbb_h > img_height then
+            local scale_factor = math.min(img_width / cbb_w, img_height / cbb_h)
+            cbb_w = math.min(math.floor(cbb_w * scale_factor)+1, img_width)
+            cbb_h = math.min(math.floor(cbb_h * scale_factor)+1, img_height)
+            thumbnail = RenderImage:scaleBlitBuffer(thumbnail, cbb_w, cbb_h, true)
+        end
+        return ImageWidget:new{
+            image = thumbnail,
+            width = cbb_w,
+            height = cbb_h,
+        }
+    end
+end
+
 
 function BookStatusWidget:genBookInfoGroup()
     local screen_width = Screen:getWidth()
@@ -53,6 +74,26 @@ function BookStatusWidget:genBookInfoGroup()
     -- Get a chance to have title and authors rendered with alternate
     -- glyphs for the book language
     local props = self.ui.doc_props
+    --[[
+    print("dump(props)")
+    print(dump(props))
+        dump(props)
+        {
+            ["authors"] = "Cherico",
+            ["keywords"] = "FanFiction\
+        NSFW\
+        Nick\
+        Saved By The Bell\
+        The Company Fucks Everyone\
+        In-Progress\
+        !000",
+            ["display_title"] = "000 Saved by the Spell (109,932)",
+            ["language"] = "en",
+            ["title"] = "000 Saved by the Spell (109,932)",
+            ["description"] = "<div class=\"bbWrapper\">Saved by the spell</div>",
+        }
+    ]]
+
     local lang = props.language
     -- title
     local book_meta_info_group = VerticalGroup:new{
@@ -62,7 +103,7 @@ function BookStatusWidget:genBookInfoGroup()
             text = props.display_title,
             lang = lang,
             width = width,
-            face = self.medium_font_face,
+            face = self.large_font_face,
             alignment = "center",
         },
 
@@ -109,7 +150,7 @@ function BookStatusWidget:genBookInfoGroup()
     )
     -- Current chapter
 
-    table.insert(book_meta_info_group,    
+    table.insert(book_meta_info_group,
         VerticalSpan:new{ width = height * 0.1 }
     )
     local chapter_title = self.ui.toc:getTocTitleByPage(self.ui:getCurrentPage())
@@ -119,6 +160,7 @@ function BookStatusWidget:genBookInfoGroup()
         lang = lang,
         width = width,
         face = self.small_font_face,
+        fgcolor = Blitbuffer.COLOR_GRAY_9, -- Blitbuffer.colorFromString("#0066FF"),
         alignment = "center",
     }
     table.insert(book_meta_info_group,
@@ -131,7 +173,7 @@ function BookStatusWidget:genBookInfoGroup()
         text = chapter_title,
         lang = lang,
         width = width,
-        face = self.medium_font_face,
+        face = self.large_font_face,
         alignment = "center",
     }
     table.insert(book_meta_info_group,
@@ -153,21 +195,9 @@ function BookStatusWidget:genBookInfoGroup()
         HorizontalSpan:new{ width =  split_span_width }
     }
     -- thumbnail
-    local thumbnail = FileManagerBookInfo:getCoverImage(self.ui.document)
+    local thumbnail = self:genThumbnailGroup(img_height,img_width)
     if thumbnail then
-        -- Much like BookInfoManager, honor AR here
-        local cbb_w, cbb_h = thumbnail:getWidth(), thumbnail:getHeight()
-        if cbb_w > img_width or cbb_h > img_height then
-            local scale_factor = math.min(img_width / cbb_w, img_height / cbb_h)
-            cbb_w = math.min(math.floor(cbb_w * scale_factor)+1, img_width)
-            cbb_h = math.min(math.floor(cbb_h * scale_factor)+1, img_height)
-            thumbnail = RenderImage:scaleBlitBuffer(thumbnail, cbb_w, cbb_h, true)
-        end
-        table.insert(book_info_group, ImageWidget:new{
-            image = thumbnail,
-            width = cbb_w,
-            height = cbb_h,
-        })
+        table.insert(book_info_group, thumbnail)
     end
 
     table.insert(book_info_group, CenterContainer:new{
@@ -209,7 +239,7 @@ function BookStatusWidget:genTagsGroup(width)
     end
 
     tags_text = TextBoxWidget:new{
-        text = self.ui.doc_props.keywords:gsub("\n", ", "),
+        text = (self.ui.doc_props.keywords or "" ):gsub("\n", ", "),
         lang = lang,
         width = width,
         face = self.medium_font_face,
@@ -218,7 +248,7 @@ function BookStatusWidget:genTagsGroup(width)
     if tags_text:getSize().h > height then
         tags_text:free()
         tags_text = TextBoxWidget:new{
-            text = self.ui.doc_props.keywords:gsub("\n", ", "),
+            text = (self.ui.doc_props.keywords or ""):gsub("\n", ", "),
             lang = lang,
             width = width,
             face = self.small_font_face,
