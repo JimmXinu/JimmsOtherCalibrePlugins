@@ -59,17 +59,15 @@ function BookStatusWidget:genBookInfoGroup()
     local screen_width = Screen:getWidth()
     local split_span_width = math.floor(screen_width * 0.05)
 
-    local img_width, img_height
+    local info_height = 174
     if Screen:getScreenMode() == "landscape" then
-        img_width = Screen:scaleBySize(132)
-        img_height = Screen:scaleBySize(184)
+        info_height = Screen:scaleBySize(info_height)
     else
-        img_width = Screen:scaleBySize(132 * 1.5)
-        img_height = Screen:scaleBySize(184 * 1.5)
+        info_height = Screen:scaleBySize(info_height * 1.5)
     end
 
-    local height = img_height
-    local width = screen_width - split_span_width - img_width
+    local height = info_height
+    local width = screen_width
 
     -- Get a chance to have title and authors rendered with alternate
     -- glyphs for the book language
@@ -96,27 +94,46 @@ function BookStatusWidget:genBookInfoGroup()
 
     local lang = props.language
     -- title
-    local book_meta_info_group = VerticalGroup:new{
+    local vert_group = VerticalGroup:new{
         align = "center",
         VerticalSpan:new{ width = height * 0.1 },
-        TextBoxWidget:new{
-            text = props.display_title,
-            lang = lang,
-            width = width,
-            face = self.large_font_face,
-            alignment = "center",
-        },
-
     }
+    local text_label = TextBoxWidget:new{
+        text = "Title",
+        lang = lang,
+        width = width,
+        face = self.small_font_face,
+        fgcolor = Blitbuffer.colorFromString("#0066FF"),
+        alignment = "center",
+    }
+    table.insert(vert_group,
+        CenterContainer:new{
+            dimen = Geom:new{ w = width, h = text_label:getSize().h },
+            text_label
+        }
+    )
+    local text_title =TextBoxWidget:new{
+        text = props.display_title,
+        lang = lang,
+        width = width,
+        face = self.large_font_face,
+        alignment = "center",
+    }
+    table.insert(vert_group,
+        CenterContainer:new{
+            dimen = Geom:new{ w = width, h = text_title:getSize().h },
+            text_title
+        }
+    )
     -- author
     local text_author = TextBoxWidget:new{
-        text = props.authors,
+        text = (self.ui.doc_props.authors or "" ):gsub("\n", ", "),
         lang = lang,
         face = self.small_font_face,
         width = width,
         alignment = "center",
     }
-    table.insert(book_meta_info_group,
+    table.insert(vert_group,
         CenterContainer:new{
             dimen = Geom:new{ w = width, h = text_author:getSize().h },
             text_author
@@ -131,7 +148,7 @@ function BookStatusWidget:genBookInfoGroup()
         ticks = nil,
         last = nil,
     }
-    table.insert(book_meta_info_group,
+    table.insert(vert_group,
         CenterContainer:new{
             dimen = Geom:new{ w = width, h = progress_bar:getSize().h },
             progress_bar
@@ -142,7 +159,7 @@ function BookStatusWidget:genBookInfoGroup()
         text = T(_("%1\xE2\x80\xAF% Completed"), string.format("%1.f", read_percentage * 100)),
         face = self.small_font_face,
     }
-    table.insert(book_meta_info_group,
+    table.insert(vert_group,
         CenterContainer:new{
             dimen = Geom:new{ w = width, h = text_complete:getSize().h },
             text_complete
@@ -150,20 +167,20 @@ function BookStatusWidget:genBookInfoGroup()
     )
     -- Current chapter
 
-    table.insert(book_meta_info_group,
+    table.insert(vert_group,
         VerticalSpan:new{ width = height * 0.1 }
     )
     local chapter_title = self.ui.toc:getTocTitleByPage(self.ui:getCurrentPage())
 
-    local text_label = TextBoxWidget:new{
+    text_label = TextBoxWidget:new{
         text = "Chapter",
         lang = lang,
         width = width,
         face = self.small_font_face,
-        fgcolor = Blitbuffer.COLOR_GRAY_9, -- Blitbuffer.colorFromString("#0066FF"),
+        fgcolor = Blitbuffer.colorFromString("#0066FF"),
         alignment = "center",
     }
-    table.insert(book_meta_info_group,
+    table.insert(vert_group,
         CenterContainer:new{
             dimen = Geom:new{ w = width, h = text_label:getSize().h },
             text_label
@@ -176,38 +193,16 @@ function BookStatusWidget:genBookInfoGroup()
         face = self.large_font_face,
         alignment = "center",
     }
-    table.insert(book_meta_info_group,
+    table.insert(vert_group,
         CenterContainer:new{
             dimen = Geom:new{ w = width, h = text_chapter:getSize().h },
             text_chapter
         }
     )
-    --[[ rating
-    table.insert(book_meta_info_group,
-                 VerticalSpan:new{ width = Screen:scaleBySize(30) })
-    local rateHeight = Screen:scaleBySize(60)
-    table.insert(book_meta_info_group,
-                 self:generateRateGroup(screen_width, rateHeight, self.summary.rating))
---]]
-    -- build the final group
-    local book_info_group = HorizontalGroup:new{
-        align = "top",
-        HorizontalSpan:new{ width =  split_span_width }
-    }
-    -- thumbnail
-    local thumbnail = self:genThumbnailGroup(img_height,img_width)
-    if thumbnail then
-        table.insert(book_info_group, thumbnail)
-    end
-
-    table.insert(book_info_group, CenterContainer:new{
-        dimen = Geom:new{ w = width, h = height },
-        book_meta_info_group,
-    })
 
     return CenterContainer:new{
         dimen = Geom:new{ w = screen_width, h = img_height },
-        book_info_group,
+        vert_group, -- book_info_group,
     }
 end
 
@@ -222,7 +217,7 @@ function BookStatusWidget:getStatusContent(width)
         align = "left",
         title_bar,
         self:genBookInfoGroup(),
-        self:genHeader(_("Tags")),
+        self:genHeader(_("Metadata")),
         self:genTagsGroup(width),
         self:genHeader(_("Statistics")),
         self:genStatisticsGroup(width),
@@ -231,12 +226,36 @@ function BookStatusWidget:getStatusContent(width)
 end
 
 function BookStatusWidget:genTagsGroup(width)
+    local screen_width = Screen:getWidth()
+    local split_span_width = math.floor(screen_width * 0.05)
     local height
     if Screen:getScreenMode() == "landscape" then
-        height = Screen:scaleBySize(120)
+        height = Screen:scaleBySize(150)
     else
-        height = Screen:scaleBySize(240)
+        height = Screen:scaleBySize(300)
     end
+    local split_span_width = math.floor(screen_width * 0.05)
+
+    local img_width, img_height
+    if Screen:getScreenMode() == "landscape" then
+        img_width = Screen:scaleBySize(132)
+        img_height = Screen:scaleBySize(184)
+    else
+        img_width = Screen:scaleBySize(132 * 1.5)
+        img_height = Screen:scaleBySize(184 * 1.5)
+    end
+
+    local horz_group = HorizontalGroup:new{
+        align = "top",
+    }
+    local thumbnail = self:genThumbnailGroup(img_height,img_width)
+    if thumbnail then
+        table.insert(horz_group,
+            HorizontalSpan:new{ width =  split_span_width })
+        table.insert(horz_group, thumbnail)
+    end
+
+    width = screen_width - split_span_width - img_width
 
     tags_text = TextBoxWidget:new{
         text = (self.ui.doc_props.keywords or "" ):gsub("\n", ", "),
@@ -256,12 +275,15 @@ function BookStatusWidget:genTagsGroup(width)
         }
     end
 
+    table.insert(horz_group, tags_text)
+
     return VerticalGroup:new{
         align = "center",
         VerticalSpan:new{ width = Size.span.vertical_large },
         CenterContainer:new{
-            dimen = Geom:new{ w = width, h = height },
-            tags_text
+            dimen = Geom:new{ w = screen_width, h = img_height },
+            horz_group,
         }
     }
 end
+
