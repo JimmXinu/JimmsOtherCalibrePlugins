@@ -1,3 +1,5 @@
+-- This one I copied from somewhere wholesale
+
 local ReaderConfig = require("apps/reader/modules/readerconfig")
 
 function ReaderConfig:onTapShowConfigMenu()

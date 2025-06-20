@@ -15,7 +15,8 @@ local userpatch = require("userpatch")
 -- use a calibre plugboard to prepend an indicator ("000") to the
 -- title to indicate new content I want read.  Yes, there exist other
 -- mechanisms I could use instead, but this is the one I'm using right
--- now.
+-- now.  Oh, and I prepend series into title, too.  Which can also
+-- change.
 --
 -- 3.  My book titles change evern more--because I also append the
 -- book word count in parans to the title.  Yes, I favor word count
@@ -42,6 +43,12 @@ local userpatch = require("userpatch")
 --
 -- After user/authors/md5 fine (or insert), also insert uuid, if the
 -- book has one.
+
+-- ----------------
+--
+-- Consolidating data from old duplicate data, both title and md5 changing
+-- -- done in python off device.
+
 
 --[=[
 -- Assumed manually created right now.
