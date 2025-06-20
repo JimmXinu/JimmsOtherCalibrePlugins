@@ -92,7 +92,7 @@ for norm_title in book_ids_by_name.keys():
     print(id_list)
 
     ## sum up the count columns -- This part will inflate values if run
-    ## more than once!
+    ## more than once without also removing the non-norm rows below.
     sumsql = "select sum(notes),sum(highlights),sum(total_read_time),sum(total_read_pages) from book where id in (%s)"
     s = sumsql % ','.join(['?']*len(id_list))
     print(s)

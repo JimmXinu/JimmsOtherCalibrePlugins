@@ -89,7 +89,9 @@ userpatch.registerPatchPluginFunc("statistics", function(ReaderStatistics)
         -- URL:https://archiveofourown.org/works/14436069"
         local uuid
         for j in (self.ui.doc_settings.data.doc_props.identifiers or ""):gmatch("calibre:[%w-]+") do uuid = j end
-        print("stats patch uuid:"..uuid)
+        if uuid then
+            print("stats patch uuid:"..uuid)
+        end
 
         local title, authors = self.data.title, self.data.authors
         --------
