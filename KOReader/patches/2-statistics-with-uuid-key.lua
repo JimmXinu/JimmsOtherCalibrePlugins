@@ -120,6 +120,16 @@ userpatch.registerPatchPluginFunc("statistics", function(ReaderStatistics)
         local stmt = conn:prepare(sql_stmt)
         local result = stmt:reset():bind(uuid):step()
         if result then
+            -- update basic book info in case it changed
+            sql_stmt = [[
+                UPDATE book
+                SET    title = ?,
+                       authors = ?,
+                       md5 = ?
+                WHERE  id = ?;
+            ]]
+            stmt = conn:prepare(sql_stmt)
+            stmt:reset():bind(title, authors, self.doc_md5, result[1]):step()
             print("stats patch uuid retval:"..tonumber(result[1]))
             return tonumber(result[1])
         end
