@@ -23,6 +23,7 @@ class KOREADER(USER_DEFINED):
     Cheese update a couple places in KOReader to:
     - Force koreader meta cache to reload updated books.
     - Make History act more like 'most recent' list, including new/updated.
+       - Optionally only bump book in History list if they have the 'bump' tag.
     """
 
     name = "KOReader Device Interface"

@@ -12,6 +12,8 @@ and 2-statistics-with-uuid-key.lua
 
 Does *not* create or populate uuid table.
 
+ ** This is not needed if stats data cleared instead. **
+
 Copy the DB over to a python capable machine to migrate becuase I'm
 not figuring this out in lua.
 

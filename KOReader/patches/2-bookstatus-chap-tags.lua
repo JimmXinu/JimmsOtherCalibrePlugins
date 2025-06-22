@@ -1,3 +1,8 @@
+-- The 'Book status' screen:
+--
+-- I don't use star ratings or builtin status.  Remove those, add
+-- current chapter, tags, and re-arrange.
+
 local Blitbuffer = require("ffi/blitbuffer")
 local BookList = require("ui/widget/booklist")
 local Button = require("ui/widget/button")

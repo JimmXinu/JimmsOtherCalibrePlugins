@@ -1,3 +1,9 @@
+-- Default 'FileManager' action from reader is to open in same dir as
+-- the book, with the book highlighted.
+
+-- Doing that takes uncomfortably long for me, but openning instead in
+-- the empty 'Home' directory I defined is basically instant.
+
 local ReaderMenu = require("apps/reader/modules/readermenu")
 
 -- Couldn't set directly in data, defined, but not instantiated at this point.

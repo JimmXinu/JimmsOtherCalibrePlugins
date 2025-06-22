@@ -1,3 +1,7 @@
+-- I calibre metadata lists (titles, tags, etc) to sort alphabetically
+-- without regard to case.  Otherwise, for example, the tags 'A dude'
+-- and 'a dude2' will be hugely far from each other.
+
 local userpatch = require("userpatch")
 
 userpatch.registerPatchPluginFunc("calibre", function(Calibre)
