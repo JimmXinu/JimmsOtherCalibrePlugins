@@ -186,9 +186,11 @@ userpatch.registerPatchPluginFunc("statistics", function(ReaderStatistics)
             id_book = result[1]
         end
 
-        ------- insert into uuid table too if have a value.
+        ------- insert into uuid table too if have a value.  'upsert'
+        ------- because uuid can change once in a while, such as
+        ------- rebuilding an anthology in a new book.
         if uuid then
-            stmt = conn:prepare("INSERT INTO uuid VALUES(?, ?);")
+            stmt = conn:prepare("INSERT INTO uuid VALUES(?, ?) ON CONFLICT (id_book) do update set uuid=excluded.uuid;")
             stmt:reset():bind(uuid,id_book):step()
             print("stats patch Added uuid record")
         end
