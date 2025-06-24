@@ -120,9 +120,14 @@ userpatch.registerPatchPluginFunc("statistics", function(ReaderStatistics)
         local stmt = conn:prepare(sql_stmt)
         local result = stmt:reset():bind(uuid):step()
         if result then
+            print("stats patch uuid retval:"..tonumber(result[1]))
             -- update basic book info in case it changed
+            -- IGNORE on failure rather than crash. I managed to get
+            -- conflicting records doing some weird updates while
+            -- testing something else.  I just 'not crashing' more
+            -- important than perfect stats.
             sql_stmt = [[
-                UPDATE book
+                UPDATE OR IGNORE book
                 SET    title = ?,
                        authors = ?,
                        md5 = ?
@@ -130,7 +135,6 @@ userpatch.registerPatchPluginFunc("statistics", function(ReaderStatistics)
             ]]
             stmt = conn:prepare(sql_stmt)
             stmt:reset():bind(title, authors, self.doc_md5, result[1]):step()
-            print("stats patch uuid retval:"..tonumber(result[1]))
             return tonumber(result[1])
         end
 
