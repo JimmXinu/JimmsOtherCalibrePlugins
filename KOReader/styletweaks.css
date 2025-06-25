@@ -1,0 +1,13 @@
+/* For inline tags (span, b, i, etc) inside background colored inline
+   tags */
+* {
+    background-color:inherit;
+}
+/* For XF quotes */
+blockquote blockquote.bbCodeBlock-expandContent {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0em;
+    margin-inline-end: 0em;
+    margin: 0;
+}
