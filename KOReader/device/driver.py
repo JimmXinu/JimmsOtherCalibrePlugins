@@ -35,7 +35,7 @@ class KOREADER(USER_DEFINED):
     supported_platforms = ['windows', 'osx', 'linux']
 
     minimum_calibre_version = (8,4,0)
-    version = (0,3,0)
+    version = (0,4,0)
 
     ## also delete .sdr 'sidecar' dirs on file delete.
     DELETE_EXTS  = ['.sdr']
@@ -130,6 +130,7 @@ class KOREADER(USER_DEFINED):
         # logger.debug("KOReader:upload_books: history_lua_path:%s"%history_lua_path)
         # logger.debug("KOReader:upload_books: history_lua_path isfile:%s"%os.path.isfile(history_lua_path))
 
+        updated_filepaths = []
         db = None
         if cache_sql_path:
             db = apsw.Connection(cache_sql_path)
@@ -138,7 +139,6 @@ class KOREADER(USER_DEFINED):
             ## to
             ## '/mnt/onboard/calibre/', '7158.epub'
             ##
-            updated_filepaths = []
             for book in retlist:
                 path, filename = os.path.split(os.path.splitdrive(book[0])[1])
                 path = onboard_path + path.replace('\\','/')
@@ -153,6 +153,12 @@ class KOREADER(USER_DEFINED):
                            (path, filename))
                 updated_filepaths.append(path+filename)
             db.close()
+
+        bump_list = []
+        if bump_tag:
+            bump_list = [ bump_tag in m.tags for m in reversed(metadata) ]
+        logger.debug("bump_list")
+        logger.debug(bump_list)
 
         if history_lua_path:
             data = luadata.read(history_lua_path, encoding="utf-8")
@@ -171,10 +177,6 @@ class KOREADER(USER_DEFINED):
             odata = OrderedDict([ (x['file'], x) for x in data ])
             # logger.debug(odata)
 
-            bump_list = []
-            if bump_tag:
-                bump_list = [ bump_tag in m.tags for m in reversed(metadata) ]
-            # logger.debug(bump_list)
             ## history only cares about order, so I don't bother updating
             ## the time, although it would be easy.
             # logger.debug(updated_filepaths)
@@ -190,6 +192,24 @@ class KOREADER(USER_DEFINED):
             if changed:
                 luadata.write(history_lua_path, list(odata.values()), encoding="utf-8",
                               indent="\t", prefix="return ")
+
+        if True: # do or do not reset percent/page count
+            logger.debug(retlist)
+            for i, book in enumerate(reversed(retlist)):
+                if not bump_tag or bump_list[i]:
+                    ## Note that this is the default location for
+                    ## 'sidecar' dirs, but can be configured
+                    ## differently in koreader -- including a hash'ed
+                    ## version.
+                    bookpath = os.path.join(book[0].replace('epub','sdr'),"metadata.epub.lua")
+                    if os.path.isfile(bookpath):
+                        logger.debug("Removing page counts / percent read from %s"%bookpath)
+                        sdr = luadata.read(bookpath, encoding="utf-8")
+                        sdr.pop("percent_finished",None)
+                        # sdr.pop("doc_pages",None)
+                        # sdr.get("stats",{}).pop("pages",None)
+                        luadata.write(bookpath, sdr, encoding="utf-8",
+                                      indent="\t", prefix="return ")
         return retlist
 
     ## Also remove from cache on delete?  Deleting in KOReader
