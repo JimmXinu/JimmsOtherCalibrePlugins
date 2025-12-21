@@ -6,7 +6,7 @@ __license__ = "GPL v3"
 __copyright__ = "2025, Jim Miller"
 __docformat__ = "markdown en"
 
-import os, shutil
+import os
 import apsw
 from collections import OrderedDict
 from datetime import datetime
@@ -35,7 +35,7 @@ class KOREADER(USER_DEFINED):
     supported_platforms = ['windows', 'osx', 'linux']
 
     minimum_calibre_version = (8,4,0)
-    version = (0,5,0)
+    version = (0,6,0)
 
     ## also delete .sdr 'sidecar' dirs on file delete.
     DELETE_EXTS  = ['.sdr']
@@ -108,8 +108,13 @@ class KOREADER(USER_DEFINED):
         prefix = self.get_device_information()[-1]['main']['prefix']
         cache_file = self.normalize_path(os.path.join(prefix, self.METADATA_CACHE))
 
-        logger.info(f'Copy cache_file: {cache_file} to backup.')
-        shutil.copyfile(cache_file, cache_file+'.backup')
+        logger.info(f'Move cache_file: {cache_file} to backup.')
+        try:
+            os.remove(cache_file+'.backup')
+        except FileNotFoundError:
+            logger.info("No prior backup found")
+            pass
+        os.rename(cache_file, cache_file+'.backup')
 
         # logger.debug(f'uploading {len(files)} books')
         # logger.debug(f'uploading {files} books')
@@ -210,7 +215,7 @@ class KOREADER(USER_DEFINED):
                     ## version.
                     bookpath = os.path.join(book[0].replace('epub','sdr'),"metadata.epub.lua")
                     if os.path.isfile(bookpath):
-                        logger.debug("Removing page counts / percent read from %s"%bookpath)
+                        logger.debug("Removing percent read from %s"%bookpath)
                         sdr = luadata.read(bookpath, encoding="utf-8")
                         sdr.pop("percent_finished",None)
                         # sdr.pop("doc_pages",None)
