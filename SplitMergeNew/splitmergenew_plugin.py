@@ -159,6 +159,7 @@ class SplitMergeNewPlugin(InterfaceAction):
         count = 0
         keep_lines=[]
         # showlist=['toc','guide','anchor','id','href']
+        use_title = None
         for line in lines:
             new_chap = '(new)' in "".join(line.get('toc',[]))
             if new_chap:
@@ -168,6 +169,8 @@ class SplitMergeNewPlugin(InterfaceAction):
                 # 'title_page' in line['id']):
                 # or 'log_page' in line['id'])
                 keep_lines.append(count)
+                if not use_title:
+                    use_title = line['toc'][0]
 
                 ## XXX Create and include a title page, or a
                 ## title-author only epub or something?  Lengthy title
@@ -185,7 +188,8 @@ class SplitMergeNewPlugin(InterfaceAction):
                 #         print("\t%s: %s"%(s,line[s]))
             count += 1
         epubO.write_split_epub(tmp,
-                               keep_lines)
+                               keep_lines,
+                               titleopt="=== "+use_title)
                                # ,
                                # authoropts=options.authoropts,
                                # titleopt=options.titleopt,
@@ -260,7 +264,7 @@ class SplitMergeNewPlugin(InterfaceAction):
             cp_plugin.count_statistics([book_id],['WordCount'])
 
         ## run auto convert
-        self.gui.iactions['Convert Books'].auto_convert_auto_add([book_id])
+        # self.gui.iactions['Convert Books'].auto_convert_auto_add([book_id])
 
         ## add to FFF update lists
         self.gui.library_view.select_rows([book_id])
@@ -350,12 +354,12 @@ def title_author_epub(zipio, title, author):
                                 text=uniqueid,
                                 attrs={"id":"splitmergenew-uid"}))
 
-    metadata.appendChild(newTag(contentdom,"dc:title",text=title.lower(),
+    metadata.appendChild(newTag(contentdom,"dc:title",text=title,
                                 attrs={"id":"id"}))
 
     metadata.appendChild(newTag(contentdom,"dc:creator",
                                 attrs={"opf:role":"aut"},
-                                text=author.lower()))
+                                text=author))
 
     ## end of metadata, create manifest.
     items = [] # list of (id, href, type, title) tuples(all strings)
@@ -444,7 +448,7 @@ def title_author_epub(zipio, title, author):
 <title>${title} by ${author}</title>
 </head>
 <body>
-<h3>${title} by ${author}</h3>
+<h3>New chapters split from ${title} by ${author}.</h3>
 </body>
 </html>
 ''')
