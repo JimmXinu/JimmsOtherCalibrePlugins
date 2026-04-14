@@ -27,7 +27,6 @@ from calibre.ebooks.metadata import MetaInformation, authors_to_string
 
 from calibre.gui2.dialogs.message_box import ViewLog
 from calibre_plugins.splitmergenew.common_utils import get_icon
-from calibre_plugins.splitmergenew.config import prefs
 from calibre_plugins.splitmergenew.dialogs import (
     LoopProgressDialog
     )
@@ -159,7 +158,7 @@ class SplitMergeNewPlugin(InterfaceAction):
         count = 0
         keep_lines=[]
         # showlist=['toc','guide','anchor','id','href']
-        use_title = None
+        use_title = ''
         for line in lines:
             new_chap = '(new)' in "".join(line.get('toc',[]))
             if new_chap:
@@ -274,10 +273,6 @@ class SplitMergeNewPlugin(InterfaceAction):
 
         remove_dir(tdir)
         # logger.debug(good_list)
-
-    def apply_settings(self):
-        # No need to do anything with prefs here, but we could.
-        prefs
 
     def is_library_view(self):
         # 0 = library, 1 = main, 2 = card_a, 3 = card_b
