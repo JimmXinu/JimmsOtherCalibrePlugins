@@ -241,6 +241,9 @@ class CopyToLibraryPlugin(InterfaceAction):
 
         mi = book['mi']
 
+        if 'url' not in mi.get_identifiers():
+            mi.set_identifiers({'url':"http://fake.url?uuid=%s"%mi.uuid})
+
         dest_ids = dest_db.search_getting_ids(r'identifiers:"=url:=%s"'%mi.get_identifiers()['url'],
                                             None,use_virtual_library=False)
 
