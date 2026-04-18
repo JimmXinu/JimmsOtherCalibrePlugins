@@ -222,19 +222,21 @@ class CopyToLibraryPlugin(InterfaceAction):
         dest_db = LibraryDatabase(path, is_second_db=True)
         logger.debug("dest_db.library_id: %s"%dest_db.library_id)
 
-
-        logger.debug("before LoopProgressDialog!")
-        LoopProgressDialog(self.gui,
-                           book_list,
-                           partial(self._do_loop,
-                                   db=db,
-                                   dest_db=dest_db),
-                           partial(self._finish_loop,
-                                   db=db,
-                                   dest_db=dest_db),
-                           init_label=_("Collecting books..."),
-                           win_title=_("Get books"),
-                           status_prefix=_("books collected"))
+        try:
+            logger.debug("before LoopProgressDialog!")
+            LoopProgressDialog(self.gui,
+                               book_list,
+                               partial(self._do_loop,
+                                       db=db,
+                                       dest_db=dest_db),
+                               partial(self._finish_loop,
+                                       db=db,
+                                       dest_db=dest_db),
+                               init_label=_("Collecting books..."),
+                               win_title=_("Get books"),
+                               status_prefix=_("books collected"))
+        finally:
+            dest_db.close()
 
     def _do_loop(self, book, db=None, dest_db=None):
         # logger.debug(book)
