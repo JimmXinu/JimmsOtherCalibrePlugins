@@ -131,6 +131,11 @@ class CopyToLibraryPlugin(InterfaceAction):
 
     def copy_to_library(self, path):
         logger.debug("copy_to_library(%s)"%path)
+
+        if self.gui.content_server:
+            self.do_error(_("CopyToLibrary doesn't work while Content Server is running due to possible conflicts"))
+            return
+
         if not self.gui.current_view().selectionModel().selectedRows() :
             self.do_error(_('No Selected Books for CopyToLibrary'))
             return
@@ -141,11 +146,6 @@ class CopyToLibraryPlugin(InterfaceAction):
             return
 
         book_list = [ self._convert_id_to_book(x, self.gui.current_db, good=False) for x in self.gui.library_view.get_selected_ids() ]
-
-        if not book_list:
-            # device view, get from epubs on device.
-            self.gui.status_bar.show_message(_('CopyToLibrary operates on selected books'))
-            return
 
         db = self.gui.current_db
         current = os.path.normcase(os.path.abspath(db.library_path))
@@ -175,68 +175,68 @@ class CopyToLibraryPlugin(InterfaceAction):
                            status_prefix=_("books collected"))
 
     ## XXX dead code - switched to menu based.
-    def plugin_button(self):
-        if not self.gui.current_view().selectionModel().selectedRows() :
-            self.do_error(_('No Selected Books for CopyToLibrary'))
-            return
+    # def plugin_button(self):
+    #     if not self.gui.current_view().selectionModel().selectedRows() :
+    #         self.do_error(_('No Selected Books for CopyToLibrary'))
+    #         return
 
-        if not self.is_library_view():
-            # device view, get from epubs on device.
-            self.do_error(_('CopyToLibrary only works in libary'))
-            return
+    #     if not self.is_library_view():
+    #         # device view, get from epubs on device.
+    #         self.do_error(_('CopyToLibrary only works in libary'))
+    #         return
 
-        book_list = [ self._convert_id_to_book(x, self.gui.current_db, good=False) for x in self.gui.library_view.get_selected_ids() ]
+    #     book_list = [ self._convert_id_to_book(x, self.gui.current_db, good=False) for x in self.gui.library_view.get_selected_ids() ]
 
-        if not book_list:
-            # device view, get from epubs on device.
-            self.do_error(_('CopyToLibrary operates on selected books'))
-            return
+    #     if not book_list:
+    #         # device view, get from epubs on device.
+    #         self.do_error(_('CopyToLibrary operates on selected books'))
+    #         return
 
-        ## choose destination library
-        # self.gui.iactions['Copy to library'].
+    #     ## choose destination library
+    #     # self.gui.iactions['Copy to library'].
 
-        path = ''
-        delete_after = False
-        db = self.gui.current_db
-        locations = list(self.gui.iactions['Choose Library'].stats.locations(db))
-        logger.debug(locations)
-        d = ChooseLibrary(self.gui, locations)
-        if d.exec() == QDialog.DialogCode.Accepted:
-            path, delete_after = d.args
-            if not path:
-                self.do_error(_('Not Destination Library selected.'))
-                return
-            current = os.path.normcase(os.path.abspath(db.library_path))
-            if current == os.path.normcase(os.path.abspath(path)):
-                self.do_error(_('Cannot copy to current library.'))
-                return
-        else:
-            return
-        logger.debug("\n\n%s %s\n"%(path,delete_after))
+    #     path = ''
+    #     delete_after = False
+    #     db = self.gui.current_db
+    #     locations = list(self.gui.iactions['Choose Library'].stats.locations(db))
+    #     logger.debug(locations)
+    #     d = ChooseLibrary(self.gui, locations)
+    #     if d.exec() == QDialog.DialogCode.Accepted:
+    #         path, delete_after = d.args
+    #         if not path:
+    #             self.do_error(_('Not Destination Library selected.'))
+    #             return
+    #         current = os.path.normcase(os.path.abspath(db.library_path))
+    #         if current == os.path.normcase(os.path.abspath(path)):
+    #             self.do_error(_('Cannot copy to current library.'))
+    #             return
+    #     else:
+    #         return
+    #     logger.debug("\n\n%s %s\n"%(path,delete_after))
 
-        if not db.exists_at(path):
-            self.do_error(_('No library found at %s')%path)
-            return
+    #     if not db.exists_at(path):
+    #         self.do_error(_('No library found at %s')%path)
+    #         return
 
-        from calibre.db.legacy import LibraryDatabase
-        dest_db = LibraryDatabase(path, is_second_db=True)
-        logger.debug("dest_db.library_id: %s"%dest_db.library_id)
+    #     from calibre.db.legacy import LibraryDatabase
+    #     dest_db = LibraryDatabase(path, is_second_db=True)
+    #     logger.debug("dest_db.library_id: %s"%dest_db.library_id)
 
-        try:
-            logger.debug("before LoopProgressDialog!")
-            LoopProgressDialog(self.gui,
-                               book_list,
-                               partial(self._do_loop,
-                                       db=db,
-                                       dest_db=dest_db),
-                               partial(self._finish_loop,
-                                       db=db,
-                                       dest_db=dest_db),
-                               init_label=_("Collecting books..."),
-                               win_title=_("Get books"),
-                               status_prefix=_("books collected"))
-        finally:
-            dest_db.close()
+    #     try:
+    #         logger.debug("before LoopProgressDialog!")
+    #         LoopProgressDialog(self.gui,
+    #                            book_list,
+    #                            partial(self._do_loop,
+    #                                    db=db,
+    #                                    dest_db=dest_db),
+    #                            partial(self._finish_loop,
+    #                                    db=db,
+    #                                    dest_db=dest_db),
+    #                            init_label=_("Collecting books..."),
+    #                            win_title=_("Get books"),
+    #                            status_prefix=_("books collected"))
+    #     finally:
+    #         dest_db.close()
 
     def _do_loop(self, book, db=None, dest_db=None):
         # logger.debug(book)

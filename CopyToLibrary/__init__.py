@@ -42,7 +42,7 @@ class CopyToLibraryBase(InterfaceActionBase):
     description         = _('UI plugin to copy books to another library overwriting any existing matching book.')
     supported_platforms = ['windows', 'osx', 'linux']
     author              = 'Jim Miller'
-    version             = (0, 1, 0)
+    version             = (0, 2, 0)
     minimum_calibre_version = (9, 7, 0)
 
     #: This field defines the GUI plugin class that contains all the code
