@@ -157,8 +157,12 @@ class CopyToLibraryPlugin(InterfaceAction):
             self.do_error(_('No library found at %s')%path)
             return
 
-        from calibre.db.legacy import LibraryDatabase
-        dest_db = LibraryDatabase(path, is_second_db=True)
+        # from calibre.db.legacy import LibraryDatabase
+        # dest_db = LibraryDatabase(path, is_second_db=True)
+
+        library_broker = self.gui.library_broker
+        dest_db = library_broker.get_library(path)
+
         logger.debug("dest_db.library_id: %s"%dest_db.library_id)
 
         logger.debug("before LoopProgressDialog!")
@@ -173,70 +177,6 @@ class CopyToLibraryPlugin(InterfaceAction):
                            init_label=_("Collecting books..."),
                            win_title=_("Get books"),
                            status_prefix=_("books collected"))
-
-    ## XXX dead code - switched to menu based.
-    # def plugin_button(self):
-    #     if not self.gui.current_view().selectionModel().selectedRows() :
-    #         self.do_error(_('No Selected Books for CopyToLibrary'))
-    #         return
-
-    #     if not self.is_library_view():
-    #         # device view, get from epubs on device.
-    #         self.do_error(_('CopyToLibrary only works in libary'))
-    #         return
-
-    #     book_list = [ self._convert_id_to_book(x, self.gui.current_db, good=False) for x in self.gui.library_view.get_selected_ids() ]
-
-    #     if not book_list:
-    #         # device view, get from epubs on device.
-    #         self.do_error(_('CopyToLibrary operates on selected books'))
-    #         return
-
-    #     ## choose destination library
-    #     # self.gui.iactions['Copy to library'].
-
-    #     path = ''
-    #     delete_after = False
-    #     db = self.gui.current_db
-    #     locations = list(self.gui.iactions['Choose Library'].stats.locations(db))
-    #     logger.debug(locations)
-    #     d = ChooseLibrary(self.gui, locations)
-    #     if d.exec() == QDialog.DialogCode.Accepted:
-    #         path, delete_after = d.args
-    #         if not path:
-    #             self.do_error(_('Not Destination Library selected.'))
-    #             return
-    #         current = os.path.normcase(os.path.abspath(db.library_path))
-    #         if current == os.path.normcase(os.path.abspath(path)):
-    #             self.do_error(_('Cannot copy to current library.'))
-    #             return
-    #     else:
-    #         return
-    #     logger.debug("\n\n%s %s\n"%(path,delete_after))
-
-    #     if not db.exists_at(path):
-    #         self.do_error(_('No library found at %s')%path)
-    #         return
-
-    #     from calibre.db.legacy import LibraryDatabase
-    #     dest_db = LibraryDatabase(path, is_second_db=True)
-    #     logger.debug("dest_db.library_id: %s"%dest_db.library_id)
-
-    #     try:
-    #         logger.debug("before LoopProgressDialog!")
-    #         LoopProgressDialog(self.gui,
-    #                            book_list,
-    #                            partial(self._do_loop,
-    #                                    db=db,
-    #                                    dest_db=dest_db),
-    #                            partial(self._finish_loop,
-    #                                    db=db,
-    #                                    dest_db=dest_db),
-    #                            init_label=_("Collecting books..."),
-    #                            win_title=_("Get books"),
-    #                            status_prefix=_("books collected"))
-    #     finally:
-    #         dest_db.close()
 
     def _do_loop(self, book, db=None, dest_db=None):
         # logger.debug(book)
@@ -301,16 +241,16 @@ class CopyToLibraryPlugin(InterfaceAction):
 
         for name, settings in from_cols.items():
             label=settings['label']
-            logger.debug(name)
+            # logger.debug(name)
             if name in dest_cols and settings['datatype'] == dest_cols[name]['datatype'] \
                     and dest_cols[name]['datatype'] != 'composite':
                 val = db.get_custom(book['calibre_id'],label=label,index_is_id=True)
-                l = "Try to set (%s) to (%s)"%(label,val)
+                l = "Set (%s) = (%s)"%(label,val)
                 logger.debug(l[:100]) # 100 max.
 
                 self.set_custom(dest_db,dest_id,val,label,commit=True)
-            else:
-                logger.debug("DON'T try to set")
+            # else:
+            #     logger.debug("DON'T try to set")
 
         return book
 
