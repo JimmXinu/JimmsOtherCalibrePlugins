@@ -123,7 +123,7 @@ class BasicTab(QWidget):
         self.l = QVBoxLayout()
         self.setLayout(self.l)
 
-        label = QLabel(_('When Summing Columns, Calculate:'))
+        label = QLabel(_('When Summing Columns, Calculate: -- NOT ACTUALLY USED -- kept as example'))
         label.setWordWrap(True)
         self.l.addWidget(label)
         #self.l.addSpacing(5)
