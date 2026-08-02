@@ -156,7 +156,7 @@ class CompareOriginalFile(Tool):
             other = _gc(path, tdir=tdir, tweak_mode=True)
             d = self.boss.create_diff_dialog(revert_msg=None)
             d.container_diff(other, c,
-                             names=(_('File on Disk'), _('Book in Editor')))
+                             names=(_('On Disk'), _('In Editor')))
 
 class AddNewFileTOC(Tool):
     name = 'Add New File and TOC'
